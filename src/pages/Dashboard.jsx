@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   CartesianGrid,
   Tooltip,
@@ -20,20 +21,9 @@ import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
 import { addBudgetRule, subscribeToBudgetRules, checkBudgetViolations } from '../services/budgetService.js'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-
-  return value < 0 ? `-${formatted}` : formatted
-}
-
-function SpendingTooltip({ active, payload, label }) {
+function SpendingTooltip({ active, payload, label, formatCurrency }) {
   if (!active || !payload?.length) return null
 
   const expenses = payload.find((p) => p.dataKey === 'amount')?.value ?? 0
@@ -55,15 +45,19 @@ const pieColors = ['#0ea5e9', '#10b981', '#f97316', '#a855f7', '#f43f5e', '#14b8
 
 function Dashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const { formatCurrency } = useCurrency()
   const [range, setRange] = React.useState('7D')
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isBudgetModalOpen, setIsBudgetModalOpen] = React.useState(false)
   const [budgetRules, setBudgetRules] = React.useState([])
+  const [isExporting, setIsExporting] = React.useState(false)
 
   const weeklyDays = range === '7D' ? 7 : range === '30D' ? 30 : 90
 
   const {
     expenses,
+    incomes,
     totalIncome,
     totalExpenses,
     balance,
@@ -108,6 +102,71 @@ function Dashboard() {
     await addBudgetRule({ userId: user.uid, ...ruleData })
   }
 
+  function handleExportData() {
+    setIsExporting(true)
+    
+    try {
+      // Merge incomes and expenses
+      const allTransactions = [
+        ...incomes.map((income) => ({
+          date: income.date?.toDate ? income.date.toDate().toISOString() : income.date,
+          type: 'Income',
+          category: income.source || income.category,
+          amount: income.amount,
+          note: income.note || '',
+        })),
+        ...expenses.map((expense) => ({
+          date: expense.date?.toDate ? expense.date.toDate().toISOString() : expense.date,
+          type: 'Expense',
+          category: expense.category,
+          amount: expense.amount,
+          note: expense.note || '',
+        })),
+      ].sort((a, b) => new Date(b.date) - new Date(a.date))
+
+      // Create CSV content
+      const headers = ['Date', 'Type', 'Category', 'Amount', 'Note']
+      const csvRows = [
+        headers.join(','),
+        ...allTransactions.map((t) => {
+          const date = new Date(t.date).toLocaleDateString()
+          const amount = t.amount.toFixed(2)
+          const note = `"${(t.note || '').replace(/"/g, '""')}"` // Escape quotes
+          return [date, t.type, t.category, amount, note].join(',')
+        }),
+      ]
+
+      // Add summary at the end
+      csvRows.push('')
+      csvRows.push('Summary')
+      csvRows.push(`Total Income,${totalIncome.toFixed(2)}`)
+      csvRows.push(`Total Expenses,${totalExpenses.toFixed(2)}`)
+      csvRows.push(`Net Balance,${balance.toFixed(2)}`)
+
+      const csvContent = csvRows.join('\n')
+
+      // Create and download file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      
+      link.setAttribute('href', url)
+      link.setAttribute('download', `smart-finance-export-${new Date().toISOString().split('T')[0]}.csv`)
+      link.style.visibility = 'hidden'
+      
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error('Export failed:', err)
+      alert('Failed to export data. Please try again.')
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
@@ -130,13 +189,15 @@ function Dashboard() {
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
-            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50 hover:shadow-md"
+            onClick={handleExportData}
+            disabled={isExporting || (expenses.length === 0 && incomes.length === 0)}
+            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Export
+            {isExporting ? 'Exporting...' : 'Export'}
           </button>
           <button
             type="button"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => navigate('/transactions')}
             className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 hover:shadow-md"
           >
             Add transaction
@@ -254,7 +315,7 @@ function Dashboard() {
                     width={40}
                     tickFormatter={(v) => `$${Number(v).toLocaleString()}`}
                   />
-                  <Tooltip content={<SpendingTooltip />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1 }} />
+                  <Tooltip content={<SpendingTooltip formatCurrency={formatCurrency} />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1 }} />
 
                   <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#0ea5e9" />
                 </BarChart>
@@ -328,6 +389,7 @@ function Dashboard() {
             </div>
             <button
               type="button"
+              onClick={() => navigate('/transactions')}
               className="rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
             >
               View all

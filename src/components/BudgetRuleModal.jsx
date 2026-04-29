@@ -14,9 +14,9 @@ export default function BudgetRuleModal({
   const [type, setType] = React.useState('weekly')
   const [limit, setLimit] = React.useState('')
   const [isActive, setIsActive] = React.useState(true)
-  const [isSaving, setIsSaving] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
+  const [success, setSuccess] = React.useState(false)
   const [error, setError] = React.useState('')
-  const [success, setSuccess] = React.useState('')
 
   React.useEffect(() => {
     if (!open) return
@@ -32,8 +32,8 @@ export default function BudgetRuleModal({
     // Defer state updates to satisfy react-hooks linting.
     const t = setTimeout(() => {
       setError('')
-      setSuccess('')
-      setIsSaving(false)
+      setSuccess(false)
+      setLoading(false)
       setName(next.name)
       setCategory(next.category)
       setType(next.type)
@@ -49,7 +49,7 @@ export default function BudgetRuleModal({
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-    setSuccess('')
+    setSuccess(false)
 
     if (!name.trim()) {
       setError('Enter a rule name.')
@@ -67,7 +67,7 @@ export default function BudgetRuleModal({
       return
     }
 
-    setIsSaving(true)
+    setLoading(true)
     try {
       await onSubmit({
         name: name.trim(),
@@ -77,8 +77,8 @@ export default function BudgetRuleModal({
         isActive,
       })
 
-      // Show success message
-      setSuccess(initialRule ? 'Budget rule updated successfully!' : 'Budget rule created successfully!')
+      // Show success state immediately
+      setSuccess(true)
 
       // Reset form if adding new rule
       if (!initialRule) {
@@ -89,14 +89,17 @@ export default function BudgetRuleModal({
         setIsActive(true)
       }
       
-      // Close modal after a brief delay to show success message
+      // Close modal after showing success message
       setTimeout(() => {
         onClose()
-      }, 1000)
+      }, 1500)
     } catch (err) {
+      console.error('Failed to save budget rule:', err)
       setError(err?.message || 'Failed to save budget rule.')
+      setSuccess(false)
     } finally {
-      setIsSaving(false)
+      // Always reset loading state
+      setLoading(false)
     }
   }
 
@@ -120,9 +123,12 @@ export default function BudgetRuleModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            aria-label="Close"
           >
-            Close
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
@@ -130,9 +136,11 @@ export default function BudgetRuleModal({
           <label className="block">
             <span className="text-sm font-semibold text-slate-700">Rule Name</span>
             <input
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Weekly Dining Limit"
+              maxLength="50"
               className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
           </label>
@@ -170,9 +178,11 @@ export default function BudgetRuleModal({
           <label className="block">
             <span className="text-sm font-semibold text-slate-700">Spending Limit</span>
             <input
+              type="number"
               value={limit}
               onChange={(e) => setLimit(e.target.value)}
-              inputMode="decimal"
+              step="0.01"
+              min="0"
               placeholder="0.00"
               className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
@@ -190,27 +200,39 @@ export default function BudgetRuleModal({
 
           {error ? (
             <div className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
-              {error}
+              ❌ {error}
             </div>
           ) : null}
 
           {success ? (
             <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
-              {success}
+              ✅ {initialRule ? 'Budget rule updated successfully!' : 'Budget rule created successfully!'}
             </div>
           ) : null}
 
           <button
             type="submit"
-            disabled={isSaving}
+            disabled={loading || success}
             className={[
               'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
               success 
-                ? 'bg-green-600 text-white hover:bg-green-700'
+                ? 'bg-green-600 text-white'
                 : 'bg-blue-600 text-white hover:bg-blue-700'
             ].join(' ')}
           >
-            {success ? '✓ Saved!' : isSaving ? 'Saving…' : initialRule ? 'Update Rule' : 'Create Rule'}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </span>
+            ) : success ? (
+              '✓ Saved!'
+            ) : (
+              initialRule ? 'Update Rule' : 'Create Rule'
+            )}
           </button>
         </form>
       </div>

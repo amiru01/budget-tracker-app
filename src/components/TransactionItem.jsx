@@ -1,13 +1,5 @@
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
+import React from 'react'
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
 function formatDate(value) {
   if (!value) return ''
@@ -17,6 +9,7 @@ function formatDate(value) {
 }
 
 export default function TransactionItem({ name, category, amount, date, note, type = 'expense', onDelete }) {
+  const { formatCurrency } = useCurrency()
   const isIncome = type === 'income'
   const amountColor = isIncome ? 'text-emerald-600' : 'text-rose-600'
   const sign = isIncome ? '+' : '-'

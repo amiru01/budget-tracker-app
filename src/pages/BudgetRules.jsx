@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useCurrency } from '../context/CurrencyContext.jsx'
 import BudgetRuleModal from '../components/BudgetRuleModal.jsx'
 import {
   addBudgetRule,
@@ -10,18 +11,7 @@ import {
 } from '../services/budgetService.js'
 import useFinanceData from '../hooks/useFinanceData.js'
 
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
-
-function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation }) {
+function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCurrency }) {
   return (
     <li className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
@@ -100,6 +90,7 @@ function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation }) {
 
 export default function BudgetRules() {
   const { user } = useAuth()
+  const { formatCurrency } = useCurrency()
   const { expenses } = useFinanceData()
   const [budgetRules, setBudgetRules] = React.useState([])
   const [loading, setLoading] = React.useState(true)
@@ -242,6 +233,7 @@ export default function BudgetRules() {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onToggle={handleToggle}
+                formatCurrency={formatCurrency}
               />
             )
           })}

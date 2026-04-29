@@ -1,3 +1,5 @@
+import React from 'react'
+import { useCurrency } from '../context/CurrencyContext.jsx'
 import {
   Bar,
   BarChart,
@@ -11,20 +13,9 @@ import {
   YAxis,
 } from 'recharts'
 
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
-
 const pieColors = ['#10b981', '#22c55e', '#34d399', '#16a34a', '#0ea5e9', '#a7f3d0', '#047857']
 
-function MonthlyTooltip({ active, payload, label }) {
+function MonthlyTooltip({ active, payload, label, formatCurrency }) {
   if (!active || !payload?.length) return null
   const amount = payload[0]?.value ?? 0
   return (
@@ -40,6 +31,7 @@ export default function IncomeChart({
   incomeBySource,
   variant = 'full',
 }) {
+  const { formatCurrency } = useCurrency()
   const showPie = variant !== 'preview'
   const monthly = monthlyIncomeTrend || []
   const bySource = incomeBySource || { total: 0, data: [] }
@@ -76,7 +68,7 @@ export default function IncomeChart({
                   width={44}
                   tickFormatter={(v) => `$${Number(v).toLocaleString()}`}
                 />
-                <Tooltip content={<MonthlyTooltip />} cursor={{ stroke: '#bbf7d0', strokeWidth: 1 }} />
+                <Tooltip content={<MonthlyTooltip formatCurrency={formatCurrency} />} cursor={{ stroke: '#bbf7d0', strokeWidth: 1 }} />
                 <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#16a34a" />
               </BarChart>
             </ResponsiveContainer>

@@ -2,12 +2,12 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/layout/Layout.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
-import SimplePage from './pages/SimplePage.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import Transactions from './pages/Transactions.jsx'
 import BudgetRules from './pages/BudgetRules.jsx'
 import Reports from './pages/Reports.jsx'
+import Profile from './pages/Profile.jsx'
 
 function App() {
   return (
@@ -31,15 +31,7 @@ function App() {
           path="budgets"
           element={<BudgetRules />}
         />
-        <Route
-          path="profile"
-          element={
-            <SimplePage
-              heading="Profile"
-              description="Manage your account details, preferences, and connected finance tools."
-            />
-          }
-        />
+        <Route path="profile" element={<Profile />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

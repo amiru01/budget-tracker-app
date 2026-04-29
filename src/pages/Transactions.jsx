@@ -5,17 +5,7 @@ import TransactionFilters from '../components/TransactionFilters.jsx'
 import TransactionListItem from '../components/TransactionListItem.jsx'
 import AddExpenseModal from '../components/AddExpenseModal.jsx'
 import AddIncomeModal from '../components/AddIncomeModal.jsx'
-
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
 function isInDateRange(date, range) {
   if (range === 'all') return true
@@ -46,6 +36,7 @@ function isInDateRange(date, range) {
 }
 
 export default function Transactions() {
+  const { formatCurrency } = useCurrency()
   const {
     incomes,
     expenses,

@@ -1,15 +1,5 @@
 import React from 'react'
-
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
 function formatDate(date) {
   if (!date) return ''
@@ -44,6 +34,7 @@ function getCategoryIcon(category, type) {
 }
 
 export default function TransactionListItem({ transaction, onDelete }) {
+  const { formatCurrency } = useCurrency()
   const isIncome = transaction.type === 'income'
   const category = transaction.category || transaction.source || 'Other'
   const icon = getCategoryIcon(category, transaction.type)

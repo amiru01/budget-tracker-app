@@ -17,21 +17,11 @@ import {
 import useFinanceData from '../hooks/useFinanceData.js'
 import ReportCard from '../components/ReportCard.jsx'
 import InsightCard from '../components/InsightCard.jsx'
-
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
 const COLORS = ['#0ea5e9', '#10b981', '#f97316', '#a855f7', '#f43f5e', '#14b8a6', '#64748b']
 
-function CustomTooltip({ active, payload, label }) {
+function CustomTooltip({ active, payload, label, formatCurrency }) {
   if (!active || !payload?.length) return null
 
   return (
@@ -54,6 +44,7 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export default function Reports() {
+  const { formatCurrency } = useCurrency()
   const [timeRange, setTimeRange] = React.useState('30D')
 
   const weeklyDays = timeRange === '7D' ? 7 : timeRange === '30D' ? 30 : 90
@@ -257,7 +248,7 @@ export default function Reports() {
                       axisLine={false}
                       tickFormatter={(v) => `$${v}`}
                     />
-                    <Tooltip content={<CustomTooltip />} />
+                    <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
                     <Line
                       type="monotone"
                       dataKey="amount"
@@ -307,7 +298,7 @@ export default function Reports() {
                       axisLine={false}
                       tickFormatter={(v) => `$${v}`}
                     />
-                    <Tooltip content={<CustomTooltip />} />
+                    <Tooltip content={<CustomTooltip formatCurrency={formatCurrency} />} />
                     <Bar dataKey="amount" radius={[10, 10, 0, 0]} name="Amount">
                       {comparisonData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.fill} />

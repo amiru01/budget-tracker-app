@@ -13,7 +13,6 @@ function formatDateInputValue(value) {
   if (!value) return ''
   if (typeof value?.toDate === 'function') return value.toDate().toISOString().slice(0, 10)
   if (value instanceof Date) return value.toISOString().slice(0, 10)
-  // assume already yyyy-mm-dd
   return String(value)
 }
 
@@ -28,9 +27,7 @@ export default function AddIncomeModal({
   const [source, setSource] = React.useState(sources[0] ?? 'Other')
   const [date, setDate] = React.useState(() => new Date().toISOString().slice(0, 10))
   const [note, setNote] = React.useState('')
-  const [isSaving, setIsSaving] = React.useState(false)
   const [error, setError] = React.useState('')
-  const [success, setSuccess] = React.useState('')
 
   React.useEffect(() => {
     if (!open) return
@@ -42,11 +39,8 @@ export default function AddIncomeModal({
       note: initialIncome?.note ?? '',
     }
 
-    // Defer state updates to satisfy react-hooks linting.
     const t = setTimeout(() => {
       setError('')
-      setSuccess('')
-      setIsSaving(false)
       setAmount(next.amount)
       setSource(next.source)
       setDate(next.date)
@@ -61,7 +55,6 @@ export default function AddIncomeModal({
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-    setSuccess('')
 
     const numeric = Number(amount)
     if (!Number.isFinite(numeric) || numeric <= 0) {
@@ -77,7 +70,10 @@ export default function AddIncomeModal({
       return
     }
 
-    setIsSaving(true)
+    // Close modal immediately
+    onClose()
+    
+    // Save in background
     try {
       await onSubmit({
         amount: numeric,
@@ -85,18 +81,8 @@ export default function AddIncomeModal({
         date: toTimestampFromDateInput(date),
         note: note.trim(),
       })
-
-      // Show success message
-      setSuccess(initialIncome ? 'Income updated successfully!' : 'Income saved successfully!')
-      
-      // Close modal after a brief delay to show success message
-      setTimeout(() => {
-        onClose()
-      }, 1000)
     } catch (err) {
-      setError(err?.message || 'Failed to save income.')
-    } finally {
-      setIsSaving(false)
+      console.error('Failed to save income:', err)
     }
   }
 
@@ -118,9 +104,12 @@ export default function AddIncomeModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            aria-label="Close"
           >
-            Close
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
@@ -129,9 +118,11 @@ export default function AddIncomeModal({
             <label className="block">
               <span className="text-sm font-semibold text-slate-700">Amount</span>
               <input
+                type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                inputMode="decimal"
+                step="0.01"
+                min="0"
                 placeholder="0.00"
                 className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
@@ -160,6 +151,7 @@ export default function AddIncomeModal({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                max={new Date().toISOString().split('T')[0]}
                 className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             </label>
@@ -167,41 +159,30 @@ export default function AddIncomeModal({
             <label className="block">
               <span className="text-sm font-semibold text-slate-700">Note</span>
               <input
+                type="text"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Optional (e.g. Client payment)"
+                placeholder="Optional"
+                maxLength="100"
                 className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             </label>
           </div>
 
           {error ? (
-            <div className="rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+            <div className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
               {error}
-            </div>
-          ) : null}
-
-          {success ? (
-            <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
-              {success}
             </div>
           ) : null}
 
           <button
             type="submit"
-            disabled={isSaving}
-            className={[
-              'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
-              success 
-                ? 'bg-green-600 text-white hover:bg-green-700'
-                : 'bg-emerald-600 text-white hover:bg-emerald-700'
-            ].join(' ')}
+            className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
           >
-            {success ? '✓ Saved!' : isSaving ? 'Saving…' : 'Save income'}
+            Save income
           </button>
         </form>
       </div>
     </div>
   )
 }
-
