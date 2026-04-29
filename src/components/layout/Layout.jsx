@@ -7,7 +7,6 @@ const pageTitles = {
   '/dashboard': 'Dashboard',
   '/transactions': 'Transactions',
   '/reports': 'Reports',
-  '/income': 'Income',
   '/budgets': 'Budgets',
   '/profile': 'Profile',
 }

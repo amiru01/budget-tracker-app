@@ -4,7 +4,6 @@ import {
   ChartBarSquareIcon,
   CreditCardIcon,
   HomeIcon,
-  ArrowTrendingUpIcon,
   UserCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -13,7 +12,6 @@ import { NavLink } from 'react-router-dom'
 const navigation = [
   { name: 'Dashboard', to: '/dashboard', icon: HomeIcon },
   { name: 'Transactions', to: '/transactions', icon: CreditCardIcon },
-  { name: 'Income', to: '/income', icon: ArrowTrendingUpIcon },
   { name: 'Reports', to: '/reports', icon: ChartBarSquareIcon },
   { name: 'Budgets', to: '/budgets', icon: BanknotesIcon },
   { name: 'Profile', to: '/profile', icon: UserCircleIcon },
