@@ -6,6 +6,8 @@ import SimplePage from './pages/SimplePage.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import Income from './pages/Income.jsx'
+import Transactions from './pages/Transactions.jsx'
+import BudgetRules from './pages/BudgetRules.jsx'
 
 function App() {
   return (
@@ -24,15 +26,7 @@ function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="income" element={<Income />} />
-        <Route
-          path="transactions"
-          element={
-            <SimplePage
-              heading="Transactions"
-              description="Track and review incoming and outgoing activity across all accounts."
-            />
-          }
-        />
+        <Route path="transactions" element={<Transactions />} />
         <Route
           path="reports"
           element={
@@ -44,12 +38,7 @@ function App() {
         />
         <Route
           path="budgets"
-          element={
-            <SimplePage
-              heading="Budgets"
-              description="Set category goals, compare actuals, and keep your spending on target."
-            />
-          }
+          element={<BudgetRules />}
         />
         <Route
           path="profile"
