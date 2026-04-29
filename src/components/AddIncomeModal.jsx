@@ -1,7 +1,7 @@
 import React from 'react'
 import { Timestamp } from 'firebase/firestore'
 
-const defaultCategories = ['Food', 'Transport', 'Shopping', 'Bills', 'Subscriptions', 'Health', 'Entertainment', 'Other']
+const defaultSources = ['Salary', 'Freelance', 'Business', 'Other']
 
 function toTimestampFromDateInput(value) {
   const d = new Date(value)
@@ -9,15 +9,23 @@ function toTimestampFromDateInput(value) {
   return Timestamp.fromDate(d)
 }
 
-export default function AddExpenseModal({
+function formatDateInputValue(value) {
+  if (!value) return ''
+  if (typeof value?.toDate === 'function') return value.toDate().toISOString().slice(0, 10)
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  // assume already yyyy-mm-dd
+  return String(value)
+}
+
+export default function AddIncomeModal({
   open,
   onClose,
   onSubmit,
-  categories = defaultCategories,
+  sources = defaultSources,
+  initialIncome = null,
 }) {
-  const [type, setType] = React.useState('expense')
   const [amount, setAmount] = React.useState('')
-  const [category, setCategory] = React.useState(categories[0] ?? 'Other')
+  const [source, setSource] = React.useState(sources[0] ?? 'Other')
   const [date, setDate] = React.useState(() => new Date().toISOString().slice(0, 10))
   const [note, setNote] = React.useState('')
   const [isSaving, setIsSaving] = React.useState(false)
@@ -25,13 +33,26 @@ export default function AddExpenseModal({
 
   React.useEffect(() => {
     if (!open) return
+
+    const next = {
+      amount: initialIncome ? String(initialIncome.amount ?? '') : '',
+      source: initialIncome?.source ?? sources[0] ?? 'Other',
+      date: formatDateInputValue(initialIncome?.date) || new Date().toISOString().slice(0, 10),
+      note: initialIncome?.note ?? '',
+    }
+
     // Defer state updates to satisfy react-hooks linting.
     const t = setTimeout(() => {
       setError('')
       setIsSaving(false)
+      setAmount(next.amount)
+      setSource(next.source)
+      setDate(next.date)
+      setNote(next.note)
     }, 0)
+
     return () => clearTimeout(t)
-  }, [open])
+  }, [open, initialIncome, sources])
 
   if (!open) return null
 
@@ -44,8 +65,8 @@ export default function AddExpenseModal({
       setError('Enter a valid amount.')
       return
     }
-    if (!category) {
-      setError('Choose a category.')
+    if (!source) {
+      setError('Choose a source.')
       return
     }
     if (!date) {
@@ -56,20 +77,15 @@ export default function AddExpenseModal({
     setIsSaving(true)
     try {
       await onSubmit({
-        type,
         amount: numeric,
-        category,
+        source,
         date: toTimestampFromDateInput(date),
         note: note.trim(),
       })
-      setAmount('')
-      setNote('')
-      setType('expense')
-      setCategory(categories[0] ?? 'Other')
-      setDate(new Date().toISOString().slice(0, 10))
+
       onClose()
     } catch (err) {
-      setError(err?.message || 'Failed to save.')
+      setError(err?.message || 'Failed to save income.')
     } finally {
       setIsSaving(false)
     }
@@ -88,7 +104,7 @@ export default function AddExpenseModal({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-medium text-slate-500">New entry</p>
-            <h3 className="mt-1 text-lg font-semibold text-slate-900">Add expense / income</h3>
+            <h3 className="mt-1 text-lg font-semibold text-slate-900">Add income</h3>
           </div>
           <button
             type="button"
@@ -102,68 +118,56 @@ export default function AddExpenseModal({
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Type</span>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
-              >
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-            </label>
-
-            <label className="block">
               <span className="text-sm font-semibold text-slate-700">Amount</span>
               <input
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 inputMode="decimal"
                 placeholder="0.00"
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             </label>
-          </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Category</span>
+              <span className="text-sm font-semibold text-slate-700">Source</span>
               <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               >
-                {categories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                {sources.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
                   </option>
                 ))}
               </select>
             </label>
+          </div>
 
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
               <span className="text-sm font-semibold text-slate-700">Date</span>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-semibold text-slate-700">Note</span>
+              <input
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Optional (e.g. Client payment)"
+                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             </label>
           </div>
 
-          <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Note</span>
-            <input
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Optional note (e.g. Uber to office)"
-              className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </label>
-
           {error ? (
-            <div className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
+            <div className="rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
               {error}
             </div>
           ) : null}
@@ -171,9 +175,9 @@ export default function AddExpenseModal({
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSaving ? 'Saving…' : 'Save'}
+            {isSaving ? 'Saving…' : 'Save income'}
           </button>
         </form>
       </div>

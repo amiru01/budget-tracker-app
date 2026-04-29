@@ -9,6 +9,7 @@ import {
   query,
   serverTimestamp,
   where,
+  updateDoc,
 } from 'firebase/firestore'
 
 const expensesCol = collection(db, 'expenses')
@@ -54,7 +55,26 @@ export async function deleteExpense(expenseId) {
   return await deleteDoc(doc(db, 'expenses', expenseId))
 }
 
-export function subscribeToExpensesByUser(userId, onChange, onError) {
+export async function updateExpense(expenseId, updatedData) {
+  const { userId, amount, category, date, note = '', type = 'expense' } = updatedData || {}
+
+  if (!expenseId) throw new Error('Missing expenseId')
+  if (!userId) throw new Error('Missing userId')
+  if (typeof amount !== 'number' || Number.isNaN(amount)) throw new Error('Invalid amount')
+  if (!category) throw new Error('Missing category')
+  if (!date) throw new Error('Missing date')
+
+  return updateDoc(doc(db, 'expenses', expenseId), {
+    userId,
+    amount,
+    category,
+    date,
+    note,
+    type,
+  })
+}
+
+export function subscribeToExpenses(userId, onChange, onError) {
   if (!userId) {
     onChange([])
     return () => {}
@@ -72,5 +92,10 @@ export function subscribeToExpensesByUser(userId, onChange, onError) {
       if (onError) onError(err)
     },
   )
+}
+
+// Backwards compatibility: older code used this name.
+export function subscribeToExpensesByUser(userId, onChange, onError) {
+  return subscribeToExpenses(userId, onChange, onError)
 }
 

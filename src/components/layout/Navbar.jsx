@@ -2,11 +2,14 @@ import {
   Bars3Icon,
   BellIcon,
 } from '@heroicons/react/24/outline'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../firebase.js'
+import React from 'react'
+import { logout } from '../../services/authService.js'
+import { useAuth } from '../../context/AuthContext.jsx'
 
 function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
-  const user = auth.currentUser
+  const { user, loading } = useAuth()
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false)
+
   const displayName = user?.displayName || user?.email || 'Signed in user'
   const initials = (displayName || 'U')
     .split(' ')
@@ -16,7 +19,12 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
     .toUpperCase()
 
   async function handleLogout() {
-    await signOut(auth)
+    try {
+      setIsLoggingOut(true)
+      await logout()
+    } finally {
+      setIsLoggingOut(false)
+    }
   }
 
   return (
@@ -71,8 +79,9 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
             type="button"
             onClick={handleLogout}
             className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
+            disabled={loading || isLoggingOut}
           >
-            Logout
+            {isLoggingOut ? 'Logging out…' : 'Logout'}
           </button>
         </div>
       </div>

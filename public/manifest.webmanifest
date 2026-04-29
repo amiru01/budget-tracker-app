@@ -1,0 +1,19 @@
+{
+  "name": "Smart Finance",
+  "short_name": "Smart Finance",
+  "description": "Track spending, budgets, and insights in Smart Finance.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fb",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

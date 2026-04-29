@@ -11,18 +11,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '../firebase.js'
-import { addExpense, deleteExpense, subscribeToExpensesByUser } from '../services/expenseService.js'
-import {
-  computeCategoryBreakdown,
-  computeTotals,
-  computeWeeklySpending,
-  generateInsights,
-} from '../services/analyticsService.js'
-import { ensureUserDoc } from '../services/userService.js'
+import useFinanceData from '../hooks/useFinanceData.js'
 import AddExpenseModal from '../components/AddExpenseModal.jsx'
 import InsightCard from '../components/InsightCard.jsx'
+import IncomeChart from '../components/IncomeChart.jsx'
 import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
 
@@ -61,65 +53,40 @@ const pieColors = ['#0ea5e9', '#10b981', '#f97316', '#a855f7', '#f43f5e', '#14b8
 function Dashboard() {
   const [range, setRange] = React.useState('7D')
   const [isModalOpen, setIsModalOpen] = React.useState(false)
-  const [userId, setUserId] = React.useState('')
-  const [expenses, setExpenses] = React.useState([])
-  const [status, setStatus] = React.useState({ loading: true, error: '' })
 
-  React.useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          await ensureUserDoc(user)
-        } catch {
-          // non-blocking: user doc is helpful but not required for dashboard usage
-        }
-        setUserId(user.uid)
-        return
-      }
-      setUserId('')
-      setExpenses([])
-      setStatus({ loading: false, error: 'Please sign in to view your dashboard.' })
-    })
+  const weeklyDays = range === '7D' ? 7 : range === '30D' ? 30 : 90
 
-    return () => unsub()
-  }, [])
-
-  React.useEffect(() => {
-    if (!userId) return
-    setStatus((s) => ({ ...s, loading: true, error: '' }))
-
-    const unsub = subscribeToExpensesByUser(
-      userId,
-      (items) => {
-        setExpenses(items)
-        setStatus({ loading: false, error: '' })
-      },
-      (err) => {
-        setStatus({ loading: false, error: err?.message || 'Failed to load expenses' })
-      },
-    )
-
-    return () => unsub()
-  }, [userId])
-
-  const totals = React.useMemo(() => computeTotals(expenses), [expenses])
-  const weekly = React.useMemo(() => computeWeeklySpending(expenses, 7), [expenses])
-  const category = React.useMemo(() => computeCategoryBreakdown(expenses), [expenses])
-  const insights = React.useMemo(() => generateInsights(expenses), [expenses])
-
-  const visibleWeekly = React.useMemo(() => {
-    if (range === '7D') return weekly
-    if (range === '30D') return computeWeeklySpending(expenses, 30)
-    return computeWeeklySpending(expenses, 90)
-  }, [expenses, range, weekly])
+  const {
+    expenses,
+    totalIncome,
+    totalExpenses,
+    balance,
+    categoryData,
+    weeklyData,
+    insights,
+    incomeMonthlyTrend,
+    incomeBySource,
+    loading,
+    error,
+    actions,
+  } = useFinanceData({ weeklyDays })
 
   async function handleAddExpense(payload) {
-    if (!userId) throw new Error('Not signed in')
-    await addExpense({ userId, ...payload })
+    await actions.addExpense(payload)
   }
 
   async function handleDelete(id) {
-    await deleteExpense(id)
+    await actions.deleteExpense(id)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
+        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+          Loading dashboard…
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -148,28 +115,28 @@ function Dashboard() {
         </div>
       </header>
 
-      {status.error ? (
+      {error ? (
         <div className="rounded-xl bg-rose-50 p-4 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
-          {status.error}
+          {error}
         </div>
       ) : null}
 
-      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <StatCard
           label="Total Balance"
-          value={formatCurrency(totals.balance)}
+          value={formatCurrency(balance)}
           sublabel="Across all connected accounts"
           accent="blue"
         />
         <StatCard
           label="Total Income"
-          value={formatCurrency(totals.income)}
+          value={formatCurrency(totalIncome)}
           sublabel="Month to date"
           accent="green"
         />
         <StatCard
           label="Total Expenses"
-          value={formatCurrency(totals.expenses)}
+          value={formatCurrency(totalExpenses)}
           sublabel="Month to date"
           accent="red"
         />
@@ -227,7 +194,7 @@ function Dashboard() {
           <div className="mt-6 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200/50">
             <div className="h-72 rounded-lg bg-white/60 p-2 ring-1 ring-slate-200/60">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={visibleWeekly} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
+                <BarChart data={weeklyData} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
                   <CartesianGrid strokeDasharray="4 4" stroke="#e2e8f0" vertical={false} />
                   <XAxis
                     dataKey="day"
@@ -259,7 +226,7 @@ function Dashboard() {
               <p className="mt-1 text-sm text-slate-500">Distribution of spending by category.</p>
             </div>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-              {formatCurrency(category.total)}
+              {formatCurrency(categoryData.total)}
             </span>
           </div>
 
@@ -275,14 +242,14 @@ function Dashboard() {
                     }}
                   />
                   <Pie
-                    data={category.data}
+                    data={categoryData.data}
                     dataKey="value"
                     nameKey="name"
                     innerRadius={62}
                     outerRadius={95}
                     paddingAngle={2}
                   >
-                    {category.data.map((entry, index) => (
+                    {categoryData.data.map((entry, index) => (
                       <Cell key={entry.name} fill={pieColors[index % pieColors.length]} />
                     ))}
                   </Pie>
@@ -292,7 +259,7 @@ function Dashboard() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {category.data.slice(0, 6).map((c, idx) => (
+            {categoryData.data.slice(0, 6).map((c, idx) => (
               <span
                 key={c.name}
                 className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
@@ -308,7 +275,7 @@ function Dashboard() {
         </article>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-2">
+      <section className="grid gap-6 lg:grid-cols-3">
         <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200/70 transition hover:shadow-lg">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -324,12 +291,12 @@ function Dashboard() {
           </div>
 
           <ul className="mt-6 space-y-3">
-            {status.loading ? (
+            {loading ? (
               <li className="rounded-xl bg-slate-50 px-4 py-4 text-sm font-medium text-slate-600 ring-1 ring-slate-100">
                 Loading transactions…
               </li>
             ) : null}
-            {!status.loading && expenses.length === 0 ? (
+            {!loading && expenses.length === 0 ? (
               <li className="rounded-xl bg-slate-50 px-4 py-4 text-sm text-slate-600 ring-1 ring-slate-100">
                 No transactions yet. Add your first expense to see charts and insights update.
               </li>
@@ -349,6 +316,8 @@ function Dashboard() {
             ))}
           </ul>
         </article>
+
+        <IncomeChart monthlyIncomeTrend={incomeMonthlyTrend} incomeBySource={incomeBySource} variant="preview" />
 
         <article className="rounded-xl bg-sky-50 p-6 shadow-md ring-1 ring-sky-200/70 transition hover:shadow-lg">
           <div className="flex items-start justify-between gap-3">
