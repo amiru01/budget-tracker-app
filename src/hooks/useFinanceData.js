@@ -112,30 +112,32 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
   const highestIncomeSource = React.useMemo(() => incomeBySource.data?.[0] ?? null, [incomeBySource])
 
   async function addIncomeEntry(data) {
-    if (!userId) throw new Error('Not signed in')
+    if (!userId) throw new Error('Please sign in to add income')
     return addIncome({ userId, ...data })
   }
 
   async function deleteIncomeEntry(id) {
+    if (!userId) throw new Error('Please sign in to delete income')
     return deleteIncome(id)
   }
 
   async function updateIncomeEntry(id, data) {
-    if (!userId) throw new Error('Not signed in')
+    if (!userId) throw new Error('Please sign in to update income')
     return updateIncome(id, { userId, ...data })
   }
 
   async function addExpenseEntry(data) {
-    if (!userId) throw new Error('Not signed in')
+    if (!userId) throw new Error('Please sign in to add expenses')
     return addExpense({ userId, ...data })
   }
 
   async function deleteExpenseEntry(id) {
+    if (!userId) throw new Error('Please sign in to delete expenses')
     return deleteExpense(id)
   }
 
   async function updateExpenseEntry(id, data) {
-    if (!userId) throw new Error('Not signed in')
+    if (!userId) throw new Error('Please sign in to update expenses')
     return updateExpense(id, { userId, ...data })
   }
 

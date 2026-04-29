@@ -13,10 +13,13 @@ import {
 } from 'recharts'
 import useFinanceData from '../hooks/useFinanceData.js'
 import AddExpenseModal from '../components/AddExpenseModal.jsx'
+import BudgetRuleModal from '../components/BudgetRuleModal.jsx'
 import InsightCard from '../components/InsightCard.jsx'
 import IncomeChart from '../components/IncomeChart.jsx'
 import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
+import { addBudgetRule, subscribeToBudgetRules, checkBudgetViolations } from '../services/budgetService.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 function formatCurrency(value) {
   const abs = Math.abs(value)
@@ -51,8 +54,11 @@ function SpendingTooltip({ active, payload, label }) {
 const pieColors = ['#0ea5e9', '#10b981', '#f97316', '#a855f7', '#f43f5e', '#14b8a6', '#64748b']
 
 function Dashboard() {
+  const { user } = useAuth()
   const [range, setRange] = React.useState('7D')
   const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [isBudgetModalOpen, setIsBudgetModalOpen] = React.useState(false)
+  const [budgetRules, setBudgetRules] = React.useState([])
 
   const weeklyDays = range === '7D' ? 7 : range === '30D' ? 30 : 90
 
@@ -71,12 +77,35 @@ function Dashboard() {
     actions,
   } = useFinanceData({ weeklyDays })
 
+  // Subscribe to budget rules
+  React.useEffect(() => {
+    if (!user?.uid) return
+
+    const unsubscribe = subscribeToBudgetRules(
+      user.uid,
+      setBudgetRules,
+      (err) => console.error('Budget rules error:', err)
+    )
+
+    return unsubscribe
+  }, [user?.uid])
+
+  // Check for budget violations
+  const budgetViolations = React.useMemo(() => {
+    return checkBudgetViolations(expenses, budgetRules)
+  }, [expenses, budgetRules])
+
   async function handleAddExpense(payload) {
     await actions.addExpense(payload)
   }
 
   async function handleDelete(id) {
     await actions.deleteExpense(id)
+  }
+
+  async function handleCreateBudgetRule(ruleData) {
+    if (!user?.uid) throw new Error('Please sign in to create budget rules')
+    await addBudgetRule({ userId: user.uid, ...ruleData })
   }
 
   if (loading) {
@@ -118,6 +147,21 @@ function Dashboard() {
       {error ? (
         <div className="rounded-xl bg-rose-50 p-4 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
           {error}
+        </div>
+      ) : null}
+
+      {budgetViolations.length > 0 ? (
+        <div className="rounded-xl bg-amber-50 p-4 ring-1 ring-amber-200">
+          <h3 className="text-sm font-semibold text-amber-800">Budget Alerts</h3>
+          <div className="mt-2 space-y-2">
+            {budgetViolations.map((violation, idx) => (
+              <div key={idx} className="text-sm text-amber-700">
+                <strong>{violation.rule.name}</strong>: You've spent{' '}
+                {formatCurrency(violation.spending)} (${formatCurrency(violation.excess)} over your{' '}
+                {violation.period} limit of {formatCurrency(violation.rule.limit)})
+              </div>
+            ))}
+          </div>
         </div>
       ) : null}
 
@@ -343,6 +387,7 @@ function Dashboard() {
             </p>
             <button
               type="button"
+              onClick={() => setIsBudgetModalOpen(true)}
               className="mt-3 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
               Create a budget rule
@@ -355,6 +400,12 @@ function Dashboard() {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddExpense}
+      />
+
+      <BudgetRuleModal
+        open={isBudgetModalOpen}
+        onClose={() => setIsBudgetModalOpen(false)}
+        onSubmit={handleCreateBudgetRule}
       />
     </div>
   )

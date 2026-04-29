@@ -2,6 +2,7 @@ import React from 'react'
 import { Timestamp } from 'firebase/firestore'
 
 const defaultCategories = ['Food', 'Transport', 'Shopping', 'Bills', 'Subscriptions', 'Health', 'Entertainment', 'Other']
+const defaultIncomeSources = ['Salary', 'Freelance', 'Business', 'Investment', 'Rental', 'Gift', 'Other']
 
 function toTimestampFromDateInput(value) {
   const d = new Date(value)
@@ -14,6 +15,7 @@ export default function AddExpenseModal({
   onClose,
   onSubmit,
   categories = defaultCategories,
+  incomeSources = defaultIncomeSources,
 }) {
   const [type, setType] = React.useState('expense')
   const [amount, setAmount] = React.useState('')
@@ -22,22 +24,39 @@ export default function AddExpenseModal({
   const [note, setNote] = React.useState('')
   const [isSaving, setIsSaving] = React.useState(false)
   const [error, setError] = React.useState('')
+  const [success, setSuccess] = React.useState('')
 
   React.useEffect(() => {
     if (!open) return
-    // Defer state updates to satisfy react-hooks linting.
+    // Reset all form state when modal opens
     const t = setTimeout(() => {
       setError('')
+      setSuccess('')
       setIsSaving(false)
+      setAmount('')
+      setNote('')
+      setType('expense')
+      setCategory(categories[0] ?? 'Other')
+      setDate(new Date().toISOString().slice(0, 10))
     }, 0)
     return () => clearTimeout(t)
-  }, [open])
+  }, [open, categories])
+
+  // Update category when type changes
+  React.useEffect(() => {
+    if (type === 'expense') {
+      setCategory(categories[0] ?? 'Other')
+    } else {
+      setCategory(incomeSources[0] ?? 'Other')
+    }
+  }, [type, categories, incomeSources])
 
   if (!open) return null
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    setSuccess('')
 
     const numeric = Number(amount)
     if (!Number.isFinite(numeric) || numeric <= 0) {
@@ -62,12 +81,14 @@ export default function AddExpenseModal({
         date: toTimestampFromDateInput(date),
         note: note.trim(),
       })
-      setAmount('')
-      setNote('')
-      setType('expense')
-      setCategory(categories[0] ?? 'Other')
-      setDate(new Date().toISOString().slice(0, 10))
-      onClose()
+      
+      // Show success message
+      setSuccess(`${type === 'expense' ? 'Expense' : 'Income'} saved successfully!`)
+      
+      // Close modal after a brief delay to show success message
+      setTimeout(() => {
+        onClose()
+      }, 1000)
     } catch (err) {
       setError(err?.message || 'Failed to save.')
     } finally {
@@ -127,13 +148,15 @@ export default function AddExpenseModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Category</span>
+              <span className="text-sm font-semibold text-slate-700">
+                {type === 'expense' ? 'Category' : 'Source'}
+              </span>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
               >
-                {categories.map((c) => (
+                {(type === 'expense' ? categories : incomeSources).map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
@@ -168,12 +191,23 @@ export default function AddExpenseModal({
             </div>
           ) : null}
 
+          {success ? (
+            <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
+              {success}
+            </div>
+          ) : null}
+
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className={[
+              'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
+              success 
+                ? 'bg-green-600 text-white hover:bg-green-700'
+                : 'bg-slate-900 text-white hover:bg-slate-800'
+            ].join(' ')}
           >
-            {isSaving ? 'Saving…' : 'Save'}
+            {success ? '✓ Saved!' : isSaving ? 'Saving…' : 'Save'}
           </button>
         </form>
       </div>

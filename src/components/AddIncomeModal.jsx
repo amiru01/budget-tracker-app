@@ -30,6 +30,7 @@ export default function AddIncomeModal({
   const [note, setNote] = React.useState('')
   const [isSaving, setIsSaving] = React.useState(false)
   const [error, setError] = React.useState('')
+  const [success, setSuccess] = React.useState('')
 
   React.useEffect(() => {
     if (!open) return
@@ -44,6 +45,7 @@ export default function AddIncomeModal({
     // Defer state updates to satisfy react-hooks linting.
     const t = setTimeout(() => {
       setError('')
+      setSuccess('')
       setIsSaving(false)
       setAmount(next.amount)
       setSource(next.source)
@@ -59,6 +61,7 @@ export default function AddIncomeModal({
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    setSuccess('')
 
     const numeric = Number(amount)
     if (!Number.isFinite(numeric) || numeric <= 0) {
@@ -83,7 +86,13 @@ export default function AddIncomeModal({
         note: note.trim(),
       })
 
-      onClose()
+      // Show success message
+      setSuccess(initialIncome ? 'Income updated successfully!' : 'Income saved successfully!')
+      
+      // Close modal after a brief delay to show success message
+      setTimeout(() => {
+        onClose()
+      }, 1000)
     } catch (err) {
       setError(err?.message || 'Failed to save income.')
     } finally {
@@ -172,12 +181,23 @@ export default function AddIncomeModal({
             </div>
           ) : null}
 
+          {success ? (
+            <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
+              {success}
+            </div>
+          ) : null}
+
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className={[
+              'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
+              success 
+                ? 'bg-green-600 text-white hover:bg-green-700'
+                : 'bg-emerald-600 text-white hover:bg-emerald-700'
+            ].join(' ')}
           >
-            {isSaving ? 'Saving…' : 'Save income'}
+            {success ? '✓ Saved!' : isSaving ? 'Saving…' : 'Save income'}
           </button>
         </form>
       </div>
