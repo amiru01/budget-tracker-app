@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import Transactions from './pages/Transactions.jsx'
 import BudgetRules from './pages/BudgetRules.jsx'
+import Reports from './pages/Reports.jsx'
 
 function App() {
   return (
@@ -25,15 +26,7 @@ function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="transactions" element={<Transactions />} />
-        <Route
-          path="reports"
-          element={
-            <SimplePage
-              heading="Reports"
-              description="Generate insights from monthly performance, spending, and cash flow trends."
-            />
-          }
-        />
+        <Route path="reports" element={<Reports />} />
         <Route
           path="budgets"
           element={<BudgetRules />}
