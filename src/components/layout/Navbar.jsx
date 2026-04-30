@@ -5,10 +5,14 @@ import {
 import React from 'react'
 import { logout } from '../../services/authService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
+import useNotifications from '../../hooks/useNotifications.js'
+import NotificationDropdown from '../NotificationDropdown.jsx'
 
 function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
   const { user, loading } = useAuth()
+  const { notifications, unreadCount } = useNotifications()
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
+  const [isNotificationOpen, setIsNotificationOpen] = React.useState(false)
 
   const displayName = user?.displayName || user?.email || 'Signed in user'
   const initials = (displayName || 'U')
@@ -53,14 +57,33 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 transition-colors duration-200 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2"
-            aria-label="View notifications"
-          >
-            <BellIcon className="h-5 w-5" />
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-cyan-500" aria-hidden="true" />
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+              className={[
+                'relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 transition-colors duration-200 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2',
+                isNotificationOpen ? 'text-slate-900 ring-2 ring-cyan-500' : '',
+              ].join(' ')}
+              aria-label="View notifications"
+              aria-expanded={isNotificationOpen}
+            >
+              <BellIcon className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {isNotificationOpen && (
+              <NotificationDropdown
+                notifications={notifications}
+                userId={user?.uid}
+                onClose={() => setIsNotificationOpen(false)}
+              />
+            )}
+          </div>
 
           <button
             type="button"

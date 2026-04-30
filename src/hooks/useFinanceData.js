@@ -21,6 +21,12 @@ import {
   groupExpensesByCategory,
 } from '../services/analyticsService.js'
 import { ensureUserDoc } from '../services/userService.js'
+import { subscribeToBudgetRules } from '../services/budgetService.js'
+import {
+  checkBudgetNotifications,
+  checkSpendingPatterns,
+  checkSavingsRate,
+} from '../services/notificationTriggers.js'
 
 export default function useFinanceData({ weeklyDays = 7 } = {}) {
   const { user, loading: authLoading } = useAuth()
@@ -28,14 +34,17 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
 
   const [incomes, setIncomes] = React.useState([])
   const [expenses, setExpenses] = React.useState([])
+  const [budgetRules, setBudgetRules] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
-  const loadedRef = React.useRef({ incomes: false, expenses: false })
+  const loadedRef = React.useRef({ incomes: false, expenses: false, budgets: false })
+  const notificationCheckRef = React.useRef(false)
 
   React.useEffect(() => {
     const t = setTimeout(() => setError(''), 0)
-    loadedRef.current = { incomes: false, expenses: false }
+    loadedRef.current = { incomes: false, expenses: false, budgets: false }
+    notificationCheckRef.current = false
     return () => clearTimeout(t)
   }, [userId])
 
@@ -52,6 +61,7 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
 
     let unsubIncomes = null
     let unsubExpenses = null
+    let unsubBudgets = null
     let timeoutId = null
 
     // Keep user document in sync for Firestore-based app features.
@@ -64,7 +74,7 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
 
     // Set a timeout to stop loading after 10 seconds if indexes are still building
     timeoutId = setTimeout(() => {
-      if (!loadedRef.current.incomes || !loadedRef.current.expenses) {
+      if (!loadedRef.current.incomes || !loadedRef.current.expenses || !loadedRef.current.budgets) {
         setError('Firestore indexes are still building. This may take 2-5 minutes. Please refresh the page in a moment.')
         setLoading(false)
       }
@@ -75,7 +85,7 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
       (items) => {
         setIncomes(items)
         loadedRef.current.incomes = true
-        setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses))
+        setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses && loadedRef.current.budgets))
         setError('') // Clear any timeout errors
       },
       (err) => {
@@ -95,7 +105,7 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
       (items) => {
         setExpenses(items)
         loadedRef.current.expenses = true
-        setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses))
+        setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses && loadedRef.current.budgets))
         setError('') // Clear any timeout errors
       },
       (err) => {
@@ -110,13 +120,51 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
       },
     )
 
+    unsubBudgets = subscribeToBudgetRules(
+      userId,
+      (items) => {
+        setBudgetRules(items)
+        loadedRef.current.budgets = true
+        setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses && loadedRef.current.budgets))
+        setError('') // Clear any timeout errors
+      },
+      (err) => {
+        const errorMsg = err?.message || 'Failed to load budget rules'
+        if (errorMsg.includes('index') || errorMsg.includes('building')) {
+          setError('Firestore indexes are building. Please wait 2-5 minutes and refresh the page.')
+        } else {
+          setError(errorMsg)
+        }
+        setLoading(false)
+      },
+    )
+
     return () => {
       clearTimeout(tLoading)
       clearTimeout(timeoutId)
       if (typeof unsubIncomes === 'function') unsubIncomes()
       if (typeof unsubExpenses === 'function') unsubExpenses()
+      if (typeof unsubBudgets === 'function') unsubBudgets()
     }
   }, [authLoading, userId, user])
+
+  // Trigger smart notifications when data changes
+  React.useEffect(() => {
+    if (!userId || loading || notificationCheckRef.current) return
+    if (incomes.length === 0 && expenses.length === 0) return
+
+    // Mark that we've checked notifications to prevent repeated checks
+    notificationCheckRef.current = true
+
+    // Run notification checks (non-blocking)
+    Promise.all([
+      checkBudgetNotifications(userId, expenses, budgetRules),
+      checkSpendingPatterns(userId, expenses),
+      checkSavingsRate(userId, incomes, expenses),
+    ]).catch((err) => {
+      console.error('Notification check failed:', err)
+    })
+  }, [userId, incomes, expenses, budgetRules, loading])
 
   const totalIncome = React.useMemo(() => calculateTotalIncome(incomes), [incomes])
   const totalExpenses = React.useMemo(() => calculateTotalExpenses(expenses), [expenses])
