@@ -69,9 +69,41 @@ function Login() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8F9FB] px-4 py-8">
       <section className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 sm:p-8">
-        <p className="text-sm font-medium text-slate-500">Smart Finance</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">Login</h1>
-        <p className="mt-2 text-sm text-slate-600">Sign in to view your dashboard.</p>
+        {/* Logo */}
+        <div className="flex justify-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-14 w-14">
+              <ellipse cx="256" cy="280" rx="140" ry="110" fill="#ffffff" opacity="0.9"/>
+              <ellipse cx="220" cy="250" rx="40" ry="30" fill="#ffffff" opacity="0.4"/>
+              <rect x="236" y="190" width="40" height="8" rx="4" fill="#0f172a"/>
+              <g transform="translate(256, 160)">
+                <circle cx="0" cy="0" r="24" fill="#fbbf24"/>
+                <circle cx="0" cy="0" r="18" fill="#f59e0b"/>
+                <text x="0" y="8" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="#0f172a" textAnchor="middle">$</text>
+              </g>
+              <line x1="230" y1="140" x2="220" y2="150" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" opacity="0.5"/>
+              <line x1="282" y1="140" x2="292" y2="150" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" opacity="0.5"/>
+              <ellipse cx="180" cy="240" rx="20" ry="35" fill="#d1fae5" transform="rotate(-20 180 240)"/>
+              <ellipse cx="380" cy="280" rx="35" ry="30" fill="#d1fae5"/>
+              <circle cx="370" cy="275" r="6" fill="#0f172a"/>
+              <circle cx="370" cy="290" r="6" fill="#0f172a"/>
+              <circle cx="300" cy="250" r="12" fill="#0f172a"/>
+              <circle cx="303" cy="247" r="5" fill="#ffffff"/>
+              <rect x="200" y="360" width="25" height="40" rx="12" fill="#d1fae5"/>
+              <rect x="260" y="360" width="25" height="40" rx="12" fill="#d1fae5"/>
+              <rect x="287" y="360" width="25" height="40" rx="12" fill="#d1fae5"/>
+              <path d="M 140 290 Q 120 280, 110 290 T 95 300" stroke="#d1fae5" strokeWidth="8" fill="none" strokeLinecap="round"/>
+              <circle cx="220" cy="130" r="3" fill="#fbbf24"/>
+              <circle cx="295" cy="125" r="3" fill="#fbbf24"/>
+            </svg>
+          </div>
+        </div>
+        
+        <div className="mt-6 text-center">
+          <p className="text-sm font-medium text-slate-500">Smart Finance</p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">Login</h1>
+          <p className="mt-2 text-sm text-slate-600">Sign in to view your dashboard.</p>
+        </div>
 
         <div className="mt-6 space-y-3">
           <button
