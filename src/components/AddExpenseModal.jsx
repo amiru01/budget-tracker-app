@@ -19,12 +19,16 @@ export default function AddExpenseModal({
   const [category, setCategory] = React.useState(categories[0] ?? 'Other')
   const [date, setDate] = React.useState(() => new Date().toISOString().slice(0, 10))
   const [note, setNote] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [success, setSuccess] = React.useState(false)
   const [error, setError] = React.useState('')
 
   React.useEffect(() => {
     if (!open) return
     const t = setTimeout(() => {
       setError('')
+      setSuccess(false)
+      setLoading(false)
       setAmount('')
       setNote('')
       setCategory(categories[0] ?? 'Other')
@@ -38,6 +42,7 @@ export default function AddExpenseModal({
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    setSuccess(false)
 
     const numeric = Number(amount)
     if (!Number.isFinite(numeric) || numeric <= 0) {
@@ -53,10 +58,7 @@ export default function AddExpenseModal({
       return
     }
 
-    // Close modal immediately
-    onClose()
-    
-    // Save in background
+    setLoading(true)
     try {
       await onSubmit({
         type: 'expense',
@@ -65,8 +67,27 @@ export default function AddExpenseModal({
         date: toTimestampFromDateInput(date),
         note: note.trim(),
       })
+
+      // Show success state immediately
+      setSuccess(true)
+
+      // Reset form
+      setAmount('')
+      setCategory(categories[0] ?? 'Other')
+      setDate(new Date().toISOString().slice(0, 10))
+      setNote('')
+      
+      // Close modal after showing success message
+      setTimeout(() => {
+        onClose()
+      }, 1500)
     } catch (err) {
       console.error('Failed to save expense:', err)
+      setError(err?.message || 'Failed to save expense.')
+      setSuccess(false)
+    } finally {
+      // Always reset loading state
+      setLoading(false)
     }
   }
 
@@ -105,7 +126,7 @@ export default function AddExpenseModal({
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                step="0.01"
+                step="1"
                 min="0"
                 placeholder="0.00"
                 className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
@@ -155,15 +176,39 @@ export default function AddExpenseModal({
 
           {error ? (
             <div className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
-              {error}
+              ❌ {error}
+            </div>
+          ) : null}
+
+          {success ? (
+            <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
+              ✅ Expense saved successfully!
             </div>
           ) : null}
 
           <button
             type="submit"
-            className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+            disabled={loading || success}
+            className={[
+              'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
+              success 
+                ? 'bg-green-600 text-white'
+                : 'bg-slate-900 text-white hover:bg-slate-800'
+            ].join(' ')}
           >
-            Save
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </span>
+            ) : success ? (
+              '✓ Saved!'
+            ) : (
+              'Save'
+            )}
           </button>
         </form>
       </div>

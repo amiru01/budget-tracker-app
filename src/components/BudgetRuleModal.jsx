@@ -6,6 +6,7 @@ export default function BudgetRuleModal({
   open,
   onClose,
   onSubmit,
+  onSuccess,
   categories = defaultCategories,
   initialRule = null,
 }) {
@@ -14,8 +15,6 @@ export default function BudgetRuleModal({
   const [type, setType] = React.useState('weekly')
   const [limit, setLimit] = React.useState('')
   const [isActive, setIsActive] = React.useState(true)
-  const [loading, setLoading] = React.useState(false)
-  const [success, setSuccess] = React.useState(false)
   const [error, setError] = React.useState('')
 
   React.useEffect(() => {
@@ -32,8 +31,6 @@ export default function BudgetRuleModal({
     // Defer state updates to satisfy react-hooks linting.
     const t = setTimeout(() => {
       setError('')
-      setSuccess(false)
-      setLoading(false)
       setName(next.name)
       setCategory(next.category)
       setType(next.type)
@@ -49,7 +46,6 @@ export default function BudgetRuleModal({
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-    setSuccess(false)
 
     if (!name.trim()) {
       setError('Enter a rule name.')
@@ -67,7 +63,10 @@ export default function BudgetRuleModal({
       return
     }
 
-    setLoading(true)
+    // Close modal immediately
+    onClose()
+    
+    // Save in background
     try {
       await onSubmit({
         name: name.trim(),
@@ -77,29 +76,12 @@ export default function BudgetRuleModal({
         isActive,
       })
 
-      // Show success state immediately
-      setSuccess(true)
-
-      // Reset form if adding new rule
-      if (!initialRule) {
-        setName('')
-        setLimit('')
-        setCategory(categories[0] ?? 'Other')
-        setType('weekly')
-        setIsActive(true)
+      // Call onSuccess callback if provided (for navigation)
+      if (onSuccess) {
+        onSuccess()
       }
-      
-      // Close modal after showing success message
-      setTimeout(() => {
-        onClose()
-      }, 1500)
     } catch (err) {
       console.error('Failed to save budget rule:', err)
-      setError(err?.message || 'Failed to save budget rule.')
-      setSuccess(false)
-    } finally {
-      // Always reset loading state
-      setLoading(false)
     }
   }
 
@@ -181,7 +163,7 @@ export default function BudgetRuleModal({
               type="number"
               value={limit}
               onChange={(e) => setLimit(e.target.value)}
-              step="0.01"
+              step="1"
               min="0"
               placeholder="0.00"
               className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -204,35 +186,11 @@ export default function BudgetRuleModal({
             </div>
           ) : null}
 
-          {success ? (
-            <div className="rounded-xl bg-green-50 p-3 text-sm font-medium text-green-700 ring-1 ring-green-100">
-              ✅ {initialRule ? 'Budget rule updated successfully!' : 'Budget rule created successfully!'}
-            </div>
-          ) : null}
-
           <button
             type="submit"
-            disabled={loading || success}
-            className={[
-              'w-full rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60',
-              success 
-                ? 'bg-green-600 text-white'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            ].join(' ')}
+            className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Saving...
-              </span>
-            ) : success ? (
-              '✓ Saved!'
-            ) : (
-              initialRule ? 'Update Rule' : 'Create Rule'
-            )}
+            {initialRule ? 'Update Rule' : 'Create Rule'}
           </button>
         </form>
       </div>

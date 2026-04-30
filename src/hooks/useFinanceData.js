@@ -52,6 +52,7 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
 
     let unsubIncomes = null
     let unsubExpenses = null
+    let timeoutId = null
 
     // Keep user document in sync for Firestore-based app features.
     ensureUserDoc(user)
@@ -61,15 +62,30 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
 
     const tLoading = setTimeout(() => setLoading(true), 0)
 
+    // Set a timeout to stop loading after 10 seconds if indexes are still building
+    timeoutId = setTimeout(() => {
+      if (!loadedRef.current.incomes || !loadedRef.current.expenses) {
+        setError('Firestore indexes are still building. This may take 2-5 minutes. Please refresh the page in a moment.')
+        setLoading(false)
+      }
+    }, 10000) // 10 second timeout
+
     unsubIncomes = subscribeToIncomes(
       userId,
       (items) => {
         setIncomes(items)
         loadedRef.current.incomes = true
         setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses))
+        setError('') // Clear any timeout errors
       },
       (err) => {
-        setError(err?.message || 'Failed to load incomes')
+        const errorMsg = err?.message || 'Failed to load incomes'
+        // Check if it's an index building error
+        if (errorMsg.includes('index') || errorMsg.includes('building')) {
+          setError('Firestore indexes are building. Please wait 2-5 minutes and refresh the page.')
+        } else {
+          setError(errorMsg)
+        }
         setLoading(false)
       },
     )
@@ -80,15 +96,23 @@ export default function useFinanceData({ weeklyDays = 7 } = {}) {
         setExpenses(items)
         loadedRef.current.expenses = true
         setLoading(!(loadedRef.current.incomes && loadedRef.current.expenses))
+        setError('') // Clear any timeout errors
       },
       (err) => {
-        setError(err?.message || 'Failed to load expenses')
+        const errorMsg = err?.message || 'Failed to load expenses'
+        // Check if it's an index building error
+        if (errorMsg.includes('index') || errorMsg.includes('building')) {
+          setError('Firestore indexes are building. Please wait 2-5 minutes and refresh the page.')
+        } else {
+          setError(errorMsg)
+        }
         setLoading(false)
       },
     )
 
     return () => {
       clearTimeout(tLoading)
+      clearTimeout(timeoutId)
       if (typeof unsubIncomes === 'function') unsubIncomes()
       if (typeof unsubExpenses === 'function') unsubExpenses()
     }

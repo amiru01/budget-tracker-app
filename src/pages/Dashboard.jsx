@@ -218,7 +218,7 @@ function Dashboard() {
             {budgetViolations.map((violation, idx) => (
               <div key={idx} className="text-sm text-amber-700">
                 <strong>{violation.rule.name}</strong>: You've spent{' '}
-                {formatCurrency(violation.spending)} (${formatCurrency(violation.excess)} over your{' '}
+                {formatCurrency(violation.spending)} ({formatCurrency(violation.excess)} over your{' '}
                 {violation.period} limit of {formatCurrency(violation.rule.limit)})
               </div>
             ))}
@@ -468,6 +468,10 @@ function Dashboard() {
         open={isBudgetModalOpen}
         onClose={() => setIsBudgetModalOpen(false)}
         onSubmit={handleCreateBudgetRule}
+        onSuccess={() => {
+          setIsBudgetModalOpen(false)
+          navigate('/budget-rules')
+        }}
       />
     </div>
   )

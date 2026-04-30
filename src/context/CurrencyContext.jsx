@@ -50,13 +50,14 @@ function CurrencyProvider({ children }) {
 
   const formatCurrency = React.useCallback((value, currencyCode = currency) => {
     const abs = Math.abs(value)
-    const symbol = getCurrencySymbol(currencyCode)
     const formatted = abs.toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })
-    return value < 0 ? `-${symbol}${formatted}` : `${symbol}${formatted}`
-  }, [currency, getCurrencySymbol])
+    // Format: "100.00 USD" (amount THEN currency with space)
+    const result = `${formatted} ${currencyCode}`
+    return value < 0 ? `-${result}` : result
+  }, [currency])
 
   const value = React.useMemo(
     () => ({ currency, setCurrency, getCurrencySymbol, formatCurrency }),

@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Incomes collection
+    match /incomes/{incomeId} {
+      // Allow read if user owns the document
+      allow read: if isOwner(resource.data.userId);
+      
+      // Allow create if user is authenticated and userId matches
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Allow update/delete if user owns the document
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+    
+    // Expenses collection
+    match /expenses/{expenseId} {
+      // Allow read if user owns the document
+      allow read: if isOwner(resource.data.userId);
+      
+      // Allow create if user is authenticated and userId matches
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Allow update/delete if user owns the document
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+    
+    // Budget Rules collection
+    match /budgetRules/{ruleId} {
+      // Allow read if user owns the document
+      allow read: if isOwner(resource.data.userId);
+      
+      // Allow create if user is authenticated and userId matches
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Allow update/delete if user owns the document
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+    
+    // Users collection (for profile data)
+    match /users/{userId} {
+      // Allow read/write only to own user document
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}
