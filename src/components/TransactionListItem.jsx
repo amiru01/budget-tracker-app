@@ -40,14 +40,14 @@ export default function TransactionListItem({ transaction, onDelete }) {
   const icon = getCategoryIcon(category, transaction.type)
 
   return (
-    <li className="group rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md">
+    <li className="group rounded-xl bg-white/5 p-4 ring-1 ring-white/10 transition hover:bg-white/10 hover:shadow-lg">
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-1 items-start gap-3">
           {/* Icon */}
           <div
             className={[
               'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg',
-              isIncome ? 'bg-emerald-100' : 'bg-rose-100',
+              isIncome ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-300',
             ].join(' ')}
           >
             {icon}
@@ -57,9 +57,9 @@ export default function TransactionListItem({ transaction, onDelete }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-slate-900 truncate">{category}</h3>
+                <h3 className="font-semibold text-slate-100 truncate">{category}</h3>
                 {transaction.note && (
-                  <p className="mt-0.5 text-sm text-slate-600 line-clamp-2">
+                  <p className="mt-0.5 text-sm text-slate-400 line-clamp-2">
                     {transaction.note}
                   </p>
                 )}
@@ -70,7 +70,7 @@ export default function TransactionListItem({ transaction, onDelete }) {
                 <p
                   className={[
                     'text-lg font-bold',
-                    isIncome ? 'text-emerald-600' : 'text-rose-600',
+                    isIncome ? 'text-emerald-400' : 'text-rose-400',
                   ].join(' ')}
                 >
                   {isIncome ? '+' : '-'}
@@ -81,7 +81,7 @@ export default function TransactionListItem({ transaction, onDelete }) {
 
             {/* Date and Actions */}
             <div className="mt-2 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-xs text-slate-500">
+              <div className="flex items-center gap-2 text-xs text-slate-400">
                 <span>📅</span>
                 <span>{formatDate(transaction.date)}</span>
                 <span
@@ -100,7 +100,7 @@ export default function TransactionListItem({ transaction, onDelete }) {
                 <button
                   type="button"
                   onClick={() => onDelete(transaction.id)}
-                  className="opacity-0 group-hover:opacity-100 rounded-lg bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-200"
+                  className="button-secondary rounded-lg px-2 py-1 text-xs font-semibold"
                 >
                   Delete
                 </button>

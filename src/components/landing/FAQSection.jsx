@@ -1,37 +1,37 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Plus } from "lucide-react";
 
 const faqs = [
   {
-    question: "Is my financial data secure and encrypted?",
+    question: "What does Smart Finance help me do day to day?",
     answer:
-      "Yes. We use military-grade 256-bit AES encryption for all data in transit and at rest. Your credentials are encrypted with a separate key and never stored on our servers. We use read-only access tokens and comply with SOC 2 Type II standards.",
+      "It gives you a clear place to review income, spending, budgets, and recent activity. The goal is to make daily money checks faster and monthly planning less scattered.",
   },
   {
-    question: "Can I connect multiple bank accounts and investments?",
+    question: "Do I need to be good with spreadsheets to use it?",
     answer:
-      "Absolutely. Smart Finance supports over 10,000 financial institutions worldwide across 195 countries. You can seamlessly connect checking accounts, savings, credit cards, investment portfolios, and crypto wallets in one unified dashboard.",
+      "No. Smart Finance is designed around plain-language summaries, simple categories, and visual dashboards. You can still export your data when you need a spreadsheet.",
   },
   {
-    question: "Is there a native mobile app available?",
+    question: "Can I track both income and expenses?",
     answer:
-      "Our web application is fully responsive and performs like a native app on mobile devices with offline capability. We're also launching dedicated iOS and Android apps in Q3 2024 with additional native features and Apple Watch integration.",
+      "Yes. You can record income sources, expenses, categories, notes, and dates, then review totals, trends, and breakdowns from the dashboard.",
   },
   {
-    question: "How does Smart Finance differ from other budgeting apps?",
+    question: "How are budget alerts supposed to work?",
     answer:
-      "Smart Finance combines premium 3D visualization, AI-driven insights, and cinematic UI design to transform financial management. Rather than sterile spreadsheets, our approach makes understanding your money intuitive, engaging, and enjoyable.",
+      "Budget rules help you define category limits for a period. When spending moves past a limit, the dashboard surfaces the issue so you can adjust before it surprises you.",
   },
   {
-    question: "What's the pricing model?",
+    question: "Can I export my records?",
     answer:
-      "We offer a free tier with core features, plus premium plans starting at $9.99/month with advanced analytics, unlimited accounts, and priority support. All plans include a 30-day free trial.",
+      "Yes. The dashboard includes an export flow for your transaction history and summary totals, so you can keep records outside the app when needed.",
   },
   {
-    question: "Can I export my financial reports?",
+    question: "Is this only for personal finance?",
     answer:
-      "Yes. You can export custom reports in PDF, Excel, and CSV formats. Reports include tax-optimized summaries, spending analysis, and goal tracking visualizations.",
+      "It is built for personal finance first, but it also works well for freelancers, solo operators, and households that need a clean view of cash flow.",
   },
 ];
 
@@ -44,45 +44,36 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
       transition={{ delay: index * 0.05, duration: 0.4 }}
       className="group"
     >
-      <motion.button
-        onClick={onToggle}
-        className="relative w-full text-left"
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-      >
-        {/* Background */}
+      <button type="button" onClick={onToggle} className="relative w-full text-left">
         <div
-          className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+          className={`absolute inset-0 rounded-2xl border transition-all duration-300 ${
             isOpen
-              ? "bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20"
-              : "bg-gradient-to-r from-white/5 to-white/[0.02] border border-white/10 hover:bg-gradient-to-r hover:from-white/8 hover:to-white/5 hover:border-white/20"
+              ? "border-emerald-500/25 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10"
+              : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.07]"
           }`}
         />
 
-        {/* Content */}
-        <div className="relative flex items-center justify-between px-6 py-5">
+        <div className="relative flex items-center justify-between gap-5 px-5 py-5 sm:px-6">
           <span
-            className={`text-lg font-semibold transition-colors duration-300 ${
+            className={`font-display text-base font-bold leading-6 tracking-tight transition-colors duration-300 sm:text-lg ${
               isOpen
-                ? "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400"
+                ? "bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
                 : "text-white group-hover:text-slate-50"
             }`}
           >
             {faq.question}
           </span>
 
-          {/* Icon */}
-          <motion.div
+          <motion.span
             animate={{ rotate: isOpen ? 45 : 0 }}
-            transition={{ duration: 0.3 }}
-            className={`flex-shrink-0 ${isOpen ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-300"}`}
+            transition={{ duration: 0.25 }}
+            className={isOpen ? "text-emerald-400" : "text-slate-400"}
           >
             <Plus className="h-5 w-5" />
-          </motion.div>
+          </motion.span>
         </div>
-      </motion.button>
+      </button>
 
-      {/* Answer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -92,7 +83,7 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-5 text-slate-300 leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+            <div className="ml-5 border-l-2 border-emerald-500/30 px-5 pb-5 text-[0.96rem] leading-7 text-slate-300 sm:ml-6">
               {faq.answer}
             </div>
           </motion.div>
@@ -106,26 +97,22 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section
-      id="faq"
-      className="relative bg-slate-900 py-24 sm:py-32 overflow-hidden"
-    >
-      {/* Background elements */}
-      <div className="absolute top-1/2 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/3 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="faq" className="section-shell">
+      <div className="absolute left-1/3 top-1/2 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div className="absolute bottom-0 right-1/3 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
 
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-16 text-center sm:mb-20">
+          <p className="section-kicker mb-4">Questions</p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
+            className="section-title text-balance mb-6"
           >
-            Frequently asked <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              questions
+            Practical answers before you
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              {" "}get started.
             </span>
           </motion.h2>
 
@@ -134,17 +121,17 @@ export default function FAQSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-slate-400"
+            className="section-copy mx-auto max-w-2xl text-pretty"
           >
-            Everything you need to know about Smart Finance
+            A quick overview of how Smart Finance fits into your everyday
+            planning routine.
           </motion.p>
         </div>
 
-        {/* FAQ Items */}
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <FAQItem
-              key={index}
+              key={faq.question}
               faq={faq}
               index={index}
               isOpen={openIndex === index}
@@ -153,35 +140,21 @@ export default function FAQSection() {
           ))}
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ delay: 0.3 }}
-          className="mt-16 text-center"
+          className="mt-14 text-center"
         >
-          <p className="text-slate-400 mb-4">
-            Still have questions? We're here to help.
+          <p className="mb-4 text-sm font-medium text-slate-400">
+            Need help thinking through your setup?
           </p>
           <a
             href="mailto:support@smartfinance.app"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all backdrop-blur-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
           >
-            Contact our support team
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            Contact support
           </a>
         </motion.div>
       </div>

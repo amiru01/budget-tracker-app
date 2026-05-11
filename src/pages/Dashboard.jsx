@@ -19,29 +19,14 @@ import InsightCard from '../components/InsightCard.jsx'
 import IncomeChart from '../components/IncomeChart.jsx'
 import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
+import ChartTooltip from '../components/ChartTooltip.jsx'
 import { addBudgetRule, subscribeToBudgetRules, checkBudgetViolations } from '../services/budgetService.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useCurrency } from '../context/CurrencyContext.jsx'
+import Spinner from '../components/Spinner.jsx'
+import Skeleton from '../components/Skeleton.jsx'
 
-function SpendingTooltip({ active, payload, label, formatCurrency }) {
-  if (!active || !payload?.length) return null
-
-  const expenses = payload.find((p) => p.dataKey === 'amount')?.value ?? 0
-
-  return (
-    <div className="rounded-xl bg-white p-3 shadow-lg ring-1 ring-slate-200">
-      <p className="text-xs font-semibold text-slate-500">{label}</p>
-      <div className="mt-2 space-y-1">
-        <div className="flex items-center justify-between gap-6">
-          <span className="text-xs font-medium text-rose-700">Spending</span>
-          <span className="text-xs font-semibold text-slate-900">{formatCurrency(expenses)}</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const pieColors = ['#0ea5e9', '#10b981', '#f97316', '#a855f7', '#f43f5e', '#14b8a6', '#64748b']
+const pieColors = ['#06b6d4', '#10b981', '#22c55e', '#14b8a6', '#0ea5e9', '#5eead4', '#7c3aed']
 
 function Dashboard() {
   const { user } = useAuth()
@@ -52,6 +37,7 @@ function Dashboard() {
   const [isBudgetModalOpen, setIsBudgetModalOpen] = React.useState(false)
   const [budgetRules, setBudgetRules] = React.useState([])
   const [isExporting, setIsExporting] = React.useState(false)
+  const [hoveredWeekly, setHoveredWeekly] = React.useState(null)
 
   const weeklyDays = range === '7D' ? 7 : range === '30D' ? 30 : 90
 
@@ -170,35 +156,39 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
-          Loading dashboard…
+        <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-700 flex items-center gap-3">
+          <Spinner size="md" />
+          <span>Loading dashboard...</span>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="space-y-7">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500">Finance Dashboard</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-            Overview & insights
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance dashboard</p>
+          <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-slate-950 sm:text-4xl">
+            Your financial command center
           </h1>
+          <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-600">
+            Track cash flow, spending behavior, and budget signals from one clean workspace.
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={handleExportData}
             disabled={isExporting || (expenses.length === 0 && incomes.length === 0)}
-            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+            className="button-secondary rounded-xl px-4 py-2.5 text-sm"
           >
             {isExporting ? 'Exporting...' : 'Export'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/transactions')}
-            className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 hover:shadow-md"
+            className="brand-button px-4 py-2.5 text-sm"
           >
             Add transaction
           </button>
@@ -206,18 +196,18 @@ function Dashboard() {
       </header>
 
       {error ? (
-        <div className="rounded-xl bg-rose-50 p-4 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
+        <div className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-100 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
           {error}
         </div>
       ) : null}
 
       {budgetViolations.length > 0 ? (
-        <div className="rounded-xl bg-amber-50 p-4 ring-1 ring-amber-200">
-          <h3 className="text-sm font-semibold text-amber-800">Budget Alerts</h3>
-          <div className="mt-2 space-y-2">
+        <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-5 shadow-lg shadow-amber-500/10 backdrop-blur-xl">
+          <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-amber-100">Budget alerts</h3>
+          <div className="mt-3 space-y-3">
             {budgetViolations.map((violation, idx) => (
-              <div key={idx} className="text-sm text-amber-700">
-                <strong>{violation.rule.name}</strong>: You've spent{' '}
+              <div key={idx} className="rounded-2xl border border-amber-300/20 bg-amber-500/5 p-4 text-sm font-medium text-amber-100">
+                <strong className="font-bold text-amber-200">{violation.rule.name}</strong>: You&apos;ve spent{' '}
                 {formatCurrency(violation.spending)} ({formatCurrency(violation.excess)} over your{' '}
                 {violation.period} limit of {formatCurrency(violation.rule.limit)})
               </div>
@@ -248,12 +238,12 @@ function Dashboard() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-5">
-        <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200/70 transition hover:shadow-lg lg:col-span-3">
+        <article className="dashboard-card p-6 transition hover:shadow-lg lg:col-span-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Weekly Spending</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Real-time spending totals grouped by day.
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">Spending trend</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">
+                Daily outflow across the selected review window.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -261,10 +251,10 @@ function Dashboard() {
                 type="button"
                 onClick={() => setRange('7D')}
                 className={[
-                  'rounded-xl px-3 py-2 text-sm font-semibold transition',
+                  'rounded-xl px-3 py-2 text-sm font-bold transition',
                   range === '7D'
-                    ? 'bg-slate-900 text-white hover:bg-slate-800'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200',
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15'
+                    : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
                 ].join(' ')}
               >
                 7D
@@ -273,10 +263,10 @@ function Dashboard() {
                 type="button"
                 onClick={() => setRange('30D')}
                 className={[
-                  'rounded-xl px-3 py-2 text-sm font-semibold transition',
+                  'rounded-xl px-3 py-2 text-sm font-bold transition',
                   range === '30D'
-                    ? 'bg-slate-900 text-white hover:bg-slate-800'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200',
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15'
+                    : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
                 ].join(' ')}
               >
                 30D
@@ -285,10 +275,10 @@ function Dashboard() {
                 type="button"
                 onClick={() => setRange('90D')}
                 className={[
-                  'rounded-xl px-3 py-2 text-sm font-semibold transition',
+                  'rounded-xl px-3 py-2 text-sm font-bold transition',
                   range === '90D'
-                    ? 'bg-slate-900 text-white hover:bg-slate-800'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200',
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15'
+                    : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
                 ].join(' ')}
               >
                 90D
@@ -296,55 +286,65 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200/50">
-            <div className="h-72 rounded-lg bg-white/60 p-2 ring-1 ring-slate-200/60">
+          <div className="dashboard-panel mt-6 p-4">
+            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={weeklyData} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
-                  <CartesianGrid strokeDasharray="4 4" stroke="#e2e8f0" vertical={false} />
+                  <CartesianGrid strokeDasharray="4 4" stroke="rgba(148,163,184,0.18)" vertical={false} />
                   <XAxis
                     dataKey="day"
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
                     interval="preserveStartEnd"
                   />
                   <YAxis
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
                     width={40}
                     tickFormatter={(v) => `$${Number(v).toLocaleString()}`}
                   />
-                  <Tooltip content={<SpendingTooltip formatCurrency={formatCurrency} />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1 }} />
+                  <Tooltip content={<ChartTooltip formatCurrency={formatCurrency} seriesLabel="Spending" />} cursor={{ stroke: 'rgba(45,212,191,0.35)', strokeWidth: 1 }} />
 
-                  <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#0ea5e9" />
+                  <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#06b6d4" onMouseLeave={() => setHoveredWeekly(null)}>
+                    {weeklyData.map((entry, idx) => (
+                      <Cell
+                        key={`weekly-bar-${idx}`}
+                        fill="#06b6d4"
+                        onMouseEnter={() => setHoveredWeekly(idx)}
+                        style={
+                          hoveredWeekly === idx
+                            ? { filter: 'drop-shadow(0 0 18px rgba(45,212,191,0.18))', transition: 'filter 150ms' }
+                            : { transition: 'filter 150ms' }
+                        }
+                      />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         </article>
 
-        <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200/70 transition hover:shadow-lg lg:col-span-2">
+        <article className="dashboard-card p-6 transition hover:shadow-lg lg:col-span-2">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Category Breakdown</h2>
-              <p className="mt-1 text-sm text-slate-500">Distribution of spending by category.</p>
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">Category mix</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Where your spending is concentrated.</p>
             </div>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+            <span className="rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-200 ring-1 ring-white/10">
               {formatCurrency(categoryData.total)}
             </span>
           </div>
 
-          <div className="mt-6 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200/50">
-            <div className="h-72 rounded-lg bg-white/60 p-2 ring-1 ring-slate-200/60">
+          <div className="dashboard-panel mt-6 p-4">
+            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Tooltip
                     formatter={(value, name) => [formatCurrency(Number(value)), String(name)]}
-                    contentStyle={{
-                      borderRadius: 12,
-                      border: '1px solid rgb(226 232 240)',
-                    }}
+                    content={<ChartTooltip formatCurrency={formatCurrency} />}
                   />
                   <Pie
                     data={categoryData.data}
@@ -367,7 +367,7 @@ function Dashboard() {
             {categoryData.data.slice(0, 6).map((c, idx) => (
               <span
                 key={c.name}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                className="inline-flex items-center gap-2 rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-300 ring-1 ring-white/10"
               >
                 <span
                   className="h-2.5 w-2.5 rounded-full"
@@ -381,16 +381,16 @@ function Dashboard() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-3">
-        <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200/70 transition hover:shadow-lg">
+        <article className="dashboard-card p-6 transition hover:shadow-lg">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Recent Transactions</h2>
-              <p className="mt-1 text-sm text-slate-500">Latest activity across your accounts.</p>
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">Recent activity</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Latest expenses and income entries.</p>
             </div>
             <button
               type="button"
               onClick={() => navigate('/transactions')}
-              className="rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+              className="button-secondary rounded-xl px-4 py-2 text-sm"
             >
               View all
             </button>
@@ -398,12 +398,15 @@ function Dashboard() {
 
           <ul className="mt-6 space-y-3">
             {loading ? (
-              <li className="rounded-xl bg-slate-50 px-4 py-4 text-sm font-medium text-slate-600 ring-1 ring-slate-100">
-                Loading transactions…
+              <li className="rounded-xl bg-white/6 px-4 py-4 text-sm font-medium text-slate-400 ring-1 ring-white/10">
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-3 w-32" />
+                </div>
               </li>
             ) : null}
             {!loading && expenses.length === 0 ? (
-              <li className="rounded-xl bg-slate-50 px-4 py-4 text-sm text-slate-600 ring-1 ring-slate-100">
+              <li className="rounded-3xl bg-white/6 px-6 py-6 text-sm font-medium text-slate-400 ring-1 ring-white/10 shadow-lg shadow-slate-950/10">
                 No transactions yet. Add your first expense to see charts and insights update.
               </li>
             ) : null}
@@ -425,13 +428,13 @@ function Dashboard() {
 
         <IncomeChart monthlyIncomeTrend={incomeMonthlyTrend} incomeBySource={incomeBySource} variant="preview" />
 
-        <article className="rounded-xl bg-sky-50 p-6 shadow-md ring-1 ring-sky-200/70 transition hover:shadow-lg">
+        <article className="dashboard-card p-6 transition hover:shadow-cyan-500/10">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">AI Insights</h2>
-              <p className="mt-1 text-sm text-slate-600">Personalized, trend-aware suggestions.</p>
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">Planning signals</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Timely prompts based on your current activity.</p>
             </div>
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
+            <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300 ring-1 ring-cyan-300/20">
               Beta
             </span>
           </div>
@@ -442,15 +445,15 @@ function Dashboard() {
             ))}
           </div>
 
-          <div className="mt-6 rounded-xl bg-white p-4 ring-1 ring-sky-100">
-            <p className="text-sm font-semibold text-slate-900">Next best action</p>
-            <p className="mt-1 text-sm text-slate-600">
+          <div className="dashboard-panel mt-6 p-4">
+            <p className="text-sm font-bold text-white">Next best action</p>
+            <p className="mt-1 text-sm font-medium leading-6 text-slate-400">
               Consider setting a weekly category cap for dining to reduce surprises.
             </p>
             <button
               type="button"
               onClick={() => setIsBudgetModalOpen(true)}
-              className="mt-3 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="brand-button mt-3 w-full px-4 py-2.5 text-sm"
             >
               Create a budget rule
             </button>
@@ -478,4 +481,3 @@ function Dashboard() {
 }
 
 export default Dashboard
-

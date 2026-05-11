@@ -137,18 +137,18 @@ export default function HeroSection() {
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-5 py-2 text-sm font-bold text-emerald-400 backdrop-blur-md"
           >
             <ShieldCheck size={16} />
-            The Future of Personal Finance
+            Personal finance, finally in focus
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.18, ease: easeOut }}
-            className="max-w-3xl text-5xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl"
+            className="font-display max-w-3xl text-5xl font-extrabold leading-[0.98] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl xl:text-8xl"
           >
-            Master your
+            See where your
             <span className="mt-4 block bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              wealth in 3D
+              money is going
             </span>
           </motion.h1>
 
@@ -156,11 +156,11 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.32, ease: easeOut }}
-            className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl"
+            className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl sm:leading-9"
           >
-            Experience a premium, immersive way to track your income and expenses.
-            Smart Finance brings cinematic clarity and intelligent automation to
-            your financial goals.
+            Smart Finance turns income, spending, and budgets into a calm
+            command center, so you can make better decisions without living in
+            spreadsheets.
           </motion.p>
 
           <motion.div
@@ -173,14 +173,14 @@ export default function HeroSection() {
               to="/auth"
               className="group inline-flex min-h-16 items-center justify-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-9 text-lg font-extrabold text-white shadow-[0_18px_36px_rgba(6,182,212,0.25)] transition hover:scale-[1.03] hover:shadow-[0_20px_44px_rgba(16,185,129,0.32)]"
             >
-              Start Free Trial
+              Start tracking smarter
               <ArrowRight size={22} className="transition group-hover:translate-x-1" />
             </Link>
             <Link
               to="/auth"
               className="inline-flex min-h-16 items-center justify-center rounded-full border border-white/20 bg-white/5 px-10 text-lg font-extrabold text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/10"
             >
-              Login
+              View dashboard
             </Link>
           </motion.div>
 
@@ -202,10 +202,10 @@ export default function HeroSection() {
             </div>
             <div>
               <p className="font-bold text-slate-300">
-                Trusted by 10,000+ users worldwide
+                Built for people who want clarity, not clutter
               </p>
               <p className="text-slate-500">
-                Join the financial intelligence revolution
+                Organize cash flow, habits, and goals in one workspace.
               </p>
             </div>
           </motion.div>

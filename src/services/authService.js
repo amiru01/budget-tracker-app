@@ -23,7 +23,7 @@ function getAuthErrorMessage(error, context = 'auth') {
     'auth/network-request-failed': 'Network error. Check your connection and try again.',
     'auth/popup-closed-by-user': 'Google sign-in was closed. Please try again.',
     'auth/cancelled-popup-request': 'Google sign-in was cancelled. Please try again.',
-    'auth/unauthorized-domain': 'This domain is not authorized. Please add your domain to Firebase authorized domains.',
+    'auth/unauthorized-domain': 'Google sign-in is not enabled for this URL. Open the app at localhost, or add this domain in Firebase Authentication > Settings > Authorized domains.',
     'auth/operation-not-allowed': 'Google sign-in is not enabled. Please enable it in Firebase Console.',
     'auth/popup-blocked': 'Popup was blocked by browser. Please allow popups and try again.',
     'auth/invalid-api-key': 'Invalid Firebase API key. Check your environment variables.',
@@ -65,4 +65,3 @@ async function resetPassword(email) {
 }
 
 export { signup, login, logout, signInWithGoogle, resetPassword, getAuthErrorMessage }
-

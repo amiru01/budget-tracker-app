@@ -1,5 +1,6 @@
 import React from 'react'
 import { useCurrency } from '../context/CurrencyContext.jsx'
+import ChartTooltip from './ChartTooltip.jsx'
 import {
   Bar,
   BarChart,
@@ -15,17 +16,6 @@ import {
 
 const pieColors = ['#10b981', '#22c55e', '#34d399', '#16a34a', '#0ea5e9', '#a7f3d0', '#047857']
 
-function MonthlyTooltip({ active, payload, label, formatCurrency }) {
-  if (!active || !payload?.length) return null
-  const amount = payload[0]?.value ?? 0
-  return (
-    <div className="rounded-xl bg-white p-3 shadow-lg ring-1 ring-emerald-100">
-      <p className="text-xs font-semibold text-slate-500">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-emerald-700">{formatCurrency(Number(amount))}</p>
-    </div>
-  )
-}
-
 export default function IncomeChart({
   monthlyIncomeTrend,
   incomeBySource,
@@ -35,41 +25,42 @@ export default function IncomeChart({
   const showPie = variant !== 'preview'
   const monthly = monthlyIncomeTrend || []
   const bySource = incomeBySource || { total: 0, data: [] }
+  const [hoverIdx, setHoverIdx] = React.useState(null)
 
   return (
     <div className="space-y-6">
-      <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-emerald-200/60 transition hover:shadow-lg">
+      <article className="dashboard-card p-6 transition hover:shadow-lg">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Monthly income</h2>
-            <p className="mt-1 text-sm text-slate-500">Trend over the last 6 months.</p>
+            <h2 className="font-display text-xl font-bold tracking-tight text-white">Income trend</h2>
+            <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Monthly inflow over the last six months.</p>
           </div>
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
+          <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300 ring-1 ring-emerald-300/20">
             {formatCurrency(bySource.total)}
           </span>
         </div>
 
-        <div className="mt-6 rounded-xl bg-emerald-50 p-4 ring-1 ring-emerald-100">
+        <div className="dashboard-panel mt-6 p-4">
           <div className={variant === 'preview' ? 'h-56' : 'h-72'}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthly} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
-                <CartesianGrid strokeDasharray="4 4" stroke="#e2e8f0" vertical={false} />
+                <CartesianGrid strokeDasharray="4 4" stroke="rgba(148,163,184,0.18)" vertical={false} />
                 <XAxis
                   dataKey="month"
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
                   interval={0}
                 />
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
                   width={44}
                   tickFormatter={(v) => `$${Number(v).toLocaleString()}`}
                 />
-                <Tooltip content={<MonthlyTooltip formatCurrency={formatCurrency} />} cursor={{ stroke: '#bbf7d0', strokeWidth: 1 }} />
-                <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#16a34a" />
+                <Tooltip content={<ChartTooltip formatCurrency={formatCurrency} seriesLabel="Income" />} cursor={{ stroke: 'rgba(16,185,129,0.36)', strokeWidth: 1 }} />
+                <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#10b981" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -77,28 +68,22 @@ export default function IncomeChart({
       </article>
 
       {showPie ? (
-        <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-emerald-200/60 transition hover:shadow-lg">
+        <article className="dashboard-card p-6 transition hover:shadow-lg">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Income by source</h2>
-              <p className="mt-1 text-sm text-slate-500">Where your income is coming from.</p>
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">Income sources</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">How each source contributes to total inflow.</p>
             </div>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
+            <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300 ring-1 ring-emerald-300/20">
               {formatCurrency(bySource.total)}
             </span>
           </div>
 
-          <div className="mt-6 rounded-xl bg-emerald-50 p-4 ring-1 ring-emerald-100">
-            <div className="h-72 rounded-lg bg-white/60 p-2 ring-1 ring-emerald-200/60">
+          <div className="dashboard-panel mt-6 p-4">
+            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Tooltip
-                    formatter={(value, name) => [formatCurrency(Number(value)), String(name)]}
-                    contentStyle={{
-                      borderRadius: 12,
-                      border: '1px solid rgb(220 252 231)',
-                    }}
-                  />
+                  <Tooltip content={<ChartTooltip formatCurrency={formatCurrency} />} />
                   <Pie
                     data={bySource.data}
                     dataKey="value"
@@ -120,7 +105,7 @@ export default function IncomeChart({
             {bySource.data.slice(0, 6).map((c, idx) => (
               <span
                 key={c.name}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+                className="inline-flex items-center gap-2 rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-300 ring-1 ring-white/10"
               >
                 <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[idx % pieColors.length] }} />
                 {c.name}
@@ -132,4 +117,3 @@ export default function IncomeChart({
     </div>
   )
 }
-

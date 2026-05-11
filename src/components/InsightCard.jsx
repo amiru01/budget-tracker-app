@@ -1,9 +1,8 @@
 export default function InsightCard({ title, message }) {
   return (
-    <div className="rounded-xl bg-white/70 p-4 ring-1 ring-sky-100">
-      <p className="text-sm font-semibold text-slate-900">{title}</p>
-      <p className="mt-1 text-sm leading-relaxed text-slate-600">{message}</p>
+    <div className="dashboard-card p-4">
+      <h3 className="font-display text-lg font-bold tracking-tight text-white">{title}</h3>
+      <p className="mt-1 text-sm font-medium leading-6 text-slate-300">{message}</p>
     </div>
   )
 }
-

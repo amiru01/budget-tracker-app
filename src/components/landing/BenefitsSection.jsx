@@ -1,43 +1,42 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, TrendingUp, Lock, Zap, Globe, Award } from "lucide-react";
 
 const benefits = [
   {
     icon: <TrendingUp className="text-emerald-400" size={32} />,
-    title: "Real-time Insights",
+    title: "Decisions in minutes",
     description:
-      "Get instant updates on your financial health with AI-powered analysis and predictive trends.",
+      "See what changed, what matters, and where to focus before you open another spreadsheet.",
   },
   {
     icon: <Lock className="text-cyan-400" size={32} />,
-    title: "Bank-Level Security",
+    title: "A cleaner money routine",
     description:
-      "Your data is protected with military-grade 256-bit encryption and SOC 2 compliance.",
+      "Keep income, bills, savings, and everyday spending organized without rebuilding your system each month.",
   },
   {
     icon: <Zap className="text-amber-400" size={32} />,
-    title: "Ultra Fast",
+    title: "Less manual cleanup",
     description:
-      "Lightning-fast performance optimized for seamless interactions and instant feedback.",
+      "Use consistent categories and simple review flows to keep your dashboard accurate with less effort.",
   },
   {
     icon: <Globe className="text-indigo-400" size={32} />,
-    title: "Multi-Currency",
+    title: "Clearer priorities",
     description:
-      "Manage finances across 195 countries with real-time exchange rates and global support.",
+      "Compare spending against goals so your next move is obvious, whether you are saving or cutting back.",
   },
   {
     icon: <Award className="text-rose-400" size={32} />,
-    title: "Award Winning",
+    title: "Built for repeat use",
     description:
-      "Recognized by industry leaders for premium design and financial innovation.",
+      "Dense enough for serious tracking, polished enough that checking your numbers feels calm.",
   },
   {
     icon: <CheckCircle className="text-purple-400" size={32} />,
-    title: "Always Available",
+    title: "Exportable records",
     description:
-      "24/7 access to your financial data with offline capability and automatic sync.",
+      "Turn your activity into clean files for reporting, budgeting sessions, and end-of-month reviews.",
   },
 ];
 
@@ -62,23 +61,24 @@ export default function BenefitsSection() {
   };
 
   return (
-    <section className="relative bg-slate-900 py-24 sm:py-32 overflow-hidden">
+    <section className="section-shell bg-slate-950">
       {/* Background elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="section-container">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
+          <p className="section-kicker mb-4">Why it feels better</p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
+            className="section-title text-balance mb-6"
           >
-            Why choose <br />
+            Designed for the way people actually
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Smart Finance?
+              {" "}manage money.
             </span>
           </motion.h2>
 
@@ -87,10 +87,11 @@ export default function BenefitsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-slate-400"
+            className="section-copy text-pretty"
           >
-            We combine premium design, cutting-edge technology, and financial
-            expertise to create the ultimate personal finance platform.
+            A premium finance tool should reduce mental load. Smart Finance
+            keeps your most important numbers visible, structured, and easy to
+            act on.
           </motion.p>
         </div>
 
@@ -100,7 +101,7 @@ export default function BenefitsSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
         >
           {benefits.map((benefit, index) => (
             <motion.div
@@ -128,11 +129,11 @@ export default function BenefitsSection() {
                 </motion.div>
 
                 {/* Content */}
-                <h3 className="mb-3 text-lg font-semibold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300">
+                <h3 className="card-title mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300">
                   {benefit.title}
                 </h3>
 
-                <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+                <p className="card-copy group-hover:text-slate-300 transition-colors duration-300">
                   {benefit.description}
                 </p>
 
@@ -152,13 +153,13 @@ export default function BenefitsSection() {
           className="mt-20 text-center"
         >
           <p className="text-slate-400 mb-6">
-            Ready to experience the future of personal finance?
+            Ready to make your finances easier to read?
           </p>
           <a
             href="#auth"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-400/50 transition-all hover:scale-105 active:scale-95"
           >
-            Start Free Trial
+            Create your workspace
             <svg
               className="w-5 h-5"
               fill="none"

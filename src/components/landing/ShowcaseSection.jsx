@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { LineChart, PieChart, TrendingUp, Settings } from "lucide-react";
+import { LineChart, PieChart, TrendingUp } from "lucide-react";
 
 export default function ShowcaseSection() {
   const containerRef = React.useRef(null);
@@ -30,24 +30,25 @@ export default function ShowcaseSection() {
     <section
       id="product"
       ref={containerRef}
-      className="relative bg-slate-900 py-32 overflow-hidden"
+      className="relative overflow-hidden bg-slate-900 pt-24 pb-12 sm:pt-32 sm:pb-16"
     >
       {/* Background glow elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="section-container">
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
+          <p className="section-kicker mb-4">Product workspace</p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
+            className="section-title text-balance mb-6"
           >
-            Explore every <br />
+            A dashboard that keeps the signal
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              dimension of your finances.
+              {" "}above the noise.
             </span>
           </motion.h2>
 
@@ -56,10 +57,10 @@ export default function ShowcaseSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-slate-400 max-w-2xl mx-auto"
+            className="section-copy mx-auto max-w-2xl text-pretty"
           >
-            Interactive dashboards, real-time analytics, and intelligent
-            insights all designed for your financial success.
+            Review spending, income, and category movement from one focused
+            workspace built for quick daily checks and deeper monthly reviews.
           </motion.p>
         </div>
 
@@ -109,7 +110,7 @@ export default function ShowcaseSection() {
               </div>
               <div className="flex-1 text-center">
                 <p className="text-xs font-medium text-slate-400">
-                  smartfinance.app/dashboard
+                    smartfinance.app/workspace
                 </p>
               </div>
             </div>
@@ -139,17 +140,17 @@ export default function ShowcaseSection() {
                 <div className="grid grid-cols-3 gap-4">
                   {[
                     {
-                      label: "Total Income",
+                      label: "Income",
                       value: "$45,230",
                       color: "from-emerald-400/20",
                     },
                     {
-                      label: "Total Expenses",
+                      label: "Spending",
                       value: "$12,450",
                       color: "from-rose-400/20",
                     },
                     {
-                      label: "Savings Rate",
+                      label: "Saved",
                       value: "72.5%",
                       color: "from-cyan-400/20",
                     },
@@ -223,37 +224,6 @@ export default function ShowcaseSection() {
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-900 via-transparent to-transparent rounded-3xl" />
         </motion.div>
 
-        {/* Call to action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ delay: 0.3 }}
-          className="text-center mt-16"
-        >
-          <p className="text-slate-400 mb-4">
-            Ready to experience the future of personal finance?
-          </p>
-          <a
-            href="#auth"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-lg hover:shadow-emerald-400/50 transition-all hover:scale-105 active:scale-95"
-          >
-            Start Your Journey
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </a>
-        </motion.div>
       </div>
     </section>
   );

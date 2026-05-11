@@ -1,4 +1,3 @@
-import React from 'react'
 import { useCurrency } from '../context/CurrencyContext.jsx'
 
 function formatDate(value) {
@@ -15,10 +14,10 @@ export default function TransactionItem({ name, category, amount, date, note, ty
   const sign = isIncome ? '+' : '-'
 
   return (
-    <li className="flex items-center justify-between gap-4 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-100">
+    <li className="flex items-center justify-between gap-4 rounded-xl bg-white/6 px-4 py-3 ring-1 ring-white/10 transition hover:bg-white/10">
       <div className="min-w-0">
-        <p className="truncate font-medium text-slate-900">{name}</p>
-        <p className="mt-0.5 text-sm text-slate-500">
+        <p className="truncate font-bold text-slate-100">{name}</p>
+        <p className="mt-0.5 text-sm font-medium text-slate-400">
           {category}
           {date ? ` · ${formatDate(date)}` : ''}
           {note ? ` · ${note}` : ''}
@@ -26,7 +25,7 @@ export default function TransactionItem({ name, category, amount, date, note, ty
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
-        <p className={`font-semibold ${amountColor}`}>
+        <p className={`font-bold ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
           {sign}
           {formatCurrency(amount).replace('-', '')}
         </p>
@@ -34,7 +33,7 @@ export default function TransactionItem({ name, category, amount, date, note, ty
           <button
             type="button"
             onClick={onDelete}
-            className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50"
+            className="button-secondary rounded-lg px-3 py-1.5 text-xs font-bold"
           >
             Delete
           </button>
@@ -43,4 +42,3 @@ export default function TransactionItem({ name, category, amount, date, note, ty
     </li>
   )
 }
-

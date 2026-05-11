@@ -13,11 +13,11 @@ import useFinanceData from '../hooks/useFinanceData.js'
 
 function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCurrency }) {
   return (
-    <li className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md">
+    <li className="rounded-xl bg-white dark:dashboard-card p-4 shadow-sm ring-1 ring-slate-200 dark:ring-white/10 transition hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h3 className="font-semibold text-slate-900">{rule.name}</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white">{rule.name}</h3>
             <span
               className={[
                 'rounded-full px-2 py-1 text-xs font-semibold',
@@ -157,7 +157,7 @@ export default function BudgetRules() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+        <div className="rounded-xl bg-white dark:dashboard-card px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-slate-200 dark:ring-white/10">
           Loading budget rules…
         </div>
       </div>
@@ -203,10 +203,10 @@ export default function BudgetRules() {
         </div>
       ) : null}
 
-      <section className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200">
+      <section className="rounded-xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Your Budget Rules</h2>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Your Budget Rules</h2>
             <p className="mt-1 text-sm text-slate-500">
               Manage spending limits and get alerts when you exceed them.
             </p>
@@ -218,7 +218,7 @@ export default function BudgetRules() {
 
         <ul className="mt-6 space-y-3">
           {budgetRules.length === 0 ? (
-            <li className="rounded-xl bg-slate-50 px-4 py-4 text-sm font-medium text-slate-600 ring-1 ring-slate-100">
+            <li className="rounded-xl bg-slate-50 dark:bg-white/5 px-4 py-4 text-sm font-medium text-slate-600 dark:text-slate-400 ring-1 ring-slate-100 dark:ring-white/5">
               No budget rules created yet. Create your first rule to start tracking spending limits.
             </li>
           ) : null}

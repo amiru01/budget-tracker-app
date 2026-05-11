@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext.jsx";
+import Spinner from "../components/Spinner.jsx";
 import {
   getAuthErrorMessage,
   login,
@@ -102,8 +103,8 @@ export default function Auth() {
           animate={{ opacity: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-700 border-t-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
-          <p className="text-sm text-slate-400">Loading your experience...</p>
+          <Spinner size="lg" />
+          <p className="text-sm font-medium text-slate-400">Preparing your workspace...</p>
         </motion.div>
       </main>
     );
@@ -173,19 +174,19 @@ export default function Auth() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="text-3xl font-bold tracking-tight text-white"
+                className="font-display text-3xl font-extrabold tracking-[-0.025em] text-white"
               >
-                {isLogin ? "Welcome back" : "Join Smart Finance"}
+                {isLogin ? "Welcome back" : "Create your finance workspace"}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.5 }}
-                className="mt-3 text-sm text-slate-400"
+                className="mx-auto mt-3 max-w-sm text-sm font-medium leading-6 text-slate-400"
               >
                 {isLogin
-                  ? "Enter your details to access your premium dashboard."
-                  : "Start your journey to financial mastery in 3D."}
+                  ? "Sign in to review cash flow, budgets, and recent activity."
+                  : "Start with a focused dashboard for income, spending, and goals."}
               </motion.p>
             </div>
 
@@ -199,7 +200,7 @@ export default function Auth() {
               disabled={isGoogleLoading || isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group relative flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-white/10 to-white/5 px-4 py-3.5 text-sm font-semibold text-white shadow-sm ring-1 ring-white/20 transition-all hover:from-white/15 hover:to-white/10 hover:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden"
+              className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-white/10 to-white/5 px-4 py-3.5 text-sm font-bold text-white shadow-sm ring-1 ring-white/20 transition-all hover:from-white/15 hover:to-white/10 hover:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
 
@@ -249,7 +250,7 @@ export default function Auth() {
             >
               <div className="flex-grow border-t border-white/10"></div>
               <span className="mx-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Or email
+                Or continue with email
               </span>
               <div className="flex-grow border-t border-white/10"></div>
             </motion.div>
@@ -306,7 +307,7 @@ export default function Auth() {
               >
                 <label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-slate-300 mb-2"
+                  className="mb-2 block text-sm font-bold text-slate-300"
                 >
                   Email address
                 </label>
@@ -317,8 +318,8 @@ export default function Auth() {
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
-                  className="w-full rounded-xl bg-slate-950/50 px-4 py-3 text-sm text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-slate-900 transition-all duration-200 backdrop-blur-sm"
-                  placeholder="you@example.com"
+                  className="w-full rounded-xl bg-slate-950/50 px-4 py-3 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                  placeholder="name@company.com"
                 />
               </motion.div>
 
@@ -331,7 +332,7 @@ export default function Auth() {
                 <div className="flex items-center justify-between mb-2">
                   <label
                     htmlFor="password"
-                    className="text-sm font-semibold text-slate-300"
+                    className="text-sm font-bold text-slate-300"
                   >
                     Password
                   </label>
@@ -339,7 +340,7 @@ export default function Auth() {
                     <button
                       type="button"
                       onClick={handleForgotPassword}
-                      className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors focus:outline-none"
+                      className="text-xs font-bold text-emerald-400 transition-colors hover:text-emerald-300 focus:outline-none"
                     >
                       Forgot?
                     </button>
@@ -353,8 +354,8 @@ export default function Auth() {
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete={isLogin ? "current-password" : "new-password"}
                     required
-                    className="w-full rounded-xl bg-slate-950/50 px-4 py-3 text-sm text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-slate-900 transition-all duration-200 pr-12 backdrop-blur-sm"
-                    placeholder="••••••••"
+                    className="w-full rounded-xl bg-slate-950/50 px-4 py-3 pr-12 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                    placeholder="Minimum 6 characters"
                   />
                   <button
                     type="button"
@@ -375,7 +376,7 @@ export default function Auth() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isLoading || isGoogleLoading}
-                className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:from-emerald-400 hover:to-emerald-500 hover:shadow-emerald-400/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-emerald-500/30 mt-6 flex items-center justify-center gap-2"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-4 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-emerald-500/30 transition-all hover:from-emerald-400 hover:to-cyan-400 hover:shadow-emerald-400/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-emerald-500/30"
               >
                 {isLoading ? (
                   <>
@@ -390,7 +391,7 @@ export default function Auth() {
                   </>
                 ) : (
                   <>
-                    <span>{isLogin ? "Sign In" : "Create Account"}</span>
+                    <span>{isLogin ? "Open dashboard" : "Create workspace"}</span>
                     <ArrowRight size={16} />
                   </>
                 )}
@@ -402,11 +403,11 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.65, duration: 0.5 }}
-              className="mt-8 text-center text-sm text-slate-400"
+              className="mt-8 text-center text-sm font-medium text-slate-400"
             >
               {isLogin
-                ? "Don't have an account? "
-                : "Already have an account? "}
+                ? "New to Smart Finance? "
+                : "Already have a workspace? "}
               <button
                 type="button"
                 onClick={() => {
@@ -414,9 +415,9 @@ export default function Auth() {
                   setError("");
                   setMessage("");
                 }}
-                className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors focus:outline-none"
+                className="font-bold text-emerald-400 transition-colors hover:text-emerald-300 focus:outline-none"
               >
-                {isLogin ? "Sign up" : "Log in"}
+                {isLogin ? "Create an account" : "Sign in"}
               </button>
             </motion.div>
 
@@ -425,7 +426,7 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-6 text-center text-xs text-slate-500"
+              className="mt-6 text-center text-xs font-medium leading-5 text-slate-500"
             >
               By continuing, you agree to our{" "}
               <a
@@ -454,7 +455,7 @@ export default function Auth() {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors hover:text-white"
           >
             <svg
               className="w-4 h-4"

@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 const testimonials = [
   {
     content:
-      "Smart Finance completely transformed how I manage my finances. The immersive 3D interface makes financial data feel accessible and even enjoyable.",
-    author: "Sarah Jenkins",
-    role: "Freelance Designer",
+      "I finally have one place to check cash flow before making business purchases. The dashboard is fast, calm, and easy to trust.",
+    author: "Maya Patel",
+    role: "Independent consultant",
     avatar: "https://i.pravatar.cc/150?img=44",
     rating: 5,
   },
   {
     content:
-      "The cleanest, most professional dashboard I've used. It doesn't feel like financial software—it feels like a premium product. Exceptional work.",
-    author: "Michael Chen",
-    role: "Software Engineer",
+      "The budget alerts helped me catch recurring expenses I had stopped noticing. It saves me a review meeting with myself every week.",
+    author: "Daniel Kim",
+    role: "Product engineer",
     avatar: "https://i.pravatar.cc/150?img=11",
     rating: 5,
   },
   {
     content:
-      "Every animation is purposeful, every interaction feels polished. This is what premium SaaS should look like. Absolutely brilliant execution.",
-    author: "Emma Watson",
-    role: "Marketing Director",
+      "The reports are clear enough to share with my partner without explaining a spreadsheet. That changed how we plan each month.",
+    author: "Elena Brooks",
+    role: "Operations lead",
     avatar: "https://i.pravatar.cc/150?img=5",
     rating: 5,
   },
   {
     content:
-      "I've been using budgeting apps for years. This is the first one that's actually made me excited to check my finances daily.",
-    author: "James Rodriguez",
-    role: "Entrepreneur",
+      "It gives me a quick read on spending without turning personal finance into a second job. That balance is exactly what I needed.",
+    author: "Jordan Reyes",
+    role: "Studio owner",
     avatar: "https://i.pravatar.cc/150?img=32",
     rating: 5,
   },
@@ -50,27 +50,19 @@ function TestimonialCard({ testimonial, index }) {
       onMouseLeave={() => setIsHovered(false)}
       className="group relative"
     >
-      {/* Glass card background */}
       <motion.div
-        animate={{
-          scale: isHovered ? 1.02 : 1,
-        }}
+        animate={{ scale: isHovered ? 1.02 : 1 }}
         transition={{ duration: 0.3 }}
-        className="relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/8 to-white/3 backdrop-blur-2xl p-8 overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300"
+        className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/8 to-white/3 p-7 shadow-xl backdrop-blur-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10 sm:p-8"
       >
-        {/* Animated background gradient on hover */}
         <motion.div
-          animate={{
-            opacity: isHovered ? 1 : 0,
-          }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-500/10 pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-500/10"
         />
 
-        {/* Content wrapper */}
-        <div className="relative z-10">
-          {/* Rating stars */}
-          <div className="mb-4 flex gap-1">
+        <div className="relative z-10 flex h-full flex-col">
+          <div className="mb-5 flex gap-1">
             {[...Array(testimonial.rating)].map((_, i) => (
               <motion.div
                 key={i}
@@ -79,57 +71,42 @@ function TestimonialCard({ testimonial, index }) {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 + i * 0.05 }}
               >
-                <Star size={16} className="text-amber-400 fill-amber-400" />
+                <Star size={15} className="fill-amber-400 text-amber-400" />
               </motion.div>
             ))}
           </div>
 
-          {/* Quote */}
-          <motion.div
-            animate={{
-              y: isHovered ? -2 : 0,
-            }}
+          <motion.p
+            animate={{ y: isHovered ? -2 : 0 }}
             transition={{ duration: 0.3 }}
-            className="mb-8"
+            className="flex-1 text-[1.02rem] font-medium leading-8 text-slate-200"
           >
-            <svg
-              className="h-6 w-6 text-emerald-400/30 mb-3"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M3 21c3 0 7-1 7-8V5c0-1.25-4.5-5-7-5s-6 3.75-6 5c0 1 0 4-1 5" />
-              <path d="M15 21c3 0 7-1 7-8V5c0-1.25-4.5-5-7-5s-6 3.75-6 5c0 1 0 4-1 5" />
-            </svg>
-            <p className="text-lg text-slate-200 leading-relaxed font-light">
-              "{testimonial.content}"
-            </p>
-          </motion.div>
+            “{testimonial.content}”
+          </motion.p>
 
-          {/* Author */}
-          <div className="flex items-center gap-4 pt-6 border-t border-white/10">
+          <div className="mt-8 flex items-center gap-4 border-t border-white/10 pt-6">
             <motion.img
-              animate={{
-                scale: isHovered ? 1.1 : 1,
-              }}
+              animate={{ scale: isHovered ? 1.08 : 1 }}
               transition={{ duration: 0.3 }}
               className="h-12 w-12 rounded-full border-2 border-white/20 object-cover shadow-lg"
               src={testimonial.avatar}
               alt={testimonial.author}
             />
             <div>
-              <h4 className="font-semibold text-white">{testimonial.author}</h4>
-              <p className="text-sm text-slate-400">{testimonial.role}</p>
+              <h4 className="font-display font-semibold tracking-tight text-white">
+                {testimonial.author}
+              </h4>
+              <p className="text-sm font-medium text-slate-400">
+                {testimonial.role}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Bottom accent line */}
         <motion.div
-          animate={{
-            width: isHovered ? "100%" : "0%",
-          }}
+          animate={{ width: isHovered ? "100%" : "0%" }}
           transition={{ duration: 0.3 }}
-          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400"
+          className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400"
         />
       </motion.div>
     </motion.div>
@@ -140,24 +117,23 @@ export default function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="relative bg-slate-900 py-24 sm:py-32 overflow-hidden"
+      className="relative overflow-hidden bg-slate-950 pt-14 pb-24 sm:pt-16 sm:pb-32"
     >
-      {/* Background elements */}
-      <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
+      <div className="absolute bottom-1/4 left-1/4 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
+      <div className="section-container">
+        <div className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
+          <p className="section-kicker mb-4">Customer notes</p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
+            className="section-title text-balance mb-6"
           >
-            Trusted by <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              thousands worldwide
+            Built for people who want a clearer
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              {" "}money routine.
             </span>
           </motion.h2>
 
@@ -166,48 +142,22 @@ export default function TestimonialsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-slate-400 max-w-2xl mx-auto"
+            className="section-copy mx-auto max-w-2xl text-pretty"
           >
-            Real users, real results, real testimonials from people who've
-            transformed their financial lives.
+            Smart Finance is made for regular reviews, quick decisions, and
+            better conversations about where money is going.
           </motion.p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
-              key={index}
+              key={testimonial.author}
               testimonial={testimonial}
               index={index}
             />
           ))}
         </div>
-
-        {/* Social Proof */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ delay: 0.4 }}
-          className="mt-20 text-center"
-        >
-          <p className="text-slate-400 mb-4">Trusted by users from:</p>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-            {["Google", "Apple", "Microsoft", "Amazon"].map((company, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.5 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 + i * 0.1 }}
-                className="text-slate-500 font-semibold text-sm tracking-wide"
-              >
-                {company}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

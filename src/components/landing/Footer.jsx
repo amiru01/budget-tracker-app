@@ -80,9 +80,9 @@ export default function Footer() {
                 Smart Finance
               </span>
             </Link>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Master your wealth in 3D. The premium personal finance platform
-              for the modern professional.
+            <p className="text-sm font-medium leading-6 text-slate-400">
+              A calmer way to review cash flow, budgets, reports, and spending
+              habits from one polished workspace.
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map((social, i) => (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
@@ -33,7 +33,7 @@ export default function Navbar() {
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30 transition-transform group-hover:scale-105">
                 <span className="text-xl font-bold text-white">$</span>
               </div>
-              <span className="text-xl font-semibold tracking-tight text-white">Smart Finance</span>
+              <span className="font-display text-xl font-bold tracking-tight text-white">Smart Finance</span>
             </Link>
           </div>
 
@@ -42,7 +42,7 @@ export default function Navbar() {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-sm font-medium text-slate-300 transition-colors hover:text-white"
+                className="text-sm font-semibold text-slate-300 transition-colors hover:text-white"
               >
                 {item}
               </a>
@@ -52,13 +52,13 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <Link
               to="/auth"
-              className="text-sm font-semibold text-white transition hover:text-emerald-400"
+              className="text-sm font-bold text-white transition hover:text-emerald-400"
             >
               Log in
             </Link>
             <Link
               to="/auth"
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100 hover:scale-105"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-slate-100 hover:scale-105"
             >
               Get Started
             </Link>

@@ -65,7 +65,7 @@ export default function Profile() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+        <div className="rounded-xl bg-white dark:dashboard-card px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-slate-200 dark:ring-white/10">
           Loading profile…
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function Profile() {
       {/* Header */}
       <header>
         <p className="text-sm font-medium text-slate-500">Smart Finance</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
           Profile & Settings
         </h1>
       </header>
@@ -105,7 +105,7 @@ export default function Profile() {
 
             {/* User Details */}
             <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-2xl font-bold text-slate-900">{userName}</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{userName}</h2>
               <p className="mt-1 text-sm text-slate-600">{userEmail}</p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
@@ -127,12 +127,12 @@ export default function Profile() {
 
       {/* Account Stats */}
       <section>
-        <h2 className="text-lg font-semibold text-slate-900">Account Overview</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Account Overview</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200 transition hover:shadow-lg">
+          <article className="rounded-xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10 transition hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">Total Income</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Income</p>
                 <p className="mt-2 text-2xl font-bold text-emerald-600">
                   {formatCurrency(totalIncome)}
                 </p>
@@ -143,10 +143,10 @@ export default function Profile() {
             </div>
           </article>
 
-          <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200 transition hover:shadow-lg">
+          <article className="rounded-xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10 transition hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">Total Expenses</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Expenses</p>
                 <p className="mt-2 text-2xl font-bold text-rose-600">
                   {formatCurrency(totalExpenses)}
                 </p>
@@ -157,11 +157,11 @@ export default function Profile() {
             </div>
           </article>
 
-          <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200 transition hover:shadow-lg">
+          <article className="rounded-xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10 transition hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">Transactions</p>
-                <p className="mt-2 text-2xl font-bold text-slate-900">{totalTransactions}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Transactions</p>
+                <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">{totalTransactions}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-2xl">
                 📊
@@ -169,10 +169,10 @@ export default function Profile() {
             </div>
           </article>
 
-          <article className="rounded-xl bg-white p-6 shadow-md ring-1 ring-slate-200 transition hover:shadow-lg">
+          <article className="rounded-xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10 transition hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">Savings Rate</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Savings Rate</p>
                 <p
                   className={[
                     'mt-2 text-2xl font-bold',
@@ -197,21 +197,21 @@ export default function Profile() {
       {/* Settings Section */}
       <section className="grid gap-6 lg:grid-cols-2">
         {/* General Settings */}
-        <article className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">General Settings</h2>
-          <p className="mt-1 text-sm text-slate-500">Manage your app preferences</p>
+        <article className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">General Settings</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your app preferences</p>
 
           <div className="mt-6 space-y-4">
             {/* Currency Selector */}
-            <div className="flex items-center justify-between rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-white/5 p-4 ring-1 ring-slate-200 dark:ring-white/5">
               <div>
-                <p className="text-sm font-semibold text-slate-900">Currency</p>
-                <p className="mt-0.5 text-xs text-slate-600">Choose your preferred currency</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">Currency</p>
+                <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Choose your preferred currency</p>
               </div>
               <select
                 value={currency}
                 onChange={(e) => setGlobalCurrency(e.target.value)}
-                className="rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-700 ring-1 ring-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 ring-1 ring-slate-300 dark:ring-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="AED">AED - UAE Dirham (د.إ)</option>
                 <option value="AFN">AFN - Afghan Afghani (؋)</option>
@@ -377,10 +377,10 @@ export default function Profile() {
             </div>
 
             {/* Theme Toggle */}
-            <div className="flex items-center justify-between rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-white/5 p-4 ring-1 ring-slate-200 dark:ring-white/5">
               <div>
-                <p className="text-sm font-semibold text-slate-900">Theme</p>
-                <p className="mt-0.5 text-xs text-slate-600">Switch between light and dark mode</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">Theme</p>
+                <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Switch between light and dark mode</p>
               </div>
               <button
                 type="button"
@@ -400,10 +400,10 @@ export default function Profile() {
             </div>
 
             {/* Notifications Toggle */}
-            <div className="flex items-center justify-between rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-white/5 p-4 ring-1 ring-slate-200 dark:ring-white/5">
               <div>
-                <p className="text-sm font-semibold text-slate-900">Notifications</p>
-                <p className="mt-0.5 text-xs text-slate-600">Receive budget alerts and updates</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">Notifications</p>
+                <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">Receive budget alerts and updates</p>
               </div>
               <button
                 type="button"
@@ -425,9 +425,9 @@ export default function Profile() {
         </article>
 
         {/* Account Actions */}
-        <article className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">Account Actions</h2>
-          <p className="mt-1 text-sm text-slate-500">Manage your account</p>
+        <article className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Account Actions</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your account</p>
 
           <div className="mt-6 space-y-4">
             {/* Export Data */}
@@ -502,7 +502,7 @@ export default function Profile() {
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex-1 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 rounded-xl bg-white dark:bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-900 dark:text-white shadow-sm ring-1 ring-slate-300 dark:ring-white/10 transition hover:bg-slate-50 dark:hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoggingOut ? 'Logging out...' : 'Logout'}
           </button>
@@ -527,13 +527,13 @@ export default function Profile() {
             aria-label="Close modal"
           />
 
-          <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
+          <div className="relative w-full max-w-md rounded-2xl bg-white dark:dashboard-card p-6 shadow-xl ring-1 ring-slate-200 dark:ring-white/10">
             <div className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-3xl">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 dark:bg-rose-900/30 text-3xl">
                 ⚠️
               </div>
-              <h3 className="mt-4 text-xl font-bold text-slate-900">Delete Account</h3>
-              <p className="mt-2 text-sm text-slate-600">
+              <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Delete Account</h3>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
                 This action cannot be undone. All your financial data, transactions, and settings
                 will be permanently deleted.
               </p>
@@ -542,7 +542,7 @@ export default function Profile() {
                 <button
                   type="button"
                   onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+                  className="flex-1 rounded-xl bg-slate-100 dark:bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 transition hover:bg-slate-200 dark:hover:bg-white/10"
                 >
                   Cancel
                 </button>

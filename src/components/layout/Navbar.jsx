@@ -32,13 +32,13 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#F8F9FB]/95 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/45 backdrop-blur-2xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="min-w-0 flex items-center gap-3">
           <button
             type="button"
             onClick={onMenuClick}
-            className="inline-flex rounded-xl border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition-colors duration-200 hover:border-slate-300 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 lg:hidden"
+              className="inline-flex rounded-xl border border-white/10 bg-white/8 p-2 text-slate-300 shadow-sm transition-colors duration-200 hover:border-cyan-300/30 hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 lg:hidden"
             aria-label="Open sidebar"
             aria-controls="sidebar-navigation"
             aria-expanded={isSidebarOpen}
@@ -47,10 +47,10 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
           </button>
 
           <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-sm sm:normal-case sm:tracking-normal">
-              Welcome back
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300/80">
+              Smart Finance
             </p>
-            <h2 className="truncate text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
+            <h2 className="font-display truncate text-xl font-extrabold tracking-[-0.02em] text-white sm:text-2xl">
               {pageTitle}
             </h2>
           </div>
@@ -62,8 +62,8 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
               type="button"
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
               className={[
-                'relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 transition-colors duration-200 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2',
-                isNotificationOpen ? 'text-slate-900 ring-2 ring-cyan-500' : '',
+                'relative rounded-full bg-white/8 p-2.5 text-slate-300 shadow-sm ring-1 ring-white/10 transition-colors duration-200 hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+                isNotificationOpen ? 'text-white ring-2 ring-cyan-400' : '',
               ].join(' ')}
               aria-label="View notifications"
               aria-expanded={isNotificationOpen}
@@ -87,24 +87,24 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
 
           <button
             type="button"
-            className="flex items-center gap-3 rounded-full bg-white py-1.5 pl-1.5 pr-2 shadow-sm ring-1 ring-slate-200 transition-shadow duration-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 sm:pr-4"
+            className="flex items-center gap-3 rounded-full bg-white/8 py-1.5 pl-1.5 pr-2 shadow-sm ring-1 ring-white/10 transition duration-200 hover:bg-white/12 hover:shadow-cyan-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:pr-4"
             aria-label="Open user profile"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 text-sm font-extrabold text-white shadow-lg shadow-cyan-500/20">
               {initials}
             </div>
             <div className="hidden text-left sm:block">
-              <p className="max-w-52 truncate text-sm font-semibold text-slate-800">{displayName}</p>
-              <p className="text-xs text-slate-500">Authenticated</p>
+              <p className="max-w-52 truncate text-sm font-bold text-white">{displayName}</p>
+              <p className="text-xs font-medium text-slate-400">Workspace access</p>
             </div>
           </button>
           <button
             type="button"
             onClick={handleLogout}
-            className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
+            className="rounded-xl bg-white/8 px-3 py-2 text-xs font-bold text-slate-300 shadow-sm ring-1 ring-white/10 transition hover:bg-white/12 hover:text-white"
             disabled={loading || isLoggingOut}
           >
-            {isLoggingOut ? 'Logging out…' : 'Logout'}
+            {isLoggingOut ? 'Logging out...' : 'Logout'}
           </button>
         </div>
       </div>

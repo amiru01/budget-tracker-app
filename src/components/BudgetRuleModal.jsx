@@ -91,14 +91,14 @@ export default function BudgetRuleModal({
         type="button"
         aria-label="Close modal"
         onClick={onClose}
-        className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm"
       />
 
-      <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
+      <div className="dashboard-card relative w-full max-w-lg p-6 shadow-2xl shadow-black/30">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-slate-500">Budget Management</p>
-            <h3 className="mt-1 text-lg font-semibold text-slate-900">
+            <p className="text-sm font-medium text-slate-400">Budget Management</p>
+            <h3 className="font-display mt-1 text-lg font-bold text-white">
               {initialRule ? 'Edit Budget Rule' : 'Create Budget Rule'}
             </h3>
           </div>
@@ -116,14 +116,14 @@ export default function BudgetRuleModal({
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Rule Name</span>
+            <span className="text-sm font-semibold text-slate-300">Rule Name</span>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Weekly Dining Limit"
               maxLength="50"
-              className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="dashboard-input mt-2"
             />
           </label>
 
@@ -133,7 +133,7 @@ export default function BudgetRuleModal({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="dashboard-input mt-2"
               >
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -148,7 +148,7 @@ export default function BudgetRuleModal({
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="dashboard-input mt-2"
               >
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
@@ -166,7 +166,7 @@ export default function BudgetRuleModal({
               step="1"
               min="0"
               placeholder="0.00"
-              className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="dashboard-input mt-2"
             />
           </label>
 
@@ -188,7 +188,7 @@ export default function BudgetRuleModal({
 
           <button
             type="submit"
-            className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            className="brand-button w-full px-4 py-2.5 text-sm font-bold transition-all duration-300 ease-out"
           >
             {initialRule ? 'Update Rule' : 'Create Rule'}
           </button>

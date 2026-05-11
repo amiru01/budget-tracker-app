@@ -150,7 +150,7 @@ export default function Transactions() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+        <div className="rounded-3xl bg-slate-950/85 px-5 py-4 text-sm font-semibold text-slate-100 ring-1 ring-white/10 shadow-xl shadow-cyan-500/10 backdrop-blur-xl">
           Loading transactions…
         </div>
       </div>
@@ -171,14 +171,14 @@ export default function Transactions() {
           <button
             type="button"
             onClick={() => setIsIncomeModalOpen(true)}
-            className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            className="brand-button px-4 py-2 text-sm"
           >
             Add Income
           </button>
           <button
             type="button"
             onClick={() => setIsExpenseModalOpen(true)}
-            className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+            className="button-secondary rounded-xl px-4 py-2 text-sm"
           >
             Add Expense
           </button>
@@ -186,7 +186,7 @@ export default function Transactions() {
       </header>
 
       {error ? (
-        <div className="rounded-xl bg-rose-50 p-4 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
+        <div className="rounded-3xl bg-rose-500/10 border border-rose-300/20 p-4 text-sm font-medium text-rose-100 ring-1 ring-white/10 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
           {error}
         </div>
       ) : null}
@@ -217,8 +217,8 @@ export default function Transactions() {
       </section>
 
       {/* Filters */}
-      <section className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
-        <h2 className="text-lg font-semibold text-slate-900">Filters</h2>
+      <section className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Filters</h2>
         <div className="mt-4">
           <TransactionFilters
             activeFilter={activeFilter}
@@ -233,7 +233,7 @@ export default function Transactions() {
       </section>
 
       {/* Transactions List */}
-      <section className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
+      <section className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">Transaction History</h2>
@@ -248,27 +248,27 @@ export default function Transactions() {
 
         <ul className="mt-6 space-y-3">
           {filteredTransactions.length === 0 ? (
-            <li className="rounded-xl bg-slate-50 p-8 text-center ring-1 ring-slate-100">
+            <li className="rounded-3xl bg-white/6 p-8 text-center ring-1 ring-white/10 shadow-lg shadow-slate-900/10">
               <div className="mx-auto max-w-sm">
-                <p className="text-4xl">📊</p>
-                <p className="mt-4 text-lg font-semibold text-slate-900">
+                <p className="text-5xl">📊</p>
+                <p className="mt-4 text-lg font-bold text-slate-900 dark:text-white">
                   No transactions yet
                 </p>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm font-medium text-slate-500">
                   Start tracking your finances by adding your first income or expense.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <button
                     type="button"
                     onClick={() => setIsIncomeModalOpen(true)}
-                    className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                    className="brand-button rounded-xl px-4 py-2 text-sm"
                   >
                     Add Income
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsExpenseModalOpen(true)}
-                    className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                    className="button-secondary rounded-xl px-4 py-2 text-sm"
                   >
                     Add Expense
                   </button>

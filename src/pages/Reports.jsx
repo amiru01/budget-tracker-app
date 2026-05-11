@@ -25,7 +25,7 @@ function CustomTooltip({ active, payload, label, formatCurrency }) {
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-xl bg-white p-3 shadow-lg ring-1 ring-slate-200">
+    <div className="rounded-xl bg-white dark:dashboard-card p-3 shadow-lg ring-1 ring-slate-200 dark:ring-white/10">
       <p className="text-xs font-semibold text-slate-500">{label}</p>
       <div className="mt-2 space-y-1">
         {payload.map((entry, index) => (
@@ -95,7 +95,7 @@ export default function Reports() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+        <div className="rounded-xl bg-white dark:dashboard-card px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-slate-200 dark:ring-white/10">
           Loading reports…
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function Reports() {
       ) : null}
 
       {!hasData ? (
-        <div className="rounded-2xl bg-white p-12 text-center shadow-md ring-1 ring-slate-200">
+        <div className="rounded-2xl bg-white dark:dashboard-card p-12 text-center shadow-md ring-1 ring-slate-200 dark:ring-white/10">
           <div className="mx-auto max-w-md">
             <p className="text-6xl">📊</p>
             <h2 className="mt-6 text-xl font-semibold text-slate-900">
@@ -222,7 +222,7 @@ export default function Reports() {
             <article className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-900">Spending Trend</h2>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Spending Trend</h2>
                   <p className="mt-1 text-sm text-slate-500">
                     Daily spending over the selected period
                   </p>
@@ -267,7 +267,7 @@ export default function Reports() {
             <article className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-900">Income vs Expenses</h2>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Income vs Expenses</h2>
                   <p className="mt-1 text-sm text-slate-500">Comparison of total amounts</p>
                 </div>
                 <span
@@ -313,7 +313,7 @@ export default function Reports() {
           {/* Category Breakdown & Insights */}
           <section className="grid gap-6 lg:grid-cols-5">
             {/* Category Breakdown Pie Chart */}
-            <article className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200 lg:col-span-2">
+            <article className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10 lg:col-span-2">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-lg font-semibold text-slate-900">Category Breakdown</h2>
@@ -387,7 +387,7 @@ export default function Reports() {
 
               <div className="mt-6 space-y-3">
                 {insights.length === 0 ? (
-                  <div className="rounded-xl bg-white p-4 text-center ring-1 ring-slate-200">
+                  <div className="rounded-xl bg-white dark:dashboard-card p-4 text-center ring-1 ring-slate-200 dark:ring-white/10">
                     <p className="text-sm text-slate-600">
                       Add more transactions to unlock personalized insights
                     </p>

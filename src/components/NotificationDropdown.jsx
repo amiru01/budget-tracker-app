@@ -18,14 +18,14 @@ function getNotificationIcon(type) {
 function getNotificationColor(type) {
   switch (type) {
     case 'warning':
-      return 'bg-amber-50 ring-amber-200'
+      return 'bg-amber-400/10 border border-amber-300/20 text-amber-200'
     case 'success':
-      return 'bg-emerald-50 ring-emerald-200'
+      return 'bg-emerald-400/10 border border-emerald-300/20 text-emerald-200'
     case 'error':
-      return 'bg-rose-50 ring-rose-200'
+      return 'bg-rose-400/10 border border-rose-300/20 text-rose-200'
     case 'info':
     default:
-      return 'bg-blue-50 ring-blue-200'
+      return 'bg-slate-900/90 border border-white/10 text-slate-100'
   }
 }
 
@@ -54,9 +54,8 @@ function NotificationItem({ notification, onMarkAsRead, onDelete }) {
     <div
       onClick={handleClick}
       className={[
-        'group relative cursor-pointer rounded-xl p-3 transition hover:shadow-sm',
-        notification.read ? 'bg-white ring-1 ring-slate-100' : getNotificationColor(notification.type),
-        notification.read ? 'opacity-70' : '',
+        'group relative cursor-pointer rounded-3xl p-4 transition shadow-lg shadow-cyan-500/10 backdrop-blur-xl',
+        notification.read ? 'bg-slate-950/90 border border-white/10 text-slate-300 opacity-80' : getNotificationColor(notification.type),
       ].join(' ')}
     >
       <div className="flex items-start gap-3">
@@ -137,9 +136,9 @@ export default function NotificationDropdown({ notifications, userId, onClose })
       />
 
       {/* Dropdown */}
-      <div className="rounded-2xl bg-white shadow-xl ring-1 ring-slate-200">
+      <div className="rounded-[28px] border border-white/10 bg-slate-950/95 shadow-2xl shadow-cyan-500/15 backdrop-blur-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
           <div>
             <h3 className="text-base font-semibold text-slate-900">Notifications</h3>
             {unreadCount > 0 && (
@@ -160,19 +159,19 @@ export default function NotificationDropdown({ notifications, userId, onClose })
         </div>
 
         {/* Notifications List */}
-        <div className="max-h-96 overflow-y-auto p-2">
+        <div className="max-h-96 overflow-y-auto p-3">
           {notifications.length === 0 ? (
-            <div className="py-12 text-center">
+            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-8 text-center text-slate-300">
               <p className="text-4xl">🔔</p>
-              <p className="mt-3 text-sm font-semibold text-slate-900">
+              <p className="mt-3 text-sm font-bold text-white">
                 No notifications yet
               </p>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-slate-400">
                 We'll notify you about important updates
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {notifications.map((notification) => (
                 <NotificationItem
                   key={notification.id}

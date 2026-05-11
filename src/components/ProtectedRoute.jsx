@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+import Spinner from './Spinner.jsx'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -9,7 +10,7 @@ function ProtectedRoute({ children }) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-700 border-t-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]" />
+          <Spinner size="lg" />
           <span className="text-sm font-medium text-slate-400">Loading Smart Finance...</span>
         </div>
       </div>

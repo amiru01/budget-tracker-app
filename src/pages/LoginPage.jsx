@@ -120,17 +120,17 @@ function LoginPage() {
   if (user) return <Navigate to="/dashboard" replace />
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F8F9FB] px-4 py-8">
-      <section className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 sm:p-8">
-        <p className="text-sm font-medium text-slate-500">Smart Finance</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
-          {mode === 'signin' ? 'Sign in to your dashboard' : 'Create your account'}
+    <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-8">
+      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl sm:p-8">
+        <p className="section-kicker">Smart Finance</p>
+        <h1 className="font-display mt-3 text-3xl font-extrabold tracking-[-0.025em] text-white">
+          {mode === 'signin' ? 'Open your workspace' : 'Create your workspace'}
         </h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Use your email and password to continue.
+        <p className="mt-3 text-sm font-medium leading-6 text-slate-400">
+          Continue to your focused dashboard for income, spending, budgets, and reports.
         </p>
 
-        <div className="mt-5 grid grid-cols-2 rounded-xl bg-slate-100 p-1">
+        <div className="mt-6 grid grid-cols-2 rounded-xl bg-slate-950/60 p-1 ring-1 ring-white/10">
           <button
             type="button"
             onClick={() => {
@@ -139,7 +139,7 @@ function LoginPage() {
               setShowPassword(false)
             }}
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              mode === 'signin' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              mode === 'signin' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-white'
             }`}
           >
             Sign in
@@ -152,7 +152,7 @@ function LoginPage() {
               setShowPassword(false)
             }}
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              mode === 'signup' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              mode === 'signup' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-white'
             }`}
           >
             Sign up
@@ -163,58 +163,58 @@ function LoginPage() {
           {mode === 'signup' ? (
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-semibold text-slate-700">First name</span>
+                <span className="text-sm font-bold text-slate-300">First name</span>
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   autoComplete="given-name"
-                  className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
-                  placeholder="John"
+                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Maya"
                 />
               </label>
 
               <label className="block">
-                <span className="text-sm font-semibold text-slate-700">Last name</span>
+                <span className="text-sm font-bold text-slate-300">Last name</span>
                 <input
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   autoComplete="family-name"
-                  className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
-                  placeholder="Doe"
+                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  placeholder="Patel"
                 />
               </label>
             </div>
           ) : null}
 
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Email</span>
+            <span className="text-sm font-bold text-slate-300">Email</span>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-300"
-              placeholder="you@example.com"
+              className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              placeholder="name@company.com"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Password</span>
-            <div className="mt-2 flex rounded-xl bg-white ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-sky-300">
+            <span className="text-sm font-bold text-slate-300">Password</span>
+            <div className="mt-2 flex rounded-xl bg-slate-950/50 ring-1 ring-white/10 focus-within:ring-2 focus-within:ring-emerald-500">
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                className="w-full rounded-l-xl bg-transparent px-3 py-2 text-sm focus:outline-none"
+                className="w-full rounded-l-xl bg-transparent px-3 py-2 text-sm font-medium text-white placeholder:text-slate-600 focus:outline-none"
                 placeholder="Minimum 6 characters"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="rounded-r-xl px-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                className="rounded-r-xl px-3 text-xs font-bold text-slate-400 transition hover:bg-white/5 hover:text-white"
               >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
@@ -224,9 +224,9 @@ function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-4 py-3 text-sm font-extrabold text-white transition hover:from-emerald-400 hover:to-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoading ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Sign up'}
+            {isLoading ? 'Please wait...' : mode === 'signin' ? 'Open dashboard' : 'Create workspace'}
           </button>
 
           {mode === 'signin' ? (
@@ -234,7 +234,7 @@ function LoginPage() {
               type="button"
               onClick={handleForgotPassword}
               disabled={isLoading}
-              className="w-full rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-white/5 px-4 py-2.5 text-sm font-bold text-slate-300 ring-1 ring-white/10 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
             >
               Forgot password?
             </button>
@@ -264,4 +264,3 @@ function LoginPage() {
 }
 
 export default LoginPage
-

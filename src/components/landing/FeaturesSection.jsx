@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   LineChart,
@@ -12,49 +12,49 @@ import {
 const features = [
   {
     icon: <Wallet className="text-emerald-400" size={32} />,
-    title: "Smart Budgeting",
+    title: "Budgets that adjust with you",
     description:
-      "Automatically categorize and track your spending in real-time with AI-driven insights.",
+      "Set practical limits, track progress by category, and spot overspending before it becomes a pattern.",
     color: "from-emerald-400/20 to-emerald-600/20",
     glow: "shadow-emerald-500/20",
   },
   {
     icon: <LineChart className="text-cyan-400" size={32} />,
-    title: "Interactive Analytics",
+    title: "Analytics you can read quickly",
     description:
-      "Dive deep into your financial health with immersive 3D charts and dynamic reports.",
+      "Turn daily transactions into clear trends, comparisons, and summaries that make decisions easier.",
     color: "from-cyan-400/20 to-blue-600/20",
     glow: "shadow-cyan-500/20",
   },
   {
     icon: <Shield className="text-indigo-400" size={32} />,
-    title: "Bank-grade Security",
+    title: "Privacy-minded by default",
     description:
-      "Your data is encrypted and secure. We use industry-standard protocols to protect you.",
+      "Your financial workspace is protected with modern authentication, encrypted data, and careful access controls.",
     color: "from-indigo-400/20 to-purple-600/20",
     glow: "shadow-indigo-500/20",
   },
   {
     icon: <Zap className="text-amber-400" size={32} />,
-    title: "Lightning Fast",
+    title: "Fast everyday workflow",
     description:
-      "Experience a smooth, lag-free dashboard built on modern edge infrastructure.",
+      "Add expenses, review charts, and move between reports without the friction of heavyweight finance tools.",
     color: "from-amber-400/20 to-orange-600/20",
     glow: "shadow-amber-500/20",
   },
   {
     icon: <ArrowUpRight className="text-rose-400" size={32} />,
-    title: "Goal Tracking",
+    title: "Goals with visible momentum",
     description:
-      "Set ambitious financial goals and watch your progress update instantly.",
+      "Connect saving targets to real activity so every paycheck and purchase has context.",
     color: "from-rose-400/20 to-pink-600/20",
     glow: "shadow-rose-500/20",
   },
   {
     icon: <BarChart3 className="text-purple-400" size={32} />,
-    title: "Custom Reports",
+    title: "Reports ready to share",
     description:
-      "Export and share beautifully designed PDF reports of your financial journey.",
+      "Export clean summaries for planning, taxes, budgeting reviews, or conversations with a partner.",
     color: "from-purple-400/20 to-violet-600/20",
     glow: "shadow-purple-500/20",
   },
@@ -123,13 +123,13 @@ function FeatureCard({ feature, index }) {
         <motion.h3
           animate={{ y: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-3 text-xl font-semibold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300"
+          className="card-title mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300"
         >
           {feature.title}
         </motion.h3>
 
         {/* Description */}
-        <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+        <p className="card-copy group-hover:text-slate-300 transition-colors duration-300">
           {feature.description}
         </p>
 
@@ -144,24 +144,25 @@ export default function FeaturesSection() {
   return (
     <section
       id="features"
-      className="relative bg-slate-900 py-24 sm:py-32 overflow-hidden"
+      className="section-shell"
     >
       {/* Background elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="section-container">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
+          <p className="section-kicker mb-4">Core workflow</p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-5xl font-bold tracking-tight text-white"
+            className="section-title text-balance"
           >
-            A new dimension of <br />
+            Everything you need to run your money with
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              financial mastery.
+              {" "}less effort.
             </span>
           </motion.h2>
 
@@ -170,16 +171,15 @@ export default function FeaturesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="mt-6 text-lg text-slate-400 leading-relaxed"
+            className="section-copy mt-6 text-pretty"
           >
-            We've reimagined personal finance with premium 3D visuals and
-            intelligent automation. No more boring spreadsheets—just clean,
-            actionable insights.
+            Smart Finance keeps the daily work simple: capture activity,
+            understand patterns, and act on the numbers that actually matter.
           </motion.p>
         </div>
 
         {/* Feature Grid */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}
