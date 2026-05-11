@@ -7,16 +7,17 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
-          Loading Smart Finance…
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-700 border-t-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]" />
+          <span className="text-sm font-medium text-slate-400">Loading Smart Finance...</span>
         </div>
       </div>
     )
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />
+    return <Navigate to="/auth" state={{ from: location.pathname }} replace />
   }
 
   return children

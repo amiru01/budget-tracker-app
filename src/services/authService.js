@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth } from '../firebase.js'
 
@@ -53,8 +54,15 @@ async function logout() {
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider()
+  // Add common scopes if needed
+  provider.addScope('profile')
+  provider.addScope('email')
   return signInWithPopup(auth, provider)
 }
 
-export { signup, login, logout, signInWithGoogle, getAuthErrorMessage }
+async function resetPassword(email) {
+  return sendPasswordResetEmail(auth, email)
+}
+
+export { signup, login, logout, signInWithGoogle, resetPassword, getAuthErrorMessage }
 

@@ -51,10 +51,12 @@ export default defineConfig({
           },
         ],
       },
-      // Better DX: enable PWA in dev mode too.
+      // Better DX: disable PWA in dev mode to avoid caching issues during development.
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
     }),
   ],
 })
+
+
