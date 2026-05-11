@@ -1,39 +1,45 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { CheckCircle, TrendingUp, Lock, Zap, Globe, Award } from 'lucide-react'
+import React from "react";
+import { motion } from "framer-motion";
+import { CheckCircle, TrendingUp, Lock, Zap, Globe, Award } from "lucide-react";
 
 const benefits = [
   {
     icon: <TrendingUp className="text-emerald-400" size={32} />,
-    title: 'Real-time Insights',
-    description: 'Get instant updates on your financial health with AI-powered analysis and predictive trends.',
+    title: "Real-time Insights",
+    description:
+      "Get instant updates on your financial health with AI-powered analysis and predictive trends.",
   },
   {
     icon: <Lock className="text-cyan-400" size={32} />,
-    title: 'Bank-Level Security',
-    description: 'Your data is protected with military-grade 256-bit encryption and SOC 2 compliance.',
+    title: "Bank-Level Security",
+    description:
+      "Your data is protected with military-grade 256-bit encryption and SOC 2 compliance.",
   },
   {
     icon: <Zap className="text-amber-400" size={32} />,
-    title: 'Ultra Fast',
-    description: 'Lightning-fast performance optimized for seamless interactions and instant feedback.',
+    title: "Ultra Fast",
+    description:
+      "Lightning-fast performance optimized for seamless interactions and instant feedback.",
   },
   {
     icon: <Globe className="text-indigo-400" size={32} />,
-    title: 'Multi-Currency',
-    description: 'Manage finances across 195 countries with real-time exchange rates and global support.',
+    title: "Multi-Currency",
+    description:
+      "Manage finances across 195 countries with real-time exchange rates and global support.",
   },
   {
     icon: <Award className="text-rose-400" size={32} />,
-    title: 'Award Winning',
-    description: 'Recognized by industry leaders for premium design and financial innovation.',
+    title: "Award Winning",
+    description:
+      "Recognized by industry leaders for premium design and financial innovation.",
   },
   {
     icon: <CheckCircle className="text-purple-400" size={32} />,
-    title: 'Always Available',
-    description: '24/7 access to your financial data with offline capability and automatic sync.',
+    title: "Always Available",
+    description:
+      "24/7 access to your financial data with offline capability and automatic sync.",
   },
-]
+];
 
 export default function BenefitsSection() {
   const containerVariants = {
@@ -44,7 +50,7 @@ export default function BenefitsSection() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -53,7 +59,7 @@ export default function BenefitsSection() {
       y: 0,
       transition: { duration: 0.6 },
     },
-  }
+  };
 
   return (
     <section className="relative bg-slate-900 py-24 sm:py-32 overflow-hidden">
@@ -83,7 +89,8 @@ export default function BenefitsSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-400"
           >
-            We combine premium design, cutting-edge technology, and financial expertise to create the ultimate personal finance platform.
+            We combine premium design, cutting-edge technology, and financial
+            expertise to create the ultimate personal finance platform.
           </motion.p>
         </div>
 
@@ -110,7 +117,11 @@ export default function BenefitsSection() {
                 {/* Icon */}
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 3, delay: index * 0.1, repeat: Infinity }}
+                  transition={{
+                    duration: 3,
+                    delay: index * 0.1,
+                    repeat: Infinity,
+                  }}
                   className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white/10 to-white/5 ring-1 ring-white/20 group-hover:from-white/15 group-hover:to-white/10 group-hover:ring-white/40 transition-all"
                 >
                   {benefit.icon}
@@ -148,12 +159,22 @@ export default function BenefitsSection() {
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-400/50 transition-all hover:scale-105 active:scale-95"
           >
             Start Free Trial
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
             </svg>
           </a>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

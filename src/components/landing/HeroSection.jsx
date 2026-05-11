@@ -1,228 +1,232 @@
-import React, { Suspense, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { ArrowRight, ShieldCheck, TrendingUp, PieChart, Zap } from 'lucide-react'
+import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  PieChart,
+  ShieldCheck,
+  TrendingUp,
+} from "lucide-react";
 
-// Lazy load Scene3D to not block initial render of text
-const Scene3D = React.lazy(() => import('./Scene3D.jsx'))
+const easeOut = [0.16, 1, 0.3, 1];
 
-// Floating metrics card component
-function FloatingCard({ icon: Icon, label, value, delay, top, right }) {
+const bars = [
+  { height: "35%", color: "from-emerald-500 to-teal-300", delay: 0 },
+  { height: "52%", color: "from-blue-500 to-sky-300", delay: 0.08 },
+  { height: "64%", color: "from-emerald-500 to-teal-300", delay: 0.16 },
+  { height: "80%", color: "from-blue-500 to-sky-300", delay: 0.24 },
+  { height: "92%", color: "from-emerald-500 to-teal-300", delay: 0.32 },
+  { height: "74%", color: "from-emerald-500 to-teal-300", delay: 0.4 },
+];
+
+function StatPill({ icon: Icon, label, value, className, delay = 0 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      initial={{ opacity: 0, y: 24, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`absolute ${top} ${right} hidden lg:block`}
+      transition={{ delay, duration: 0.7, ease: easeOut }}
+      className={`absolute hidden rounded-[18px] border border-white/12 bg-slate-800/72 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-xl lg:block ${className}`}
     >
       <motion.div
         animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 3, delay, repeat: Infinity }}
-        className="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl p-4 shadow-2xl shadow-black/20 hover:shadow-emerald-500/20 transition-shadow duration-300"
+        transition={{ duration: 4, delay, repeat: Infinity, ease: "easeInOut" }}
+        className="flex items-center gap-4"
       >
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-gradient-to-br from-emerald-400/20 to-cyan-400/10 p-2 text-emerald-400 group-hover:from-emerald-400/40 transition-colors">
-            <Icon size={20} />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">{label}</p>
-            <p className="text-lg font-bold text-white">{value}</p>
-          </div>
-        </div>
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-400">
+          <Icon size={23} strokeWidth={2.2} />
+        </span>
+        <span>
+          <span className="block text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
+            {label}
+          </span>
+          <span className="mt-1 block text-2xl font-extrabold tracking-tight text-white">
+            {value}
+          </span>
+        </span>
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
-// Scroll indicator animation
-function ScrollIndicator() {
+function FinanceScene({ mousePosition }) {
   return (
     <motion.div
-      animate={{ y: [0, 8, 0] }}
-      transition={{ duration: 2, repeat: Infinity }}
-      className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none"
+      animate={{
+        rotateX: mousePosition.y * -0.025,
+        rotateY: mousePosition.x * 0.035,
+      }}
+      transition={{ type: "spring", stiffness: 95, damping: 28 }}
+      className="pointer-events-none absolute inset-y-20 right-0 z-0 hidden w-[74%] origin-center transform-gpu lg:block"
+      style={{ perspective: 1200 }}
     >
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Scroll</p>
-        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
-      </div>
+      <motion.div
+        animate={{ y: [0, -14, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-[10%] top-[14%] h-[60%] w-[72%] rounded-[12px] border border-white/25 bg-slate-800/28 shadow-[0_32px_120px_rgba(5,12,28,0.45)] backdrop-blur-[1px]"
+      >
+        <div className="absolute inset-3 rounded-[9px] border border-emerald-300/25 bg-gradient-to-br from-slate-950/70 via-slate-900/30 to-white/5" />
+        <div className="absolute left-[8%] top-[22%] h-[22%] w-[32%] rounded bg-gradient-to-r from-emerald-600 to-teal-400 shadow-[0_0_28px_rgba(16,185,129,0.38)]" />
+        <div className="absolute left-[53%] top-[20%] h-[23%] w-[20%] rounded bg-gradient-to-r from-blue-600 to-sky-400 shadow-[0_0_28px_rgba(59,130,246,0.38)]" />
+        <div className="absolute bottom-[16%] left-[26%] h-[37%] w-[44%] rounded bg-slate-950/72 shadow-inner shadow-black/60" />
+        <div className="absolute bottom-[26%] right-[8%] flex h-[36%] items-end gap-5">
+          {bars.map((bar) => (
+            <motion.span
+              key={`${bar.height}-${bar.delay}`}
+              animate={{ height: [bar.height, `calc(${bar.height} + 6%)`, bar.height] }}
+              transition={{
+                duration: 3,
+                delay: bar.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className={`w-8 rounded-t bg-gradient-to-t ${bar.color} shadow-[0_0_18px_rgba(45,212,191,0.38)]`}
+            />
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        animate={{ rotate: [0, 360], y: [0, -10, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+        className="absolute left-[9%] top-[-1%] h-28 w-28 bg-gradient-to-br from-rose-200 via-red-500 to-red-900"
+        style={{ clipPath: "polygon(50% 0, 88% 18%, 100% 54%, 61% 100%, 20% 92%, 0 42%)" }}
+      />
+      <motion.div
+        animate={{ rotate: [0, -360], y: [0, 12, 0] }}
+        transition={{ duration: 11, repeat: Infinity, ease: "linear" }}
+        className="absolute right-[13%] top-[31%] h-24 w-24 bg-gradient-to-br from-emerald-300 to-emerald-700"
+        style={{ clipPath: "polygon(50% 0, 100% 38%, 78% 100%, 18% 83%, 0 28%)" }}
+      />
+      <div className="absolute right-[18%] top-[11%] h-28 w-36 rounded border border-white/20 bg-white/35 shadow-xl backdrop-blur-sm" />
     </motion.div>
-  )
+  );
 }
 
 export default function HeroSection() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollYProgress } = useScroll();
+  const sceneY = useTransform(scrollYProgress, [0, 0.25], [0, 70]);
+  const sceneOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0.65]);
+
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (event) => {
       setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      })
-    }
-    
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+        x: event.clientX / window.innerWidth - 0.5,
+        y: event.clientY / window.innerHeight - 0.5,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-slate-900 pt-20">
-      {/* 3D Background */}
-      <Suspense fallback={<div className="absolute inset-0 bg-slate-900" />}>
-        <motion.div
-          animate={{
-            transform: `perspective(1200px) rotateX(${mousePosition.y * 0.05}deg) rotateY(${mousePosition.x * 0.05}deg)`,
-          }}
-          transition={{ type: 'spring', stiffness: 100, damping: 30 }}
-          className="absolute inset-0"
-        >
-          <Scene3D />
-        </motion.div>
-      </Suspense>
+    <section className="relative min-h-screen overflow-hidden bg-[#071024] pt-20 text-white">
+      <motion.div style={{ y: sceneY, opacity: sceneOpacity }} className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_28%,rgba(20,184,166,0.12),transparent_28%),linear-gradient(180deg,#071024_0%,#0b1326_56%,#071024_100%)]" />
+        <div className="absolute -bottom-24 -left-20 h-60 w-60 rounded-full border-[36px] border-cyan-300/40 shadow-[0_0_40px_rgba(34,211,238,0.18)]" />
+        <FinanceScene mousePosition={mousePosition} />
+      </motion.div>
 
-      {/* Ambient glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-0 pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl -z-0 pointer-events-none" />
+      <div className="relative z-30 mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
+        <div className="max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.1, ease: easeOut }}
+            className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-5 py-2 text-sm font-bold text-emerald-400 backdrop-blur-md"
+          >
+            <ShieldCheck size={16} />
+            The Future of Personal Finance
+          </motion.div>
 
-      {/* Content Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-center px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto w-full max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Text Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-auto max-w-2xl"
+          <motion.h1
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.18, ease: easeOut }}
+            className="max-w-3xl text-5xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl"
+          >
+            Master your
+            <span className="mt-4 block bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              wealth in 3D
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.32, ease: easeOut }}
+            className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl"
+          >
+            Experience a premium, immersive way to track your income and expenses.
+            Smart Finance brings cinematic clarity and intelligent automation to
+            your financial goals.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.44, ease: easeOut }}
+            className="mt-12 flex flex-wrap items-center gap-5"
+          >
+            <Link
+              to="/auth"
+              className="group inline-flex min-h-16 items-center justify-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-9 text-lg font-extrabold text-white shadow-[0_18px_36px_rgba(6,182,212,0.25)] transition hover:scale-[1.03] hover:shadow-[0_20px_44px_rgba(16,185,129,0.32)]"
             >
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 backdrop-blur-sm mb-8 hover:bg-emerald-500/15 transition-colors">
-                  <ShieldCheck size={16} />
-                  <span>The Future of Personal Finance</span>
-                </div>
-              </motion.div>
-              
-              {/* Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl leading-tight"
-              >
-                Master your{' '}
-                <span className="block">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 animate-pulse">
-                    wealth in 3D
-                  </span>
-                </span>
-              </motion.h1>
-              
-              {/* Subheadline */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.7 }}
-                className="mt-8 text-lg text-slate-300 sm:text-xl max-w-xl leading-relaxed"
-              >
-                Experience a premium, immersive way to track your income and expenses. 
-                Smart Finance brings cinematic clarity and intelligent automation to your financial goals.
-              </motion.p>
-              
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.7 }}
-                className="mt-12 flex flex-wrap items-center gap-4"
-              >
-                <Link
-                  to="/auth"
-                  className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-emerald-500/40 transition-all hover:shadow-emerald-400/60 hover:scale-105 active:scale-95"
-                >
-                  <span>Start Free Trial</span>
-                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-                </Link>
-                
-                <Link
-                  to="/auth"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/40 active:scale-95"
-                >
-                  <span>Login</span>
-                </Link>
-              </motion.div>
-              
-              {/* Social Proof */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.7 }}
-                className="mt-16 flex items-center gap-6 text-sm text-slate-400"
-              >
-                <div className="flex -space-x-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <img
-                      key={i}
-                      className="inline-block h-10 w-10 rounded-full border-2 border-slate-900 object-cover shadow-lg"
-                      src={`https://i.pravatar.cc/100?img=${i + 10}`}
-                      alt="User"
-                    />
-                  ))}
-                </div>
-                <div>
-                  <p className="font-medium text-white">Trusted by 10,000+ users worldwide</p>
-                  <p className="text-slate-500">Join the financial intelligence revolution</p>
-                </div>
-              </motion.div>
-            </motion.div>
+              Start Free Trial
+              <ArrowRight size={22} className="transition group-hover:translate-x-1" />
+            </Link>
+            <Link
+              to="/auth"
+              className="inline-flex min-h-16 items-center justify-center rounded-full border border-white/20 bg-white/5 px-10 text-lg font-extrabold text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/10"
+            >
+              Login
+            </Link>
+          </motion.div>
 
-            {/* Right: Floating Cards */}
-            <div className="relative h-96 hidden lg:block">
-              <FloatingCard
-                icon={TrendingUp}
-                label="Total Income"
-                value="$45,230"
-                delay={0.7}
-                top="top-10"
-                right="right-0"
-              />
-              <FloatingCard
-                icon={PieChart}
-                label="Savings Rate"
-                value="32%"
-                delay={0.8}
-                top="top-40"
-                right="right-20"
-              />
-              <FloatingCard
-                icon={Zap}
-                label="Insight Alert"
-                value="3 New"
-                delay={0.9}
-                top="bottom-20"
-                right="right-10"
-              />
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.56, ease: easeOut }}
+            className="mt-20 flex flex-wrap items-center gap-6"
+          >
+            <div className="flex -space-x-3">
+              {[14, 32, 48, 68].map((id) => (
+                <img
+                  key={id}
+                  src={`https://i.pravatar.cc/96?img=${id}`}
+                  alt=""
+                  className="h-12 w-12 rounded-full border-2 border-[#071024] object-cover"
+                />
+              ))}
             </div>
-          </div>
+            <div>
+              <p className="font-bold text-slate-300">
+                Trusted by 10,000+ users worldwide
+              </p>
+              <p className="text-slate-500">
+                Join the financial intelligence revolution
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
-      
-      {/* Scroll Indicator */}
-      <ScrollIndicator />
-      
-      {/* Gradient Bottom Fade */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10"
+
+      <StatPill
+        icon={TrendingUp}
+        label="Total Income"
+        value="$45,230"
+        delay={0.75}
+        className="right-[10%] top-[31%] z-10 opacity-90"
       />
+      <StatPill
+        icon={PieChart}
+        label="Savings Rate"
+        value="32%"
+        delay={0.9}
+        className="right-[16%] top-[51%] z-10 opacity-85"
+      />
+
     </section>
-  )
+  );
 }
