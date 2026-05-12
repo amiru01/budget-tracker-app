@@ -33,6 +33,7 @@ export async function addExpense({
   date,
   note = '',
   type = 'expense',
+  accountId = null,
 }) {
   if (!userId) throw new Error('Missing userId')
   if (typeof amount !== 'number' || Number.isNaN(amount)) throw new Error('Invalid amount')
@@ -46,6 +47,7 @@ export async function addExpense({
     date,
     note,
     type,
+    accountId,
     createdAt: serverTimestamp(),
   })
 }

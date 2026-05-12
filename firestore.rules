@@ -38,13 +38,36 @@ service cloud.firestore {
     
     // Budget Rules collection
     match /budgetRules/{ruleId} {
-      // Allow read if user owns the document
       allow read: if isOwner(resource.data.userId);
-      
-      // Allow create if user is authenticated and userId matches
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      
-      // Allow update/delete if user owns the document
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // Accounts collection (Net Worth)
+    match /accounts/{accountId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // Subscriptions collection
+    match /subscriptions/{subId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // Debts collection
+    match /debts/{debtId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isOwner(resource.data.userId);
+    }
+
+    // Debt Payments collection
+    match /debtPayments/{paymentId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
       allow update, delete: if isOwner(resource.data.userId);
     }
     

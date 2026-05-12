@@ -1,107 +1,123 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import {
-  CartesianGrid,
-  Tooltip,
-  Bar,
-  BarChart,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from 'recharts'
+import { useCurrency } from '../context/CurrencyContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import useFinanceData from '../hooks/useFinanceData.js'
-import AddExpenseModal from '../components/AddExpenseModal.jsx'
-import BudgetRuleModal from '../components/BudgetRuleModal.jsx'
-import InsightCard from '../components/InsightCard.jsx'
-import IncomeChart from '../components/IncomeChart.jsx'
 import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
-import ChartTooltip from '../components/ChartTooltip.jsx'
-import { addBudgetRule, subscribeToBudgetRules, checkBudgetViolations } from '../services/budgetService.js'
-import { useAuth } from '../context/AuthContext.jsx'
-import { useCurrency } from '../context/CurrencyContext.jsx'
+import IncomeChart from '../components/IncomeChart.jsx'
+import InsightCard from '../components/InsightCard.jsx'
 import Spinner from '../components/Spinner.jsx'
-import Skeleton from '../components/Skeleton.jsx'
 import { quickFade } from '../utils/animations.js'
+import { subscribeToDebts } from '../services/debtService.js'
 
-const pieColors = ['#06b6d4', '#10b981', '#22c55e', '#14b8a6', '#0ea5e9', '#5eead4', '#7c3aed']
+const MODULES = [
+  { title: 'Track My Spending', desc: 'Log and categorize every expense with visual analytics.', icon: '💳', path: '/transactions', color: 'from-cyan-500 to-blue-600' },
+  { title: 'Control My Subscriptions', desc: 'Monitor recurring payments and manage subscriptions.', icon: '📱', path: '/subscriptions', color: 'from-purple-500 to-pink-600' },
+  { title: 'Pay Off My Debt', desc: 'Track debts, prioritize payments, and reach financial freedom.', icon: '🎯', path: '/debt', color: 'from-amber-500 to-rose-600' },
+]
 
-function Dashboard() {
+export default function Dashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { formatCurrency } = useCurrency()
-  const [range, setRange] = React.useState('7D')
-  const [isModalOpen, setIsModalOpen] = React.useState(false)
-  const [isBudgetModalOpen, setIsBudgetModalOpen] = React.useState(false)
-  const [budgetRules, setBudgetRules] = React.useState([])
-  const [isExporting, setIsExporting] = React.useState(false)
-  const [hoveredWeekly, setHoveredWeekly] = React.useState(null)
-
-  const weeklyDays = range === '7D' ? 7 : range === '30D' ? 30 : 90
-
-  const {
-    expenses,
-    incomes,
-    totalIncome,
-    totalExpenses,
-    balance,
-    categoryData,
-    weeklyData,
-    insights,
-    incomeMonthlyTrend,
-    incomeBySource,
-    loading,
-    error,
-    actions,
-  } = useFinanceData({ weeklyDays })
+  const [mode, setMode] = React.useState(() => localStorage.getItem('financeMode') || null)
+  const [debts, setDebts] = React.useState([])
+  const { expenses, incomes, totalIncome, totalExpenses, balance, loading, error } = useFinanceData()
 
   React.useEffect(() => {
-    if (!user?.uid) return
-    const unsubscribe = subscribeToBudgetRules(user.uid, setBudgetRules, (err) => console.error('Budget rules error:', err))
-    return unsubscribe
+    if (mode) localStorage.setItem('financeMode', mode)
+  }, [mode])
+
+  React.useEffect(() => {
+    if (user?.uid) {
+      const unsub = subscribeToDebts(user.uid, setDebts, console.error)
+      return unsub
+    }
   }, [user?.uid])
 
-  const budgetViolations = React.useMemo(() => checkBudgetViolations(expenses, budgetRules), [expenses, budgetRules])
+  const todayStr = new Date().toISOString().split('T')[0]
+  const dueDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.dueDate === todayStr), [debts, todayStr])
+  const overdueDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.dueDate && d.dueDate < todayStr), [debts, todayStr])
 
-  async function handleAddExpense(payload) { await actions.addExpense(payload) }
-  async function handleDelete(id) { await actions.deleteExpense(id) }
-  async function handleCreateBudgetRule(ruleData) {
-    if (!user?.uid) throw new Error('Please sign in to create budget rules')
-    await addBudgetRule({ userId: user.uid, ...ruleData })
-  }
-
-  function handleExportData() {
-    setIsExporting(true)
-    try {
-      const allTransactions = [
-        ...incomes.map((i) => ({ date: i.date?.toDate ? i.date.toDate().toISOString() : i.date, type: 'Income', category: i.source || i.category, amount: i.amount, note: i.note || '' })),
-        ...expenses.map((e) => ({ date: e.date?.toDate ? e.date.toDate().toISOString() : e.date, type: 'Expense', category: e.category, amount: e.amount, note: e.note || '' })),
-      ].sort((a, b) => new Date(b.date) - new Date(a.date))
-      const headers = ['Date', 'Type', 'Category', 'Amount', 'Note']
-      const csvRows = [headers.join(','), ...allTransactions.map((t) => {
-        const date = new Date(t.date).toLocaleDateString()
-        return [date, t.type, t.category, t.amount.toFixed(2), `"${(t.note || '').replace(/"/g, '""')}"`].join(',')
-      })]
-      csvRows.push('', 'Summary', `Total Income,${totalIncome.toFixed(2)}`, `Total Expenses,${totalExpenses.toFixed(2)}`, `Net Balance,${balance.toFixed(2)}`)
-      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })
-      const link = document.createElement('a'); const url = URL.createObjectURL(blob)
-      link.setAttribute('href', url); link.setAttribute('download', `smart-finance-export-${new Date().toISOString().split('T')[0]}.csv`)
-      link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-    } catch (err) { console.error('Export failed:', err); alert('Failed to export data. Please try again.')
-    } finally { setIsExporting(false) }
+  if (!mode) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-4">
+        <div className="w-full max-w-2xl">
+          <motion.div {...quickFade} className="text-center mb-10">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Welcome to</p>
+            <h1 className="font-display mt-2 text-4xl font-extrabold tracking-[-0.03em] text-white">Smart Finance</h1>
+            <p className="mt-3 text-slate-400 max-w-md mx-auto">Choose how you want to use your finance workspace.</p>
+          </motion.div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <motion.button onClick={() => setMode('personal')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-emerald-500/10"
+            >
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 text-3xl shadow-lg shadow-cyan-500/20">👤</div>
+              <h2 className="font-display text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">Personal Use</h2>
+              <p className="mt-2 text-sm text-slate-400 leading-relaxed">Track spending, manage subscriptions, monitor net worth, and pay off debt — all in one place.</p>
+              <div className="mt-4 flex gap-2 text-xs text-slate-500">
+                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">3 Modules</span>
+                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Personal Finance</span>
+              </div>
+            </motion.button>
+            <motion.button onClick={() => setMode('org')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-cyan-500/10"
+            >
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-400 to-pink-500 text-3xl shadow-lg shadow-purple-500/20">🏢</div>
+              <h2 className="font-display text-xl font-bold text-white group-hover:text-purple-300 transition-colors">Organizational Use</h2>
+              <p className="mt-2 text-sm text-slate-400 leading-relaxed">Team finance tracking, shared accounts, expense management, budgets, and multi-user reports.</p>
+              <div className="mt-4 flex gap-2 text-xs text-slate-500">
+                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Team Mode</span>
+                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Shared Access</span>
+              </div>
+            </motion.button>
+          </div>
+          <p className="mt-6 text-center text-xs text-slate-600">You can change this later in Settings.</p>
+        </div>
+      </div>
+    )
   }
 
   if (loading) {
+    return <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
+      <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-700 flex items-center gap-3">
+        <Spinner size="md" /><span>Loading dashboard...</span>
+      </div>
+    </div>
+  }
+
+  if (mode === 'org') {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-700 flex items-center gap-3">
-          <Spinner size="md" />
-          <span>Loading dashboard...</span>
+      <div className="space-y-7">
+        <motion.div {...quickFade}>
+          <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance OS</p>
+              <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Organization Dashboard</h1>
+              <p className="mt-1 text-sm text-slate-400">Team finance tracking and shared expense management.</p>
+            </div>
+            <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
+              className="button-secondary rounded-xl px-4 py-2 text-xs">Switch Mode</button>
+          </header>
+        </motion.div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <article className="dashboard-card p-8 text-center lg:col-span-3">
+            <p className="text-5xl mb-4">🏢</p>
+            <h2 className="font-display text-xl font-bold text-white">Organizational Mode</h2>
+            <p className="mt-2 text-slate-400 max-w-md mx-auto">Team finance features are being rolled out. Start by adding expenses and building your team workspace.</p>
+          </article>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {MODULES.map((mod, idx) => (
+            <motion.button key={mod.title} onClick={() => navigate(mod.path)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + idx * 0.06, duration: 0.3 }}
+              whileHover={{ scale: 1.03, y: -2 }} className="dashboard-card group p-5 text-left transition-all">
+              <span className="text-3xl">{mod.icon}</span>
+              <h3 className="mt-3 font-semibold text-white group-hover:text-emerald-300 transition-colors">{mod.title}</h3>
+              <p className="mt-1 text-xs text-slate-400">{mod.desc}</p>
+            </motion.button>
+          ))}
         </div>
       </div>
     )
@@ -109,185 +125,94 @@ function Dashboard() {
 
   return (
     <div className="space-y-7">
-      <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0 }}>
+      <motion.div {...quickFade}>
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance dashboard</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">
-              Your financial command center
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-400">
-              Track cash flow, spending behavior, and budget signals from one clean workspace.
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Smart Finance</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Your finance command center</h1>
+            <p className="mt-1 text-sm text-slate-400">Track cash flow, spending, and budget signals from one workspace.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="button" onClick={handleExportData} disabled={isExporting || (expenses.length === 0 && incomes.length === 0)} className="button-secondary rounded-xl px-4 py-2.5 text-sm">
-              {isExporting ? 'Exporting...' : 'Export'}
-            </button>
-            <button type="button" onClick={() => navigate('/transactions')} className="brand-button px-4 py-2.5 text-sm">
-              Add transaction
-            </button>
+            <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
+              className="button-secondary rounded-xl px-3 py-2 text-xs">Switch Mode</button>
+            <button type="button" onClick={() => navigate('/transactions')} className="brand-button px-4 py-2.5 text-sm">Add transaction</button>
           </div>
         </header>
       </motion.div>
 
       {error ? (
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-100 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
+        <motion.div {...quickFade} transition={{ delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-100 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
           {error}
         </motion.div>
       ) : null}
 
-      {budgetViolations.length > 0 ? (
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.12 }} className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-5 shadow-lg shadow-amber-500/10 backdrop-blur-xl">
-          <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-amber-100">Budget alerts</h3>
-          <div className="mt-3 space-y-3">
-            {budgetViolations.map((violation, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + idx * 0.08, duration: 0.25 }} className="rounded-2xl border border-amber-300/20 bg-amber-500/5 p-4 text-sm font-medium text-amber-100">
-                <strong className="font-bold text-amber-200">{violation.rule.name}</strong>: You&apos;ve spent{' '}
-                {formatCurrency(violation.spending)} ({formatCurrency(violation.excess)} over your {violation.period} limit of {formatCurrency(violation.rule.limit)})
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      ) : null}
-
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {[
-          { label: 'Total Balance', value: formatCurrency(balance), sublabel: 'Across all connected accounts', accent: 'blue' },
-          { label: 'Total Income', value: formatCurrency(totalIncome), sublabel: 'Month to date', accent: 'green' },
-          { label: 'Total Expenses', value: formatCurrency(totalExpenses), sublabel: 'Month to date', accent: 'red' },
-        ].map((card, idx) => (
-          <motion.div key={card.label} {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.15 + idx * 0.08 }}>
-            <StatCard {...card} />
-          </motion.div>
-        ))}
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-5">
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.3 }} className="dashboard-card p-6 lg:col-span-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {dueDebts.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-amber-400/10 p-4 ring-1 ring-amber-400/20">
+          <div className="flex items-start gap-3">
+            <span className="text-xl">🔔</span>
             <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-white">Spending trend</h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Daily outflow across the selected review window.</p>
-            </div>
-            <div className="flex items-center gap-2">
-              {['7D', '30D', '90D'].map((r) => (
-                <button key={r} type="button" onClick={() => setRange(r)}
-                  className={`rounded-xl px-3 py-2 text-sm font-bold transition ${range === r ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15' : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white'}`}
-                >{r}</button>
-              ))}
-            </div>
-          </div>
-          <div className="dashboard-panel mt-6 p-4">
-            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyData} margin={{ top: 10, right: 12, bottom: 0, left: 0 }}>
-                  <CartesianGrid strokeDasharray="4 4" stroke="rgba(148,163,184,0.18)" vertical={false} />
-                  <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }} interval="preserveStartEnd" />
-                  <YAxis tickLine={false} axisLine={false} tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }} width={40} tickFormatter={(v) => `$${Number(v).toLocaleString()}`} />
-                  <Tooltip content={<ChartTooltip formatCurrency={formatCurrency} seriesLabel="Spending" />} cursor={{ stroke: 'rgba(45,212,191,0.35)', strokeWidth: 1 }} />
-                  <Bar dataKey="amount" radius={[10, 10, 0, 0]} fill="#06b6d4" onMouseLeave={() => setHoveredWeekly(null)}>
-                    {weeklyData.map((entry, idx) => (
-                      <Cell key={`weekly-bar-${idx}`} fill="#06b6d4" onMouseEnter={() => setHoveredWeekly(idx)}
-                        style={hoveredWeekly === idx ? { filter: 'drop-shadow(0 0 18px rgba(45,212,191,0.18))', transition: 'filter 150ms' } : { transition: 'filter 150ms' }}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <p className="text-sm font-semibold text-amber-200">Debt payment{dueDebts.length > 1 ? 's' : ''} due today</p>
+              <p className="mt-1 text-sm text-amber-300">{dueDebts.map((d) => `${d.name} (${formatCurrency(d.remainingBalance)} remaining)`).join(', ')}</p>
             </div>
           </div>
         </motion.div>
+      )}
 
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.35 }} className="dashboard-card p-6 lg:col-span-2">
-          <div className="flex items-start justify-between gap-3">
+      {overdueDebts.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-rose-400/10 p-4 ring-1 ring-rose-400/20">
+          <div className="flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
             <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-white">Category mix</h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Where your spending is concentrated.</p>
+              <p className="text-sm font-semibold text-rose-200">{overdueDebts.length} overdue debt{overdueDebts.length > 1 ? 's' : ''}</p>
+              <p className="mt-1 text-sm text-rose-300">{overdueDebts.map((d) => `${d.name} — was due ${new Date(d.dueDate).toLocaleDateString()}`).join(', ')}</p>
             </div>
-            <span className="rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-200 ring-1 ring-white/10">
-              {formatCurrency(categoryData.total)}
-            </span>
-          </div>
-          <div className="dashboard-panel mt-6 p-4">
-            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Tooltip formatter={(value, name) => [formatCurrency(Number(value)), String(name)]} content={<ChartTooltip formatCurrency={formatCurrency} />} />
-                  <Pie data={categoryData.data} dataKey="value" nameKey="name" innerRadius={62} outerRadius={95} paddingAngle={2}>
-                    {categoryData.data.map((entry, index) => (<Cell key={entry.name} fill={pieColors[index % pieColors.length]} />))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {categoryData.data.slice(0, 6).map((c, idx) => (
-              <motion.span key={c.name} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.5 + idx * 0.05 }}
-                className="inline-flex items-center gap-2 rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-300 ring-1 ring-white/10"
-              >
-                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[idx % pieColors.length] }} />
-                {c.name}
-              </motion.span>
-            ))}
           </div>
         </motion.div>
-      </section>
+      )}
 
-      <section className="grid gap-6 lg:grid-cols-3">
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.4 }} className="dashboard-card p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-white">Recent activity</h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Latest expenses and income entries.</p>
-            </div>
-            <button type="button" onClick={() => navigate('/transactions')} className="button-secondary rounded-xl px-4 py-2 text-sm">View all</button>
-          </div>
-          <ul className="mt-6 space-y-3">
-            {!loading && expenses.length === 0 ? (
-              <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="rounded-3xl bg-white/6 px-6 py-6 text-sm font-medium text-slate-400 ring-1 ring-white/10 shadow-lg shadow-slate-950/10">
-                No transactions yet. Add your first expense to see charts and insights update.
-              </motion.li>
-            ) : null}
-            {expenses.slice(0, 6).map((t, idx) => (
-              <motion.li key={t.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 + idx * 0.05, duration: 0.25 }}>
-                <TransactionItem name={t.type === 'income' ? 'Income' : 'Expense'} category={t.category} amount={t.amount} date={t.date} note={t.note} type={t.type || 'expense'} onDelete={() => handleDelete(t.id)} />
+      <motion.div {...quickFade} transition={{ delay: 0.1 }} className="dashboard-card p-6">
+        <h2 className="font-display text-lg font-bold tracking-tight text-white">Quick Actions</h2>
+        <p className="mt-1 text-sm text-slate-400">Your personal finance modules.</p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {MODULES.map((mod, idx) => (
+            <motion.button key={mod.title} onClick={() => navigate(mod.path)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + idx * 0.05 }}
+              whileHover={{ scale: 1.03, y: -2 }} className="dashboard-card group p-5 text-left transition-all hover:shadow-lg hover:shadow-cyan-500/5"
+            >
+              <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${mod.color} text-xl shadow-lg`}>{mod.icon}</div>
+              <h3 className="font-semibold text-white group-hover:text-emerald-300 transition-colors">{mod.title}</h3>
+              <p className="mt-1 text-xs text-slate-400">{mod.desc}</p>
+            </motion.button>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div {...quickFade} transition={{ delay: 0.15 }}>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <StatCard label="Total Balance" value={formatCurrency(balance)} sublabel="Across all accounts" accent="blue" />
+          <StatCard label="Total Income" value={formatCurrency(totalIncome)} sublabel="Month to date" accent="green" />
+          <StatCard label="Total Expenses" value={formatCurrency(totalExpenses)} sublabel="Month to date" accent="red" />
+        </div>
+      </motion.div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <motion.div {...quickFade} transition={{ delay: 0.3 }} className="dashboard-card p-6 lg:col-span-2">
+          <h2 className="font-display text-lg font-bold tracking-tight text-white">Recent Activity</h2>
+          <p className="mt-1 text-sm text-slate-400">Latest expenses across your accounts.</p>
+          <ul className="mt-4 space-y-3">
+            {expenses.length === 0 ? (
+              <li className="rounded-xl bg-white/6 px-4 py-4 text-sm font-medium text-slate-400 ring-1 ring-white/10">No transactions yet. Start tracking your spending.</li>
+            ) : expenses.slice(0, 6).map((t, idx) => (
+              <motion.li key={t.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + idx * 0.04 }}>
+                <TransactionItem name={t.type === 'income' ? 'Income' : 'Expense'} category={t.category} amount={t.amount} date={t.date} note={t.note} type={t.type || 'expense'} />
               </motion.li>
             ))}
           </ul>
         </motion.div>
 
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.45 }}>
-          <IncomeChart monthlyIncomeTrend={incomeMonthlyTrend} incomeBySource={incomeBySource} variant="preview" />
+        <motion.div {...quickFade} transition={{ delay: 0.35 }}>
+          <IncomeChart monthlyIncomeTrend={[]} incomeBySource={{ total: totalIncome, data: [] }} variant="preview" />
         </motion.div>
-
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.5 }} className="dashboard-card p-6">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-white">Planning signals</h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Timely prompts based on your current activity.</p>
-            </div>
-            <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300 ring-1 ring-cyan-300/20">Beta</span>
-          </div>
-          <div className="mt-6 space-y-3">
-            {insights.map((insight, idx) => (
-              <motion.div key={insight.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 + idx * 0.08, duration: 0.25 }}>
-                <InsightCard title={insight.title} message={insight.message} />
-              </motion.div>
-            ))}
-          </div>
-          <div className="dashboard-panel mt-6 p-4">
-            <p className="text-sm font-bold text-white">Next best action</p>
-            <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Consider setting a weekly category cap for dining to reduce surprises.</p>
-            <button type="button" onClick={() => setIsBudgetModalOpen(true)} className="brand-button mt-3 w-full px-4 py-2.5 text-sm">Create a budget rule</button>
-          </div>
-        </motion.div>
-      </section>
-
-      <AddExpenseModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddExpense} />
-      <BudgetRuleModal open={isBudgetModalOpen} onClose={() => setIsBudgetModalOpen(false)} onSubmit={handleCreateBudgetRule} onSuccess={() => { setIsBudgetModalOpen(false); navigate('/budget-rules') }} />
+      </div>
     </div>
   )
 }
-
-export default Dashboard

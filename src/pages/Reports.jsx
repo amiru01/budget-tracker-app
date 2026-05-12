@@ -18,6 +18,9 @@ import useFinanceData from '../hooks/useFinanceData.js'
 import ReportCard from '../components/ReportCard.jsx'
 import InsightCard from '../components/InsightCard.jsx'
 import { useCurrency } from '../context/CurrencyContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
+import { subscribeToSubscriptions } from '../services/subscriptionService.js'
+import { subscribeToDebts } from '../services/debtService.js'
 import { quickFade, badgePop } from '../utils/animations.js'
 
 const COLORS = ['#06b6d4', '#10b981', '#22c55e', '#14b8a6', '#0ea5e9', '#5eead4', '#7c3aed']
@@ -38,10 +41,28 @@ function CustomTooltip({ active, payload, label, formatCurrency }) {
 }
 
 export default function Reports() {
+  const { user } = useAuth()
   const { formatCurrency } = useCurrency()
   const [timeRange, setTimeRange] = React.useState('30D')
+  const [subscriptions, setSubscriptions] = React.useState([])
+  const [debts, setDebts] = React.useState([])
   const weeklyDays = timeRange === '7D' ? 7 : timeRange === '30D' ? 30 : 90
   const { incomes, expenses, totalIncome, totalExpenses, balance, categoryData, weeklyData, insights, loading, error } = useFinanceData({ weeklyDays })
+
+  React.useEffect(() => {
+    if (!user?.uid) return
+    const unsubs = [
+      subscribeToSubscriptions(user.uid, setSubscriptions, console.error),
+      subscribeToDebts(user.uid, setDebts, console.error),
+    ]
+    return () => unsubs.forEach((u) => u())
+  }, [user?.uid])
+
+  const activeSubs = React.useMemo(() => subscriptions.filter((s) => s.isActive), [subscriptions])
+  const subMonthlyTotal = React.useMemo(() => activeSubs.reduce((s, sub) => s + (sub.price || 0), 0), [activeSubs])
+  const activeDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.remainingBalance > 0), [debts])
+  const debtTotalRemaining = React.useMemo(() => activeDebts.reduce((s, d) => s + (d.remainingBalance || 0), 0), [activeDebts])
+  const debtTotalPaid = React.useMemo(() => debts.reduce((s, d) => s + ((d.totalAmount || 0) - (d.remainingBalance || 0)), 0), [debts])
 
   const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0
   const comparisonData = [
@@ -116,6 +137,21 @@ export default function Reports() {
                 <ReportCard {...card} />
               </motion.div>
             ))}
+          </section>
+
+          <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <motion.div {...quickFade} transition={{ delay: 0.2 }}>
+              <ReportCard label="Active Subscriptions" value={`${activeSubs.length}`} icon="📱" variant="success" />
+            </motion.div>
+            <motion.div {...quickFade} transition={{ delay: 0.22 }}>
+              <ReportCard label="Subscriptions Annual" value={formatCurrency(subMonthlyTotal * 12)} icon="💳" variant="warning" />
+            </motion.div>
+            <motion.div {...quickFade} transition={{ delay: 0.24 }}>
+              <ReportCard label="Debt Remaining" value={formatCurrency(debtTotalRemaining)} icon="🎯" variant={debtTotalRemaining > 0 ? 'danger' : 'success'} />
+            </motion.div>
+            <motion.div {...quickFade} transition={{ delay: 0.26 }}>
+              <ReportCard label="Total Debt Paid" value={formatCurrency(debtTotalPaid)} icon="✅" variant="success" />
+            </motion.div>
           </section>
 
           <section className="grid gap-6 lg:grid-cols-2">

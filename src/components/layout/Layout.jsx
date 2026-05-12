@@ -7,6 +7,8 @@ import Sidebar from './Sidebar.jsx'
 const pageTitles = {
   '/dashboard': 'Dashboard',
   '/transactions': 'Transactions',
+  '/subscriptions': 'Subscriptions',
+  '/debt': 'Debt Payoff',
   '/reports': 'Reports',
   '/budgets': 'Budgets',
   '/profile': 'Profile',

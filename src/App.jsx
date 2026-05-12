@@ -8,6 +8,8 @@ import Transactions from './pages/Transactions.jsx'
 import BudgetRules from './pages/BudgetRules.jsx'
 import Reports from './pages/Reports.jsx'
 import Profile from './pages/Profile.jsx'
+import Subscriptions from './pages/Subscriptions.jsx'
+import Debt from './pages/Debt.jsx'
 import Landing from './pages/Landing.jsx'
 
 function App() {
@@ -54,6 +56,22 @@ function App() {
             element={
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }} exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}>
                 <BudgetRules />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/subscriptions"
+            element={
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }} exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}>
+                <Subscriptions />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/debt"
+            element={
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }} exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}>
+                <Debt />
               </motion.div>
             }
           />

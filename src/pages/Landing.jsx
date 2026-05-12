@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import Navbar from "../components/landing/Navbar.jsx";
 import HeroSection from "../components/landing/HeroSection.jsx";
 import FeaturesSection from "../components/landing/FeaturesSection.jsx";
+import ModulesSection from "../components/landing/ModulesSection.jsx";
 import BenefitsSection from "../components/landing/BenefitsSection.jsx";
 import ShowcaseSection from "../components/landing/ShowcaseSection.jsx";
 import TestimonialsSection from "../components/landing/TestimonialsSection.jsx";
@@ -45,6 +46,7 @@ export default function Landing() {
       <main>
         <HeroSection />
         <FeaturesSection />
+        <ModulesSection />
         <BenefitsSection />
         <ShowcaseSection />
         <TestimonialsSection />

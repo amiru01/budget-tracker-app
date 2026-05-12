@@ -4,36 +4,21 @@ import { useCurrency } from '../context/CurrencyContext.jsx'
 function formatDate(date) {
   if (!date) return ''
   const d = date?.toDate ? date.toDate() : new Date(date)
-  return d.toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 function getCategoryIcon(category, type) {
   const icons = {
-    // Expense categories
-    Food: '🍔',
-    Transport: '🚗',
-    Shopping: '🛍️',
-    Bills: '📄',
-    Subscriptions: '📱',
-    Health: '⚕️',
-    Entertainment: '🎬',
-    // Income sources
-    Salary: '💼',
-    Freelance: '💻',
-    Business: '🏢',
-    Investment: '📈',
-    Rental: '🏠',
-    Gift: '🎁',
+    Food: '🍔', Transport: '🚗', Shopping: '🛍️', Bills: '📄',
+    Subscriptions: '📱', Health: '⚕️', Entertainment: '🎬',
+    Salary: '💼', Freelance: '💻', Business: '🏢',
+    Investment: '📈', Rental: '🏠', Gift: '🎁',
     Other: type === 'income' ? '💰' : '💳',
   }
   return icons[category] || (type === 'income' ? '💰' : '💳')
 }
 
-export default function TransactionListItem({ transaction, onDelete }) {
+export default function TransactionListItem({ transaction, onDelete, accountName }) {
   const { formatCurrency } = useCurrency()
   const isIncome = transaction.type === 'income'
   const category = transaction.category || transaction.source || 'Other'
@@ -43,65 +28,32 @@ export default function TransactionListItem({ transaction, onDelete }) {
     <li className="group rounded-xl bg-white/5 p-4 ring-1 ring-white/10 transition hover:bg-white/10 hover:shadow-lg">
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-1 items-start gap-3">
-          {/* Icon */}
-          <div
-            className={[
-              'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg',
-              isIncome ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-300',
-            ].join(' ')}
-          >
+          <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg ${isIncome ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-300'}`}>
             {icon}
           </div>
-
-          {/* Details */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-slate-100 truncate">{category}</h3>
-                {transaction.note && (
-                  <p className="mt-0.5 text-sm text-slate-400 line-clamp-2">
-                    {transaction.note}
-                  </p>
-                )}
+                {transaction.note && <p className="mt-0.5 text-sm text-slate-400 line-clamp-2">{transaction.note}</p>}
+                {accountName && <p className="mt-0.5 text-xs text-slate-500">From: {accountName}</p>}
               </div>
-              
-              {/* Amount */}
               <div className="text-right flex-shrink-0">
-                <p
-                  className={[
-                    'text-lg font-bold',
-                    isIncome ? 'text-emerald-400' : 'text-rose-400',
-                  ].join(' ')}
-                >
-                  {isIncome ? '+' : '-'}
-                  {formatCurrency(transaction.amount)}
+                <p className={`text-lg font-bold ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {isIncome ? '+' : '-'}{formatCurrency(transaction.amount)}
                 </p>
               </div>
             </div>
-
-            {/* Date and Actions */}
             <div className="mt-2 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <span>📅</span>
                 <span>{formatDate(transaction.date)}</span>
-                <span
-                  className={[
-                    'rounded-full px-2 py-0.5 text-xs font-semibold',
-                    isIncome
-                      ? 'bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/20'
-                      : 'bg-rose-400/10 text-rose-300 ring-1 ring-rose-400/20',
-                  ].join(' ')}
-                >
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${isIncome ? 'bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/20' : 'bg-rose-400/10 text-rose-300 ring-1 ring-rose-400/20'}`}>
                   {isIncome ? 'Income' : 'Expense'}
                 </span>
               </div>
-
               {onDelete && (
-                <button
-                  type="button"
-                  onClick={() => onDelete(transaction.id)}
-                  className="button-secondary rounded-lg px-2 py-1 text-xs font-semibold"
-                >
+                <button type="button" onClick={() => onDelete(transaction.id)} className="button-secondary rounded-lg px-2 py-1 text-xs font-semibold">
                   Delete
                 </button>
               )}

@@ -1,15 +1,5 @@
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-
-function formatCurrency(value) {
-  const abs = Math.abs(value)
-  const formatted = abs.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-  return value < 0 ? `-${formatted}` : formatted
-}
+import { useCurrency } from '../context/CurrencyContext.jsx'
 
 function formatDate(value) {
   if (!value) return ''
@@ -19,51 +9,32 @@ function formatDate(value) {
 }
 
 export default function IncomeItem({ income, onEdit, onDelete }) {
+  const { formatCurrency } = useCurrency()
   const amount = Number(income?.amount) || 0
   const dateLabel = income?.date ? formatDate(income.date) : ''
   const note = income?.note ? String(income.note) : ''
 
   return (
-    <li className="flex flex-col gap-3 rounded-xl bg-white p-4 ring-1 ring-emerald-100 sm:flex-row sm:items-center sm:justify-between">
+    <li className="dashboard-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-slate-900">{income?.source || 'Other'}</p>
-        <p className="mt-1 text-sm text-slate-500">
-          {dateLabel ? dateLabel : '—'}
-          {note ? ` · ${note}` : ''}
+        <p className="truncate text-sm font-semibold text-white">{income?.source || 'Other'}</p>
+        <p className="mt-1 text-sm text-slate-400">
+          {dateLabel || '—'}{note ? ` · ${note}` : ''}
         </p>
       </div>
-
       <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
-        <p className="text-base font-semibold text-emerald-700">
-          +
-          {formatCurrency(amount).replace('-', '')}
-        </p>
-
+        <p className="text-base font-semibold text-emerald-400">+{formatCurrency(amount).replace('-', '')}</p>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onEdit?.(income)}
-            className="rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100 transition hover:bg-emerald-100"
-          >
-            <span className="inline-flex items-center gap-2">
-              <PencilSquareIcon className="h-4 w-4" />
-              Edit
-            </span>
+          <button type="button" onClick={() => onEdit?.(income)}
+            className="rounded-lg bg-sky-400/10 px-2.5 py-1.5 text-xs font-semibold text-sky-300 ring-1 ring-sky-400/20 transition hover:bg-sky-400/20">
+            <span className="inline-flex items-center gap-1.5"><PencilSquareIcon className="h-3.5 w-3.5" /> Edit</span>
           </button>
-
-          <button
-            type="button"
-            onClick={() => onDelete?.(income?.id)}
-            className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-rose-700 ring-1 ring-rose-100 transition hover:bg-rose-50"
-          >
-            <span className="inline-flex items-center gap-2">
-              <TrashIcon className="h-4 w-4" />
-              Delete
-            </span>
+          <button type="button" onClick={() => onDelete?.(income?.id)}
+            className="rounded-lg bg-rose-400/10 px-2.5 py-1.5 text-xs font-semibold text-rose-300 ring-1 ring-rose-400/20 transition hover:bg-rose-400/20">
+            <span className="inline-flex items-center gap-1.5"><TrashIcon className="h-3.5 w-3.5" /> Delete</span>
           </button>
         </div>
       </div>
     </li>
   )
 }
-
