@@ -105,7 +105,7 @@ export default function BudgetRuleModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white"
             aria-label="Close"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,7 +129,7 @@ export default function BudgetRuleModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Category</span>
+              <span className="text-sm font-semibold text-slate-300">Category</span>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -144,7 +144,7 @@ export default function BudgetRuleModal({
             </label>
 
             <label className="block">
-              <span className="text-sm font-semibold text-slate-700">Period</span>
+              <span className="text-sm font-semibold text-slate-300">Period</span>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
@@ -158,7 +158,7 @@ export default function BudgetRuleModal({
           </div>
 
           <label className="block">
-            <span className="text-sm font-semibold text-slate-700">Spending Limit</span>
+            <span className="text-sm font-semibold text-slate-300">Spending Limit</span>
             <input
               type="number"
               value={limit}
@@ -175,13 +175,13 @@ export default function BudgetRuleModal({
               type="checkbox"
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-slate-600 text-cyan-500 focus:ring-cyan-400 bg-slate-800"
             />
-            <span className="text-sm font-semibold text-slate-700">Active rule</span>
+            <span className="text-sm font-semibold text-slate-300">Active rule</span>
           </label>
 
           {error ? (
-            <div className="rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700 ring-1 ring-rose-100">
+            <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-300 ring-1 ring-rose-400/20">
               ❌ {error}
             </div>
           ) : null}

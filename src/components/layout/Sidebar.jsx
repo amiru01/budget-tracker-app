@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
   BanknotesIcon,
   ChartBarSquareIcon,
@@ -56,10 +57,17 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
         }`}
         aria-label="Primary navigation"
       >
-        <div className="flex items-center justify-between border-b border-white/10 pb-5">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-between border-b border-white/10 pb-5"
+        >
           <div className="flex items-center gap-3">
-            {/* Logo */}
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-lg shadow-cyan-500/25">
+            <motion.div
+              whileHover={{ scale: 1.05, rotate: -3 }}
+              className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-lg shadow-cyan-500/25"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-8 w-8">
                 <ellipse cx="256" cy="280" rx="140" ry="110" fill="#ffffff" opacity="0.9"/>
                 <ellipse cx="220" cy="250" rx="40" ry="30" fill="#ffffff" opacity="0.4"/>
@@ -84,9 +92,8 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
                 <circle cx="220" cy="130" r="3" fill="#fbbf24"/>
                 <circle cx="295" cy="125" r="3" fill="#fbbf24"/>
               </svg>
-            </div>
+            </motion.div>
             
-            {/* Text */}
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-300/90">
                 Finance OS
@@ -97,50 +104,64 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
             </div>
           </div>
 
-          <button
+          <motion.button
             type="button"
             onClick={onClose}
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
             className="rounded-full p-2 text-slate-400 transition hover:bg-white/10 hover:text-white lg:hidden"
             aria-label="Close sidebar"
           >
             <XMarkIcon className="h-6 w-6" />
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         <nav className="mt-5 flex-1 space-y-1.5" aria-label="Sidebar">
-          {navigation.map((item) => {
+          {navigation.map((item, idx) => {
             const Icon = item.icon
 
             return (
-              <NavLink
+              <motion.div
                 key={item.name}
-                to={item.to}
-                onClick={onClose}
-                aria-label={`Go to ${item.name}`}
-                aria-current={
-                  currentPageTitle === item.name ? 'page' : undefined
-                }
-                className={({ isActive }) =>
-                  `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-emerald-400/18 to-cyan-400/14 text-white shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-300/25'
-                      : 'text-slate-300 hover:bg-white/8 hover:text-white hover:ring-1 hover:ring-white/10'
-                  }`
-                }
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + idx * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
-                {({ isActive }) => (
-                  <>
-                    <Icon
-                      className={`h-5 w-5 shrink-0 transition ${
-                        isActive
-                          ? 'text-cyan-300'
-                          : 'text-slate-400 group-hover:text-cyan-200'
-                      }`}
-                    />
-                    <span>{item.name}</span>
-                  </>
-                )}
-              </NavLink>
+                <NavLink
+                  to={item.to}
+                  onClick={onClose}
+                  aria-label={`Go to ${item.name}`}
+                  aria-current={
+                    currentPageTitle === item.name ? 'page' : undefined
+                  }
+                  className={({ isActive }) =>
+                    `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
+                      isActive
+                        ? 'bg-gradient-to-r from-emerald-400/18 to-cyan-400/14 text-white shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-300/25'
+                        : 'text-slate-300 hover:bg-white/8 hover:text-white hover:ring-1 hover:ring-white/10'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        className={`h-5 w-5 shrink-0 transition ${
+                          isActive
+                            ? 'text-cyan-300'
+                            : 'text-slate-400 group-hover:text-cyan-200'
+                        }`}
+                      />
+                      <span>{item.name}</span>
+                      {isActive && (
+                        <motion.span
+                          layoutId="activeNav"
+                          className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400"
+                        />
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              </motion.div>
             )
           })}
         </nav>

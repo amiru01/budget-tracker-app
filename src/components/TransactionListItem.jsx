@@ -88,8 +88,8 @@ export default function TransactionListItem({ transaction, onDelete }) {
                   className={[
                     'rounded-full px-2 py-0.5 text-xs font-semibold',
                     isIncome
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-rose-100 text-rose-700',
+                      ? 'bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/20'
+                      : 'bg-rose-400/10 text-rose-300 ring-1 ring-rose-400/20',
                   ].join(' ')}
                 >
                   {isIncome ? 'Income' : 'Expense'}
