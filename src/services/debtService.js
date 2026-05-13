@@ -15,12 +15,14 @@ import {
 const COLLECTION = 'debts'
 const PAYMENTS_COLLECTION = 'debtPayments'
 
-export function addDebt({ userId, name, totalAmount, remainingBalance, interestRate, dueDate, category, frequency = 'monthly', note = '', priority = 0 }) {
+export function addDebt({ userId, name, totalAmount, remainingBalance, interestRate, dueDate, category, frequency = 'monthly', note = '', priority = 0, targetPayoffDate = '', savingAmount = '', savingFrequency = '' }) {
   if (!userId) throw new Error('User ID is required')
   if (!name?.trim()) throw new Error('Debt name is required')
   if (!totalAmount || Number(totalAmount) <= 0) throw new Error('Valid total amount is required')
 
   const remaining = remainingBalance !== undefined ? Number(remainingBalance) : Number(totalAmount)
+  const freq = ['daily', 'weekly', 'monthly'].includes(savingFrequency) ? savingFrequency : ''
+  const nextReminder = freq && savingAmount ? calcNextReminderDate(freq) : null
 
   return addDoc(collection(db, COLLECTION), {
     userId,
@@ -34,9 +36,27 @@ export function addDebt({ userId, name, totalAmount, remainingBalance, interestR
     note: note.trim(),
     priority: Number(priority) || 0,
     isPaid: remaining <= 0,
+    targetPayoffDate: targetPayoffDate || null,
+    savingAmount: savingAmount ? Number(savingAmount) : 0,
+    savingFrequency: freq,
+    nextReminderDate: nextReminder,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   })
+}
+
+function calcNextReminderDate(frequency) {
+  const now = new Date()
+  switch (frequency) {
+    case 'daily':
+      now.setDate(now.getDate() + 1); break
+    case 'weekly':
+      now.setDate(now.getDate() + 7); break
+    case 'monthly':
+      now.setMonth(now.getMonth() + 1); break
+  }
+  now.setHours(8, 0, 0, 0)
+  return Timestamp.fromDate(now)
 }
 
 export function deleteDebt(debtId) {
@@ -44,10 +64,17 @@ export function deleteDebt(debtId) {
 }
 
 export function updateDebt(debtId, data) {
-  return updateDoc(doc(db, COLLECTION, debtId), {
-    ...data,
-    updatedAt: Timestamp.now(),
-  })
+  const updated = { ...data, updatedAt: Timestamp.now() }
+  if (data.savingFrequency || data.savingAmount) {
+    const freq = data.savingFrequency || data.savingFrequency === '' ? data.savingFrequency : undefined
+    const amt = data.savingAmount !== undefined ? data.savingAmount : undefined
+    if (freq && amt) {
+      updated.nextReminderDate = calcNextReminderDate(freq)
+    } else {
+      updated.nextReminderDate = null
+    }
+  }
+  return updateDoc(doc(db, COLLECTION, debtId), updated)
 }
 
 export function subscribeToDebts(userId, onChange, onError) {

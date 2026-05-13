@@ -11,6 +11,7 @@ import InsightCard from '../components/InsightCard.jsx'
 import Spinner from '../components/Spinner.jsx'
 import { quickFade } from '../utils/animations.js'
 import { subscribeToDebts } from '../services/debtService.js'
+import { subscribeToSubscriptions } from '../services/subscriptionService.js'
 
 const MODULES = [
   { title: 'Track My Spending', desc: 'Log and categorize every expense with visual analytics.', icon: '💳', path: '/transactions', color: 'from-cyan-500 to-blue-600' },
@@ -24,6 +25,7 @@ export default function Dashboard() {
   const { formatCurrency } = useCurrency()
   const [mode, setMode] = React.useState(() => localStorage.getItem('financeMode') || null)
   const [debts, setDebts] = React.useState([])
+  const [subs, setSubs] = React.useState([])
   const { expenses, incomes, totalIncome, totalExpenses, balance, loading, error } = useFinanceData()
 
   React.useEffect(() => {
@@ -32,14 +34,23 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     if (user?.uid) {
-      const unsub = subscribeToDebts(user.uid, setDebts, console.error)
-      return unsub
+      const unsubs = [
+        subscribeToDebts(user.uid, setDebts, console.error),
+        subscribeToSubscriptions(user.uid, setSubs, console.error),
+      ]
+      return () => unsubs.forEach((u) => u())
     }
   }, [user?.uid])
 
   const todayStr = new Date().toISOString().split('T')[0]
   const dueDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.dueDate === todayStr), [debts, todayStr])
   const overdueDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.dueDate && d.dueDate < todayStr), [debts, todayStr])
+  const debtsWithPlan = React.useMemo(() => debts.filter((d) => !d.isPaid && d.savingFrequency && d.savingAmount > 0), [debts])
+  const subsDueSoon = React.useMemo(() => {
+    const now = new Date()
+    const weekFromNow = new Date(now.getTime() + 7 * 86400000)
+    return subs.filter((s) => s.isActive && s.renewalDate && new Date(s.renewalDate) >= now && new Date(s.renewalDate) <= weekFromNow)
+  }, [subs])
 
   if (!mode) {
     return (
@@ -165,6 +176,43 @@ export default function Dashboard() {
             <div>
               <p className="text-sm font-semibold text-rose-600">{overdueDebts.length} overdue debt{overdueDebts.length > 1 ? 's' : ''}</p>
               <p className="mt-1 text-sm text-rose-600">{overdueDebts.map((d) => `${d.name} — was due ${new Date(d.dueDate).toLocaleDateString()}`).join(', ')}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {debtsWithPlan.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-cyan-400/10 p-4 ring-1 ring-cyan-400/20">
+          <div className="flex items-start gap-3">
+            <span className="text-xl">💰</span>
+            <div>
+              <p className="text-sm font-semibold text-cyan-600">Debt Savings Plans</p>
+              <div className="mt-1 space-y-0.5">
+                {debtsWithPlan.map((d) => (
+                  <p key={d.id} className="text-sm text-ink-secondary">
+                    {d.name} — save {formatCurrency(d.savingAmount)} {d.savingFrequency}
+                    {d.targetPayoffDate && `, target ${new Date(d.targetPayoffDate).toLocaleDateString()}`}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {subsDueSoon.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl bg-purple-400/10 p-4 ring-1 ring-purple-400/20">
+          <div className="flex items-start gap-3">
+            <span className="text-xl">📱</span>
+            <div>
+              <p className="text-sm font-semibold text-purple-600">Subscriptions Renewing Soon</p>
+              <div className="mt-1 space-y-0.5">
+                {subsDueSoon.map((s) => (
+                  <p key={s.id} className="text-sm text-ink-secondary">
+                    {s.name} — {formatCurrency(s.price)} on {new Date(s.renewalDate).toLocaleDateString()}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { useCurrency } from '../context/CurrencyContext.jsx'
 import { subscribeToSubscriptions, addSubscription, deleteSubscription, toggleSubscription, updateSubscription } from '../services/subscriptionService.js'
 import { subscribeToAccounts } from '../services/accountsService.js'
+import { addNotification } from '../services/notificationService.js'
 import SubscriptionModal from '../components/SubscriptionModal.jsx'
 import { quickFade, badgePop } from '../utils/animations.js'
 
@@ -20,11 +21,38 @@ export default function Subscriptions() {
   React.useEffect(() => {
     if (!user?.uid) return
     const unsubs = [
-      subscribeToSubscriptions(user.uid, (data) => { setSubs(data); setLoading(false) }, (err) => { setError(err.message); setLoading(false) }),
+      subscribeToSubscriptions(user.uid, (data) => { setSubs(data); setLoading(false); checkSubReminders(user.uid, data) }, (err) => { setError(err.message); setLoading(false) }),
       subscribeToAccounts(user.uid, setAccounts, console.error),
     ]
     return () => unsubs.forEach((u) => u())
   }, [user?.uid])
+
+  async function checkSubReminders(userId, subs) {
+    const now = new Date()
+    for (const s of subs) {
+      if (!s.isActive || !s.nextReminderDate || !s.savingFrequency) continue
+      const reminderDate = s.nextReminderDate?.toDate ? s.nextReminderDate.toDate() : new Date(s.nextReminderDate)
+      if (reminderDate <= now) {
+        try {
+          await addNotification({
+            userId,
+            title: '📱 Subscription Saving Reminder',
+            message: `Time to save ${formatCurrency(s.savingAmount)} for "${s.name}" (${s.savingFrequency}).`,
+            type: 'info',
+            metadata: { subId: s.id, amount: s.savingAmount, frequency: s.savingFrequency },
+          })
+          const nextDate = new Date()
+          switch (s.savingFrequency) {
+            case 'daily': nextDate.setDate(nextDate.getDate() + 1); break
+            case 'weekly': nextDate.setDate(nextDate.getDate() + 7); break
+            case 'monthly': nextDate.setMonth(nextDate.getMonth() + 1); break
+          }
+          nextDate.setHours(8, 0, 0, 0)
+          await updateSubscription(s.id, { nextReminderDate: new Date(nextDate).toISOString() })
+        } catch {}
+      }
+    }
+  }
 
   const activeSubs = React.useMemo(() => subs.filter((s) => s.isActive), [subs])
   const monthlyTotal = React.useMemo(() => activeSubs.reduce((s, sub) => s + (sub.price || 0), 0), [activeSubs])
@@ -155,6 +183,11 @@ export default function Subscriptions() {
                   <div>
                     <p className="font-semibold text-ink">{sub.name}</p>
                     <p className="text-xs text-ink-secondary">{sub.category}{sub.renewalDate ? ` · Renews ${new Date(sub.renewalDate).toLocaleDateString()}` : ''}</p>
+                    {sub.savingFrequency && sub.savingAmount > 0 && (
+                      <p className="text-xs text-cyan-500 mt-0.5 font-medium">
+                        Save {formatCurrency(sub.savingAmount)} {sub.savingFrequency}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

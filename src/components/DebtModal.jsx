@@ -4,6 +4,12 @@ import { modalOverlay, modalContent } from '../utils/animations.js'
 
 const CATEGORIES = ['Credit Card', 'Student Loan', 'Mortgage', 'Car Loan', 'Medical', 'Personal Loan', 'Business', 'Other']
 const FREQUENCIES = ['daily', 'weekly', 'monthly']
+const SAVING_FREQUENCIES = [
+  { value: '', label: 'No plan' },
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+]
 
 export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
   const [name, setName] = React.useState('')
@@ -15,6 +21,9 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
   const [frequency, setFrequency] = React.useState('monthly')
   const [priority, setPriority] = React.useState('0')
   const [note, setNote] = React.useState('')
+  const [targetPayoffDate, setTargetPayoffDate] = React.useState('')
+  const [savingAmount, setSavingAmount] = React.useState('')
+  const [savingFrequency, setSavingFrequency] = React.useState('')
   const [error, setError] = React.useState('')
   const [saving, setSaving] = React.useState(false)
 
@@ -30,9 +39,13 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
       setFrequency(initial.frequency || 'monthly')
       setPriority(String(initial.priority || '0'))
       setNote(initial.note || '')
+      setTargetPayoffDate(initial.targetPayoffDate || '')
+      setSavingAmount(String(initial.savingAmount || ''))
+      setSavingFrequency(initial.savingFrequency || '')
     } else {
       setName(''); setTotalAmount(''); setRemainingBalance(''); setInterestRate(''); setDueDate('')
       setCategory('Other'); setFrequency('monthly'); setPriority('0'); setNote('')
+      setTargetPayoffDate(''); setSavingAmount(''); setSavingFrequency('')
     }
     setError('')
   }, [open, initial])
@@ -53,6 +66,9 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
         frequency,
         priority: Number(priority) || 0,
         note: note.trim(),
+        targetPayoffDate,
+        savingAmount: savingAmount ? Number(savingAmount) : 0,
+        savingFrequency,
       })
       onClose()
     } catch (err) { setError(err?.message || 'Failed to save debt')
@@ -116,6 +132,26 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Note</label>
               <input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional notes" maxLength={100} className="dashboard-input mt-2" />
+            </div>
+          </div>
+
+          <hr className="border-border-subtle" />
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Savings Plan</p>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label className="text-sm font-semibold text-ink-secondary">Target Payoff Date</label>
+              <input type="date" value={targetPayoffDate} onChange={(e) => setTargetPayoffDate(e.target.value)} className="dashboard-input mt-2" />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-ink-secondary">Save Amount ($)</label>
+              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="0.01" min="0" placeholder="100" className="dashboard-input mt-2" />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-ink-secondary">Frequency</label>
+              <select value={savingFrequency} onChange={(e) => setSavingFrequency(e.target.value)} className="dashboard-input mt-2">
+                {SAVING_FREQUENCIES.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+              </select>
             </div>
           </div>
           {error ? <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-600 ring-1 ring-rose-400/20">{error}</div> : null}

@@ -14,10 +14,24 @@ import {
 
 const COLLECTION = 'subscriptions'
 
-export function addSubscription({ userId, name, price, renewalDate, accountId, category, note = '', isActive = true }) {
+function calcNextReminderDate(frequency) {
+  const now = new Date()
+  switch (frequency) {
+    case 'daily': now.setDate(now.getDate() + 1); break
+    case 'weekly': now.setDate(now.getDate() + 7); break
+    case 'monthly': now.setMonth(now.getMonth() + 1); break
+  }
+  now.setHours(8, 0, 0, 0)
+  return Timestamp.fromDate(now)
+}
+
+export function addSubscription({ userId, name, price, renewalDate, accountId, category, note = '', isActive = true, savingAmount = '', savingFrequency = '' }) {
   if (!userId) throw new Error('User ID is required')
   if (!name?.trim()) throw new Error('Subscription name is required')
   if (!price || Number(price) <= 0) throw new Error('Valid price is required')
+
+  const freq = ['daily', 'weekly', 'monthly'].includes(savingFrequency) ? savingFrequency : ''
+  const nextReminder = freq && savingAmount ? calcNextReminderDate(freq) : null
 
   return addDoc(collection(db, COLLECTION), {
     userId,
@@ -28,6 +42,9 @@ export function addSubscription({ userId, name, price, renewalDate, accountId, c
     category: category || 'Other',
     note: note.trim(),
     isActive,
+    savingAmount: savingAmount ? Number(savingAmount) : 0,
+    savingFrequency: freq,
+    nextReminderDate: nextReminder,
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   })
@@ -38,10 +55,17 @@ export function deleteSubscription(subId) {
 }
 
 export function updateSubscription(subId, data) {
-  return updateDoc(doc(db, COLLECTION, subId), {
-    ...data,
-    updatedAt: Timestamp.now(),
-  })
+  const updated = { ...data, updatedAt: Timestamp.now() }
+  if (data.savingFrequency !== undefined || data.savingAmount !== undefined) {
+    const freq = data.savingFrequency
+    const amt = data.savingAmount
+    if (freq && amt) {
+      updated.nextReminderDate = calcNextReminderDate(freq)
+    } else {
+      updated.nextReminderDate = null
+    }
+  }
+  return updateDoc(doc(db, COLLECTION, subId), updated)
 }
 
 export function toggleSubscription(subId, isActive) {

@@ -6,6 +6,7 @@ import {
   subscribeToDebts, addDebt, deleteDebt, updateDebt,
   addDebtPayment, subscribeToDebtPayments,
 } from '../services/debtService.js'
+import { addNotification } from '../services/notificationService.js'
 import DebtModal from '../components/DebtModal.jsx'
 import DebtPaymentModal from '../components/DebtPaymentModal.jsx'
 import { quickFade } from '../utils/animations.js'
@@ -13,6 +14,7 @@ import { quickFade } from '../utils/animations.js'
 function DebtCard({ debt, onEdit, onDelete, onPay, formatCurrency }) {
   const paid = debt.totalAmount - debt.remainingBalance
   const progress = debt.totalAmount > 0 ? (paid / debt.totalAmount) * 100 : 0
+  const hasPlan = debt.savingFrequency && debt.savingAmount > 0
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="dashboard-card p-5 transition hover:shadow-md">
@@ -42,13 +44,24 @@ function DebtCard({ debt, onEdit, onDelete, onPay, formatCurrency }) {
 
       {debt.interestRate > 0 && <p className="mt-2 text-xs text-ink-tertiary">Interest: {debt.interestRate}%</p>}
 
+      {hasPlan && (
+        <div className="mt-2 rounded-lg bg-cyan-400/10 p-2 ring-1 ring-cyan-400/20">
+          <p className="text-xs font-semibold text-cyan-600">
+            Save {formatCurrency(debt.savingAmount)} {debt.savingFrequency}
+          </p>
+          {debt.targetPayoffDate && (
+            <p className="text-xs text-ink-tertiary mt-0.5">Target: {new Date(debt.targetPayoffDate).toLocaleDateString()}</p>
+          )}
+        </div>
+      )}
+
       <div className="mt-3 flex gap-2">
         <button type="button" onClick={() => onPay(debt)}
           className="brand-button flex-1 rounded-lg px-3 py-1.5 text-xs font-bold">Pay</button>
         <button type="button" onClick={() => onEdit(debt)}
-          className="rounded-lg bg-sky-400/10 px-2.5 py-1.5 text-xs font-semibold text-sky-300 ring-1 ring-sky-400/20 hover:bg-sky-400/20">Edit</button>
+          className="rounded-lg bg-sky-400/10 px-2.5 py-1.5 text-xs font-semibold text-sky-400 ring-1 ring-sky-400/20 hover:bg-sky-400/20">Edit</button>
         <button type="button" onClick={() => onDelete(debt.id)}
-          className="rounded-lg bg-rose-400/10 px-2.5 py-1.5 text-xs font-semibold text-rose-300 ring-1 ring-rose-400/20 hover:bg-rose-400/20">Delete</button>
+          className="rounded-lg bg-rose-400/10 px-2.5 py-1.5 text-xs font-semibold text-rose-400 ring-1 ring-rose-400/20 hover:bg-rose-400/20">Delete</button>
       </div>
     </motion.div>
   )
@@ -67,9 +80,39 @@ export default function Debt() {
 
   React.useEffect(() => {
     if (!user?.uid) return
-    const unsub = subscribeToDebts(user.uid, (data) => { setDebts(data); setLoading(false) }, (err) => { setError(err.message); setLoading(false) })
+    const unsub = subscribeToDebts(user.uid, (data) => {
+      setDebts(data); setLoading(false)
+      checkDebtReminders(user.uid, data)
+    }, (err) => { setError(err.message); setLoading(false) })
     return unsub
   }, [user?.uid])
+
+  async function checkDebtReminders(userId, debts) {
+    const now = new Date()
+    for (const d of debts) {
+      if (d.isPaid || !d.nextReminderDate || !d.savingFrequency) continue
+      const reminderDate = d.nextReminderDate?.toDate ? d.nextReminderDate.toDate() : new Date(d.nextReminderDate)
+      if (reminderDate <= now) {
+        try {
+          await addNotification({
+            userId,
+            title: '💳 Debt Saving Reminder',
+            message: `Time to save ${formatCurrency(d.savingAmount)} for "${d.name}" (${d.savingFrequency}). Keep going!`,
+            type: 'info',
+            metadata: { debtId: d.id, amount: d.savingAmount, frequency: d.savingFrequency },
+          })
+          const nextDate = new Date()
+          switch (d.savingFrequency) {
+            case 'daily': nextDate.setDate(nextDate.getDate() + 1); break
+            case 'weekly': nextDate.setDate(nextDate.getDate() + 7); break
+            case 'monthly': nextDate.setMonth(nextDate.getMonth() + 1); break
+          }
+          nextDate.setHours(8, 0, 0, 0)
+          await updateDebt(d.id, { nextReminderDate: new Date(nextDate).toISOString() })
+        } catch {}
+      }
+    }
+  }
 
   const activeDebts = React.useMemo(() => debts.filter((d) => !d.isPaid && d.remainingBalance > 0), [debts])
   const paidDebts = React.useMemo(() => debts.filter((d) => d.isPaid || d.remainingBalance <= 0), [debts])

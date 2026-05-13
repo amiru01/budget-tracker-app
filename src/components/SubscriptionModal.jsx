@@ -3,6 +3,12 @@ import { motion } from 'framer-motion'
 import { modalOverlay, modalContent } from '../utils/animations.js'
 
 const CATEGORIES = ['Entertainment', 'Productivity', 'Cloud', 'Design', 'Music', 'News', 'Health', 'Food', 'Other']
+const SAVING_FREQUENCIES = [
+  { value: '', label: 'No plan' },
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+]
 
 export default function SubscriptionModal({ open, onClose, onSubmit, accounts = [], initial = null }) {
   const [name, setName] = React.useState('')
@@ -12,6 +18,8 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
   const [accountId, setAccountId] = React.useState('')
   const [isActive, setIsActive] = React.useState(true)
   const [note, setNote] = React.useState('')
+  const [savingAmount, setSavingAmount] = React.useState('')
+  const [savingFrequency, setSavingFrequency] = React.useState('')
   const [error, setError] = React.useState('')
   const [saving, setSaving] = React.useState(false)
 
@@ -25,8 +33,11 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
       setAccountId(initial.accountId || '')
       setIsActive(initial.isActive ?? true)
       setNote(initial.note || '')
+      setSavingAmount(String(initial.savingAmount || ''))
+      setSavingFrequency(initial.savingFrequency || '')
     } else {
       setName(''); setPrice(''); setRenewalDate(''); setCategory('Other'); setAccountId(''); setIsActive(true); setNote('')
+      setSavingAmount(''); setSavingFrequency('')
     }
     setError('')
   }, [open, initial])
@@ -37,7 +48,10 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
     if (!price || Number(price) <= 0) { setError('Enter a valid monthly price'); return }
     setSaving(true)
     try {
-      await onSubmit({ name: name.trim(), price: Number(price), renewalDate, category, accountId: accountId || null, isActive, note: note.trim() })
+      await onSubmit({
+        name: name.trim(), price: Number(price), renewalDate, category, accountId: accountId || null, isActive, note: note.trim(),
+        savingAmount: savingAmount ? Number(savingAmount) : 0, savingFrequency,
+      })
       onClose()
     } catch (err) { setError(err?.message || 'Failed to save subscription')
     } finally { setSaving(false) }
@@ -89,6 +103,22 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
             <label className="text-sm font-semibold text-ink-secondary">Note (optional)</label>
             <input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. Annual plan" maxLength={100} className="dashboard-input mt-2" />
           </div>
+
+          <hr className="border-border-subtle" />
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Savings Plan</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-sm font-semibold text-ink-secondary">Save Amount ($)</label>
+              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="0.01" min="0" placeholder="50" className="dashboard-input mt-2" />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-ink-secondary">Frequency</label>
+              <select value={savingFrequency} onChange={(e) => setSavingFrequency(e.target.value)} className="dashboard-input mt-2">
+                {SAVING_FREQUENCIES.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+              </select>
+            </div>
+          </div>
+
           <label className="flex items-center gap-3">
             <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)}
               className="h-4 w-4 rounded border-slate-600 text-cyan-500 focus:ring-cyan-400 bg-slate-800" />
