@@ -21,8 +21,8 @@ function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCur
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h3 className="font-semibold text-white">{rule.name}</h3>
-            <motion.span {...badgePop} className={`rounded-full px-2 py-1 text-xs font-semibold ring-1 ${rule.isActive ? 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20' : 'bg-slate-400/10 text-slate-300 ring-slate-400/20'}`}>
+            <h3 className="font-semibold text-ink">{rule.name}</h3>
+            <motion.span {...badgePop} className={`rounded-full px-2 py-1 text-xs font-semibold ring-1 ${rule.isActive ? 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20' : 'bg-slate-400/10 text-ink-secondary ring-slate-400/20'}`}>
               {rule.isActive ? 'Active' : 'Inactive'}
             </motion.span>
             {violation && (
@@ -33,7 +33,7 @@ function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCur
               </motion.span>
             )}
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-slate-400">
+          <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-ink-secondary">
             <span><strong>Category:</strong> {rule.category}</span>
             <span><strong>Period:</strong> {rule.type}</span>
             <span><strong>Limit:</strong> {formatCurrency(rule.limit)}</span>
@@ -44,7 +44,7 @@ function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCur
                 <span className="text-rose-300">{formatCurrency(violation.spending)} spent</span>
                 <span className="text-rose-300">{formatCurrency(violation.excess)} over</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-surface-elevated">
                 <motion.div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-rose-500"
                   initial={{ width: '0%' }} animate={{ width: `${usagePercent}%` }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                 />
@@ -54,17 +54,17 @@ function BudgetRuleItem({ rule, onEdit, onDelete, onToggle, violation, formatCur
         </div>
         <div className="flex items-center gap-2">
           <motion.button type="button" onClick={() => onToggle(rule.id, !rule.isActive)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ring-1 ${rule.isActive ? 'bg-white/8 text-slate-300 ring-white/10 hover:bg-white/12 hover:text-white' : 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20 hover:bg-emerald-400/20 hover:text-emerald-200'}`}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ring-1 ${rule.isActive ? 'bg-surface-secondary text-ink-secondary ring-border-subtle hover:bg-surface-elevated hover:text-ink' : 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20 hover:bg-emerald-400/20 hover:text-emerald-600'}`}
           >
             {rule.isActive ? 'Disable' : 'Enable'}
           </motion.button>
           <motion.button type="button" onClick={() => onEdit(rule)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="rounded-lg bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-300 ring-1 ring-sky-400/20 transition hover:bg-sky-400/20 hover:text-sky-200"
+            className="rounded-lg bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-300 ring-1 ring-sky-400/20 transition hover:bg-sky-400/20 hover:text-sky-600"
           >
             Edit
           </motion.button>
           <motion.button type="button" onClick={() => onDelete(rule.id)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="rounded-lg bg-rose-400/10 px-3 py-1.5 text-xs font-semibold text-rose-300 ring-1 ring-rose-400/20 transition hover:bg-rose-400/20 hover:text-rose-200"
+            className="rounded-lg bg-rose-400/10 px-3 py-1.5 text-xs font-semibold text-rose-300 ring-1 ring-rose-400/20 transition hover:bg-rose-400/20 hover:text-rose-600"
           >
             Delete
           </motion.button>
@@ -105,7 +105,7 @@ export default function BudgetRules() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="dashboard-card px-4 py-3 text-sm font-semibold text-slate-300">Loading budget rules…</div>
+        <div className="dashboard-card px-4 py-3 text-sm font-semibold text-ink-secondary">Loading budget rules…</div>
       </div>
     )
   }
@@ -115,8 +115,8 @@ export default function BudgetRules() {
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0 }}>
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Budget Management</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Budget Rules</h1>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Budget Management</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Budget Rules</h1>
           </div>
           <motion.button type="button" onClick={handleAdd} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="brand-button px-4 py-2 text-sm">
             Create Budget Rule
@@ -132,7 +132,7 @@ export default function BudgetRules() {
 
       {budgetViolations.length > 0 ? (
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.12 }} className="rounded-xl bg-amber-400/10 p-4 ring-1 ring-amber-400/20">
-          <h3 className="text-sm font-semibold text-amber-200">Budget Alerts</h3>
+          <h3 className="text-sm font-semibold text-amber-600">Budget Alerts</h3>
           <div className="mt-2 space-y-2">
             {budgetViolations.map((violation, idx) => (
               <motion.div key={idx} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + idx * 0.08, duration: 0.25 }} className="text-sm text-amber-300">
@@ -147,16 +147,16 @@ export default function BudgetRules() {
         <section className="dashboard-card p-6">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-white">Your Budget Rules</h2>
-              <p className="mt-1 text-sm text-slate-400">Manage spending limits and get alerts when you exceed them.</p>
+              <h2 className="text-lg font-semibold text-ink">Your Budget Rules</h2>
+              <p className="mt-1 text-sm text-ink-secondary">Manage spending limits and get alerts when you exceed them.</p>
             </div>
-            <motion.span {...badgePop} className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-slate-200 ring-1 ring-white/10">
+            <motion.span {...badgePop} className="rounded-full bg-surface-secondary px-3 py-1 text-xs font-semibold text-ink-secondary ring-1 ring-border-subtle">
               {budgetRules.length} rules
             </motion.span>
           </div>
           <ul className="mt-6 space-y-3">
             {budgetRules.length === 0 ? (
-              <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="dashboard-card px-4 py-4 text-sm font-medium text-slate-400">
+              <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="dashboard-card px-4 py-4 text-sm font-medium text-ink-secondary">
                 No budget rules created yet. Create your first rule to start tracking spending limits.
               </motion.li>
             ) : null}

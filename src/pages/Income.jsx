@@ -49,7 +49,7 @@ export default function Income() {
     return (
       <main className="space-y-6">
         <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-          <div className="rounded-xl bg-white dark:dashboard-card px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm ring-1 ring-slate-200 dark:ring-white/10">
+          <div className="rounded-xl dashboard-card px-4 py-3 text-sm font-semibold text-ink-secondary shadow-sm ring-1 ring-border-subtle">
             Loading Income Tracking…
           </div>
         </div>
@@ -61,8 +61,8 @@ export default function Income() {
     <div className="space-y-6">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500">Smart Finance</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+          <p className="text-sm font-medium text-ink-tertiary">Smart Finance</p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
             Income Tracking
           </h1>
         </div>
@@ -113,11 +113,11 @@ export default function Income() {
       <IncomeChart monthlyIncomeTrend={incomeMonthlyTrend} incomeBySource={incomeBySource} />
 
       {/* AI Insights */}
-      <section className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-emerald-100 dark:ring-white/10">
+      <section className="rounded-2xl dashboard-card p-6 shadow-md ring-1 ring-border-subtle">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">AI Insights</h2>
-            <p className="mt-1 text-sm text-slate-600">Rule-based guidance based on your income history.</p>
+            <h2 className="text-lg font-semibold text-ink">AI Insights</h2>
+            <p className="mt-1 text-sm text-ink-secondary">Rule-based guidance based on your income history.</p>
           </div>
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
             Live
@@ -126,20 +126,20 @@ export default function Income() {
 
         <div className="mt-6 space-y-3">
           {incomeInsights.map((insight) => (
-            <div key={insight.id} className="rounded-xl bg-white/70 dark:bg-white/5 p-4 ring-1 ring-emerald-100 dark:ring-white/5">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-300">{insight.title}</p>
-              <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{insight.message}</p>
+            <div key={insight.id} className="rounded-xl bg-white/70 dark:bg-surface-secondary p-4 ring-1 ring-border-subtle">
+              <p className="text-sm font-semibold text-ink-secondary">{insight.title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-ink-secondary">{insight.message}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Income list */}
-      <section className="rounded-2xl bg-white dark:dashboard-card p-6 shadow-md ring-1 ring-slate-200 dark:ring-white/10">
+      <section className="rounded-2xl dashboard-card p-6 shadow-md ring-1 ring-border-subtle">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Income entries</h2>
-            <p className="mt-1 text-sm text-slate-500">All recorded income, updated in real time.</p>
+            <h2 className="text-lg font-semibold text-ink">Income entries</h2>
+            <p className="mt-1 text-sm text-ink-tertiary">All recorded income, updated in real time.</p>
           </div>
           <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
             {incomes.length} items
@@ -148,7 +148,7 @@ export default function Income() {
 
         <ul className="mt-6 space-y-3">
           {incomes.length === 0 ? (
-            <li className="rounded-xl bg-slate-50 dark:bg-white/5 px-4 py-4 text-sm font-medium text-slate-600 dark:text-slate-400 ring-1 ring-slate-100 dark:ring-white/5">
+            <li className="rounded-xl bg-slate-50 dark:bg-surface-secondary px-4 py-4 text-sm font-medium text-ink-secondary ring-1 ring-border-subtle">
               No income recorded yet. Tap “Add Income” to get started.
             </li>
           ) : null}

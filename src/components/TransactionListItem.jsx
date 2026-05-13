@@ -25,18 +25,18 @@ export default function TransactionListItem({ transaction, onDelete, accountName
   const icon = getCategoryIcon(category, transaction.type)
 
   return (
-    <li className="group rounded-xl bg-white/5 p-4 ring-1 ring-white/10 transition hover:bg-white/10 hover:shadow-lg">
+    <li className="group rounded-xl bg-surface-secondary p-4 ring-1 ring-border-subtle transition hover:bg-surface-elevated hover:shadow-lg">
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-1 items-start gap-3">
-          <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg ${isIncome ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-300'}`}>
+          <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-lg ${isIncome ? 'bg-emerald-400/10 text-emerald-300' : 'bg-rose-400/10 text-rose-600'}`}>
             {icon}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-slate-100 truncate">{category}</h3>
-                {transaction.note && <p className="mt-0.5 text-sm text-slate-400 line-clamp-2">{transaction.note}</p>}
-                {accountName && <p className="mt-0.5 text-xs text-slate-500">From: {accountName}</p>}
+                <h3 className="font-semibold text-ink truncate">{category}</h3>
+                {transaction.note && <p className="mt-0.5 text-sm text-ink-secondary line-clamp-2">{transaction.note}</p>}
+                {accountName && <p className="mt-0.5 text-xs text-ink-tertiary">From: {accountName}</p>}
               </div>
               <div className="text-right flex-shrink-0">
                 <p className={`text-lg font-bold ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -45,10 +45,10 @@ export default function TransactionListItem({ transaction, onDelete, accountName
               </div>
             </div>
             <div className="mt-2 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-xs text-ink-secondary">
                 <span>📅</span>
                 <span>{formatDate(transaction.date)}</span>
-                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${isIncome ? 'bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/20' : 'bg-rose-400/10 text-rose-300 ring-1 ring-rose-400/20'}`}>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${isIncome ? 'bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/20' : 'bg-rose-400/10 text-rose-600 ring-1 ring-rose-400/20'}`}>
                   {isIncome ? 'Income' : 'Expense'}
                 </span>
               </div>

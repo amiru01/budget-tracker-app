@@ -104,7 +104,7 @@ export default function Auth() {
           className="flex flex-col items-center gap-4"
         >
           <Spinner size="lg" />
-          <p className="text-sm font-medium text-slate-400">Preparing your workspace...</p>
+          <p className="text-sm font-medium text-ink-secondary">Preparing your workspace...</p>
         </motion.div>
       </main>
     );
@@ -159,7 +159,7 @@ export default function Auth() {
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-3xl p-8 shadow-2xl sm:p-10 overflow-hidden"
+          className="relative rounded-3xl border border-border-subtle bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-3xl p-8 shadow-2xl sm:p-10 overflow-hidden"
         >
           {/* Top glow accent */}
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
@@ -182,7 +182,7 @@ export default function Auth() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.5 }}
-                className="mx-auto mt-3 max-w-sm text-sm font-medium leading-6 text-slate-400"
+                className="mx-auto mt-3 max-w-sm text-sm font-medium leading-6 text-ink-secondary"
               >
                 {isLogin
                   ? "Sign in to review cash flow, budgets, and recent activity."
@@ -248,11 +248,11 @@ export default function Auth() {
               transition={{ delay: 0.45, duration: 0.5 }}
               className="relative flex items-center py-6"
             >
-              <div className="flex-grow border-t border-white/10"></div>
-              <span className="mx-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <div className="flex-grow border-t border-border-subtle"></div>
+              <span className="mx-4 text-xs font-semibold text-ink-tertiary uppercase tracking-wider">
                 Or continue with email
               </span>
-              <div className="flex-grow border-t border-white/10"></div>
+              <div className="flex-grow border-t border-border-subtle"></div>
             </motion.div>
 
             {/* Form */}
@@ -307,7 +307,7 @@ export default function Auth() {
               >
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-bold text-slate-300"
+                  className="mb-2 block text-sm font-bold text-ink-secondary"
                 >
                   Email address
                 </label>
@@ -318,7 +318,7 @@ export default function Auth() {
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
-                  className="w-full rounded-xl bg-slate-950/50 px-4 py-3 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                  className="w-full rounded-xl bg-surface-secondary px-4 py-3 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-ink-quaternary focus:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
                   placeholder="name@company.com"
                 />
               </motion.div>
@@ -332,7 +332,7 @@ export default function Auth() {
                 <div className="flex items-center justify-between mb-2">
                   <label
                     htmlFor="password"
-                    className="text-sm font-bold text-slate-300"
+                    className="text-sm font-bold text-ink-secondary"
                   >
                     Password
                   </label>
@@ -354,13 +354,13 @@ export default function Auth() {
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete={isLogin ? "current-password" : "new-password"}
                     required
-                    className="w-full rounded-xl bg-slate-950/50 px-4 py-3 pr-12 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                    className="w-full rounded-xl bg-surface-secondary px-4 py-3 pr-12 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-ink-quaternary focus:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
                     placeholder="Minimum 6 characters"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors p-1 group-focus-within:text-emerald-400"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-secondary hover:text-ink-secondary transition-colors p-1 group-focus-within:text-emerald-400"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -403,7 +403,7 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.65, duration: 0.5 }}
-              className="mt-8 text-center text-sm font-medium text-slate-400"
+              className="mt-8 text-center text-sm font-medium text-ink-secondary"
             >
               {isLogin
                 ? "New to Smart Finance? "
@@ -426,7 +426,7 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-6 text-center text-xs font-medium leading-5 text-slate-500"
+              className="mt-6 text-center text-xs font-medium leading-5 text-ink-tertiary"
             >
               By continuing, you agree to our{" "}
               <a
@@ -455,7 +455,7 @@ export default function Auth() {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-ink-secondary transition-colors hover:text-ink"
           >
             <svg
               className="w-4 h-4"

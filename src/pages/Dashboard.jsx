@@ -46,35 +46,35 @@ export default function Dashboard() {
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="w-full max-w-2xl">
           <motion.div {...quickFade} className="text-center mb-10">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Welcome to</p>
-            <h1 className="font-display mt-2 text-4xl font-extrabold tracking-[-0.03em] text-white">Smart Finance</h1>
-            <p className="mt-3 text-slate-400 max-w-md mx-auto">Choose how you want to use your finance workspace.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Welcome to</p>
+            <h1 className="font-display mt-2 text-4xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Smart Finance</h1>
+            <p className="mt-3 text-ink-secondary max-w-md mx-auto">Choose how you want to use your finance workspace.</p>
           </motion.div>
           <div className="grid gap-6 sm:grid-cols-2">
             <motion.button onClick={() => setMode('personal')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-emerald-500/10"
             >
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 text-3xl shadow-lg shadow-cyan-500/20">👤</div>
-              <h2 className="font-display text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">Personal Use</h2>
-              <p className="mt-2 text-sm text-slate-400 leading-relaxed">Track spending, manage subscriptions, monitor net worth, and pay off debt — all in one place.</p>
-              <div className="mt-4 flex gap-2 text-xs text-slate-500">
-                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">3 Modules</span>
-                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Personal Finance</span>
+              <h2 className="font-display text-xl font-bold text-ink group-hover:text-emerald-500 transition-colors">Personal Use</h2>
+              <p className="mt-2 text-sm text-ink-secondary leading-relaxed">Track spending, manage subscriptions, monitor net worth, and pay off debt — all in one place.</p>
+              <div className="mt-4 flex gap-2 text-xs text-ink-tertiary">
+                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">3 Modules</span>
+                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Personal Finance</span>
               </div>
             </motion.button>
             <motion.button onClick={() => setMode('org')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-cyan-500/10"
             >
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-400 to-pink-500 text-3xl shadow-lg shadow-purple-500/20">🏢</div>
-              <h2 className="font-display text-xl font-bold text-white group-hover:text-purple-300 transition-colors">Organizational Use</h2>
-              <p className="mt-2 text-sm text-slate-400 leading-relaxed">Team finance tracking, shared accounts, expense management, budgets, and multi-user reports.</p>
-              <div className="mt-4 flex gap-2 text-xs text-slate-500">
-                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Team Mode</span>
-                <span className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-white/10">Shared Access</span>
+              <h2 className="font-display text-xl font-bold text-ink group-hover:text-purple-500 transition-colors">Organizational Use</h2>
+              <p className="mt-2 text-sm text-ink-secondary leading-relaxed">Team finance tracking, shared accounts, expense management, budgets, and multi-user reports.</p>
+              <div className="mt-4 flex gap-2 text-xs text-ink-tertiary">
+                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Team Mode</span>
+                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Shared Access</span>
               </div>
             </motion.button>
           </div>
-          <p className="mt-6 text-center text-xs text-slate-600">You can change this later in Settings.</p>
+          <p className="mt-6 text-center text-xs text-ink-quaternary">You can change this later in Settings.</p>
         </div>
       </div>
     )
@@ -82,7 +82,7 @@ export default function Dashboard() {
 
   if (loading) {
     return <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-      <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-700 flex items-center gap-3">
+      <div className="dashboard-card px-4 py-3 text-sm font-bold text-ink-secondary flex items-center gap-3">
         <Spinner size="md" /><span>Loading dashboard...</span>
       </div>
     </div>
@@ -94,9 +94,9 @@ export default function Dashboard() {
         <motion.div {...quickFade}>
           <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance OS</p>
-              <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Organization Dashboard</h1>
-              <p className="mt-1 text-sm text-slate-400">Team finance tracking and shared expense management.</p>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Finance OS</p>
+              <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Organization Dashboard</h1>
+              <p className="mt-1 text-sm text-ink-secondary">Team finance tracking and shared expense management.</p>
             </div>
             <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
               className="button-secondary rounded-xl px-4 py-2 text-xs">Switch Mode</button>
@@ -105,8 +105,8 @@ export default function Dashboard() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <article className="dashboard-card p-8 text-center lg:col-span-3">
             <p className="text-5xl mb-4">🏢</p>
-            <h2 className="font-display text-xl font-bold text-white">Organizational Mode</h2>
-            <p className="mt-2 text-slate-400 max-w-md mx-auto">Team finance features are being rolled out. Start by adding expenses and building your team workspace.</p>
+            <h2 className="font-display text-xl font-bold text-ink">Organizational Mode</h2>
+            <p className="mt-2 text-ink-secondary max-w-md mx-auto">Team finance features are being rolled out. Start by adding expenses and building your team workspace.</p>
           </article>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -114,8 +114,8 @@ export default function Dashboard() {
             <motion.button key={mod.title} onClick={() => navigate(mod.path)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + idx * 0.06, duration: 0.3 }}
               whileHover={{ scale: 1.03, y: -2 }} className="dashboard-card group p-5 text-left transition-all">
               <span className="text-3xl">{mod.icon}</span>
-              <h3 className="mt-3 font-semibold text-white group-hover:text-emerald-300 transition-colors">{mod.title}</h3>
-              <p className="mt-1 text-xs text-slate-400">{mod.desc}</p>
+              <h3 className="mt-3 font-semibold text-ink group-hover:text-emerald-500 transition-colors">{mod.title}</h3>
+              <p className="mt-1 text-xs text-ink-secondary">{mod.desc}</p>
             </motion.button>
           ))}
         </div>
@@ -128,9 +128,9 @@ export default function Dashboard() {
       <motion.div {...quickFade}>
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Smart Finance</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Your finance command center</h1>
-            <p className="mt-1 text-sm text-slate-400">Track cash flow, spending, and budget signals from one workspace.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Smart Finance</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Your finance command center</h1>
+            <p className="mt-1 text-sm text-ink-secondary">Track cash flow, spending, and budget signals from one workspace.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
@@ -141,7 +141,7 @@ export default function Dashboard() {
       </motion.div>
 
       {error ? (
-        <motion.div {...quickFade} transition={{ delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-100 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
+        <motion.div {...quickFade} transition={{ delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-600 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
           {error}
         </motion.div>
       ) : null}
@@ -151,8 +151,8 @@ export default function Dashboard() {
           <div className="flex items-start gap-3">
             <span className="text-xl">🔔</span>
             <div>
-              <p className="text-sm font-semibold text-amber-200">Debt payment{dueDebts.length > 1 ? 's' : ''} due today</p>
-              <p className="mt-1 text-sm text-amber-300">{dueDebts.map((d) => `${d.name} (${formatCurrency(d.remainingBalance)} remaining)`).join(', ')}</p>
+              <p className="text-sm font-semibold text-amber-600">Debt payment{dueDebts.length > 1 ? 's' : ''} due today</p>
+              <p className="mt-1 text-sm text-amber-600">{dueDebts.map((d) => `${d.name} (${formatCurrency(d.remainingBalance)} remaining)`).join(', ')}</p>
             </div>
           </div>
         </motion.div>
@@ -163,24 +163,24 @@ export default function Dashboard() {
           <div className="flex items-start gap-3">
             <span className="text-xl">⚠️</span>
             <div>
-              <p className="text-sm font-semibold text-rose-200">{overdueDebts.length} overdue debt{overdueDebts.length > 1 ? 's' : ''}</p>
-              <p className="mt-1 text-sm text-rose-300">{overdueDebts.map((d) => `${d.name} — was due ${new Date(d.dueDate).toLocaleDateString()}`).join(', ')}</p>
+              <p className="text-sm font-semibold text-rose-600">{overdueDebts.length} overdue debt{overdueDebts.length > 1 ? 's' : ''}</p>
+              <p className="mt-1 text-sm text-rose-600">{overdueDebts.map((d) => `${d.name} — was due ${new Date(d.dueDate).toLocaleDateString()}`).join(', ')}</p>
             </div>
           </div>
         </motion.div>
       )}
 
       <motion.div {...quickFade} transition={{ delay: 0.1 }} className="dashboard-card p-6">
-        <h2 className="font-display text-lg font-bold tracking-tight text-white">Quick Actions</h2>
-        <p className="mt-1 text-sm text-slate-400">Your personal finance modules.</p>
+        <h2 className="font-display text-lg font-bold tracking-tight text-ink">Quick Actions</h2>
+        <p className="mt-1 text-sm text-ink-secondary">Your personal finance modules.</p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {MODULES.map((mod, idx) => (
             <motion.button key={mod.title} onClick={() => navigate(mod.path)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + idx * 0.05 }}
               whileHover={{ scale: 1.03, y: -2 }} className="dashboard-card group p-5 text-left transition-all hover:shadow-lg hover:shadow-cyan-500/5"
             >
               <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${mod.color} text-xl shadow-lg`}>{mod.icon}</div>
-              <h3 className="font-semibold text-white group-hover:text-emerald-300 transition-colors">{mod.title}</h3>
-              <p className="mt-1 text-xs text-slate-400">{mod.desc}</p>
+              <h3 className="font-semibold text-ink group-hover:text-emerald-500 transition-colors">{mod.title}</h3>
+              <p className="mt-1 text-xs text-ink-secondary">{mod.desc}</p>
             </motion.button>
           ))}
         </div>
@@ -196,11 +196,11 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <motion.div {...quickFade} transition={{ delay: 0.3 }} className="dashboard-card p-6 lg:col-span-2">
-          <h2 className="font-display text-lg font-bold tracking-tight text-white">Recent Activity</h2>
-          <p className="mt-1 text-sm text-slate-400">Latest expenses across your accounts.</p>
+          <h2 className="font-display text-lg font-bold tracking-tight text-ink">Recent Activity</h2>
+          <p className="mt-1 text-sm text-ink-secondary">Latest expenses across your accounts.</p>
           <ul className="mt-4 space-y-3">
             {expenses.length === 0 ? (
-              <li className="rounded-xl bg-white/6 px-4 py-4 text-sm font-medium text-slate-400 ring-1 ring-white/10">No transactions yet. Start tracking your spending.</li>
+              <li className="rounded-xl bg-surface-secondary px-4 py-4 text-sm font-medium text-ink-secondary ring-1 ring-border-subtle">No transactions yet. Start tracking your spending.</li>
             ) : expenses.slice(0, 6).map((t, idx) => (
               <motion.li key={t.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + idx * 0.04 }}>
                 <TransactionItem name={t.type === 'income' ? 'Income' : 'Expense'} category={t.category} amount={t.amount} date={t.date} note={t.note} type={t.type || 'expense'} />

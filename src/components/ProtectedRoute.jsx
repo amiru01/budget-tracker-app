@@ -8,10 +8,10 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-surface px-4">
         <div className="flex flex-col items-center gap-4">
           <Spinner size="lg" />
-          <span className="text-sm font-medium text-slate-400">Loading Smart Finance...</span>
+          <span className="text-sm font-medium text-ink-secondary">Loading Smart Finance...</span>
         </div>
       </div>
     )

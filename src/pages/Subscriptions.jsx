@@ -63,7 +63,7 @@ export default function Subscriptions() {
 
   if (loading) {
     return <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-      <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-300">Loading subscriptions…</div>
+      <div className="dashboard-card px-4 py-3 text-sm font-bold text-ink-secondary">Loading subscriptions…</div>
     </div>
   }
 
@@ -74,9 +74,9 @@ export default function Subscriptions() {
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0 }}>
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance OS</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Subscriptions</h1>
-            <p className="mt-1 text-sm text-slate-400">Track and manage your recurring subscriptions.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Finance OS</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Subscriptions</h1>
+            <p className="mt-1 text-sm text-ink-secondary">Track and manage your recurring subscriptions.</p>
           </div>
           <button type="button" onClick={() => { setEditing(null); setIsModalOpen(true) }} className="brand-button px-4 py-2 text-sm">+ Add Subscription</button>
         </header>
@@ -89,7 +89,7 @@ export default function Subscriptions() {
           <div className="flex items-start gap-3">
             <span className="text-xl">🔔</span>
             <div>
-              <p className="text-sm font-semibold text-amber-200">Payment{dueToday.length > 1 ? 's' : ''} due today</p>
+              <p className="text-sm font-semibold text-amber-600">Payment{dueToday.length > 1 ? 's' : ''} due today</p>
               <p className="mt-1 text-sm text-amber-300">{dueToday.map((s) => `${s.name} (${formatCurrency(s.price)})`).join(', ')}</p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function Subscriptions() {
           <div className="flex items-start gap-3">
             <span className="text-xl">⚠️</span>
             <div>
-              <p className="text-sm font-semibold text-rose-200">{overdue.length} overdue subscription{overdue.length > 1 ? 's' : ''}</p>
+              <p className="text-sm font-semibold text-rose-600">{overdue.length} overdue subscription{overdue.length > 1 ? 's' : ''}</p>
               <p className="mt-1 text-sm text-rose-300">{overdue.map((s) => `${s.name} — was due ${new Date(s.renewalDate).toLocaleDateString()}`).join(', ')}</p>
             </div>
           </div>
@@ -110,30 +110,30 @@ export default function Subscriptions() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.1 }} className="dashboard-card p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Active Subs</p>
-          <p className="font-display mt-2 text-3xl font-extrabold text-white">{activeSubs.length}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Active Subs</p>
+          <p className="font-display mt-2 text-3xl font-extrabold text-ink">{activeSubs.length}</p>
         </motion.div>
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.13 }} className="dashboard-card p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Monthly Cost</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Monthly Cost</p>
           <p className="font-display mt-2 text-3xl font-extrabold text-cyan-400">{formatCurrency(monthlyTotal)}</p>
         </motion.div>
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.16 }} className="dashboard-card p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Yearly Cost</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Yearly Cost</p>
           <p className="font-display mt-2 text-3xl font-extrabold text-amber-400">{formatCurrency(monthlyTotal * 12)}</p>
         </motion.div>
       </div>
 
       {upcomingPayments.length > 0 && (
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.18 }} className="dashboard-card p-6">
-          <h2 className="font-display text-lg font-bold tracking-tight text-white">Upcoming Renewals</h2>
+          <h2 className="font-display text-lg font-bold tracking-tight text-ink">Upcoming Renewals</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {upcomingPayments.map((sub) => (
               <div key={sub.id} className="dashboard-panel flex items-center justify-between p-4">
                 <div>
-                  <p className="font-semibold text-white">{sub.name}</p>
-                  <p className="text-xs text-slate-400">Renews {sub.renewal.toLocaleDateString()}</p>
+                  <p className="font-semibold text-ink">{sub.name}</p>
+                  <p className="text-xs text-ink-secondary">Renews {sub.renewal.toLocaleDateString()}</p>
                 </div>
-                <p className="font-bold text-white">{formatCurrency(sub.price)}<span className="text-xs text-slate-400">/mo</span></p>
+                <p className="font-bold text-ink">{formatCurrency(sub.price)}<span className="text-xs text-ink-secondary">/mo</span></p>
               </div>
             ))}
           </div>
@@ -142,25 +142,25 @@ export default function Subscriptions() {
 
       <div className="grid gap-6 lg:grid-cols-4">
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.2 }} className="dashboard-card p-6 lg:col-span-3">
-          <h2 className="font-display text-lg font-bold tracking-tight text-white">All Subscriptions</h2>
-          <p className="mt-1 text-sm text-slate-400">{subs.length} total &middot; {activeSubs.length} active</p>
+          <h2 className="font-display text-lg font-bold tracking-tight text-ink">All Subscriptions</h2>
+          <p className="mt-1 text-sm text-ink-secondary">{subs.length} total &middot; {activeSubs.length} active</p>
           <div className="mt-4 space-y-3">
             {subs.length === 0 ? (
-              <p className="text-sm text-slate-500 py-4">No subscriptions yet. Add your first one.</p>
+              <p className="text-sm text-ink-tertiary py-4">No subscriptions yet. Add your first one.</p>
             ) : subs.map((sub, idx) => (
               <motion.div key={sub.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + idx * 0.03, duration: 0.2 }}
                 className="dashboard-card flex items-center justify-between p-4 transition hover:shadow-md"
               >
                 <div className="flex items-center gap-4">
                   <div>
-                    <p className="font-semibold text-white">{sub.name}</p>
-                    <p className="text-xs text-slate-400">{sub.category}{sub.renewalDate ? ` · Renews ${new Date(sub.renewalDate).toLocaleDateString()}` : ''}</p>
+                    <p className="font-semibold text-ink">{sub.name}</p>
+                    <p className="text-xs text-ink-secondary">{sub.category}{sub.renewalDate ? ` · Renews ${new Date(sub.renewalDate).toLocaleDateString()}` : ''}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <p className="font-bold text-white">{formatCurrency(sub.price)}<span className="text-xs text-slate-400">/mo</span></p>
-                    {!sub.isActive && <span className="text-xs text-slate-500">Inactive</span>}
+                <p className="font-bold text-ink">{formatCurrency(sub.price)}<span className="text-xs text-ink-secondary">/mo</span></p>
+                    {!sub.isActive && <span className="text-xs text-ink-tertiary">Inactive</span>}
                   </div>
                   <button type="button" onClick={() => toggleSubscription(sub.id, !sub.isActive)}
                     className={`rounded-lg px-2.5 py-1 text-xs font-semibold ring-1 transition ${sub.isActive ? 'bg-amber-400/10 text-amber-300 ring-amber-400/20' : 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20'}`}>
@@ -177,18 +177,18 @@ export default function Subscriptions() {
         </motion.div>
 
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.22 }} className="dashboard-card p-6 lg:col-span-1">
-          <h2 className="font-display text-lg font-bold tracking-tight text-white">By Category</h2>
+          <h2 className="font-display text-lg font-bold tracking-tight text-ink">By Category</h2>
           <div className="mt-4 space-y-3">
             {grouped.map(([cat, info]) => (
               <div key={cat}>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-300">{cat}</span>
-                  <span className="text-white font-semibold">{formatCurrency(info.total)}</span>
+                  <span className="text-ink-secondary">{cat}</span>
+                  <span className="text-ink font-semibold">{formatCurrency(info.total)}</span>
                 </div>
-                <p className="text-xs text-slate-500">{info.count} service{info.count > 1 ? 's' : ''}</p>
+                <p className="text-xs text-ink-tertiary">{info.count} service{info.count > 1 ? 's' : ''}</p>
               </div>
             ))}
-            {grouped.length === 0 && <p className="text-sm text-slate-500">No active subscriptions.</p>}
+            {grouped.length === 0 && <p className="text-sm text-ink-tertiary">No active subscriptions.</p>}
           </div>
         </motion.div>
       </div>

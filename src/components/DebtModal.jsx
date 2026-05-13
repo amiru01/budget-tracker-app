@@ -63,20 +63,20 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
 
   return (
     <motion.div {...modalOverlay} className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <button type="button" onClick={onClose} className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" aria-label="Close" />
+      <button type="button" onClick={onClose} className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-label="Close" />
       <motion.div {...modalContent} className="dashboard-card relative w-full max-w-md p-6 shadow-xl">
         <div className="mb-4">
-          <h3 className="font-display text-lg font-bold text-white">{initial ? 'Edit Debt' : 'Add Debt'}</h3>
-          <p className="mt-1 text-sm text-slate-400">Track and manage your debt payoff plan.</p>
+          <h3 className="font-display text-lg font-bold text-ink">{initial ? 'Edit Debt' : 'Add Debt'}</h3>
+          <p className="mt-1 text-sm text-ink-secondary">Track and manage your debt payoff plan.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-semibold text-slate-300">Debt Name</label>
+              <label className="text-sm font-semibold text-ink-secondary">Debt Name</label>
               <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Visa Card" maxLength={50} className="dashboard-input mt-2" />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-300">Category</label>
+              <label className="text-sm font-semibold text-ink-secondary">Category</label>
               <select value={category} onChange={(e) => setCategory(e.target.value)} className="dashboard-input mt-2">
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -84,25 +84,25 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-semibold text-slate-300">Total Amount ($)</label>
+              <label className="text-sm font-semibold text-ink-secondary">Total Amount ($)</label>
               <input type="number" value={totalAmount} onChange={(e) => setTotalAmount(e.target.value)} step="0.01" min="0" placeholder="5000" className="dashboard-input mt-2" />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-300">Remaining Balance ($)</label>
+              <label className="text-sm font-semibold text-ink-secondary">Remaining Balance ($)</label>
               <input type="number" value={remainingBalance} onChange={(e) => setRemainingBalance(e.target.value)} step="0.01" min="0" placeholder={totalAmount || '5000'} className="dashboard-input mt-2" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="text-sm font-semibold text-slate-300">Interest Rate (%)</label>
+              <label className="text-sm font-semibold text-ink-secondary">Interest Rate (%)</label>
               <input type="number" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} step="0.1" min="0" placeholder="5.0" className="dashboard-input mt-2" />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-300">Due Date</label>
+              <label className="text-sm font-semibold text-ink-secondary">Due Date</label>
               <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="dashboard-input mt-2" />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-300">Payment Freq.</label>
+              <label className="text-sm font-semibold text-ink-secondary">Payment Freq.</label>
               <select value={frequency} onChange={(e) => setFrequency(e.target.value)} className="dashboard-input mt-2">
                 {FREQUENCIES.map((f) => <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>)}
               </select>
@@ -110,15 +110,15 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-semibold text-slate-300">Priority (0 = highest)</label>
+              <label className="text-sm font-semibold text-ink-secondary">Priority (0 = highest)</label>
               <input type="number" value={priority} onChange={(e) => setPriority(e.target.value)} min="0" max="99" placeholder="0" className="dashboard-input mt-2" />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-300">Note</label>
+              <label className="text-sm font-semibold text-ink-secondary">Note</label>
               <input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional notes" maxLength={100} className="dashboard-input mt-2" />
             </div>
           </div>
-          {error ? <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-300 ring-1 ring-rose-400/20">{error}</div> : null}
+          {error ? <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-600 ring-1 ring-rose-400/20">{error}</div> : null}
           <button type="submit" disabled={saving} className="brand-button w-full px-4 py-2.5 text-sm font-bold">
             {saving ? 'Saving...' : initial ? 'Update Debt' : 'Add Debt'}
           </button>

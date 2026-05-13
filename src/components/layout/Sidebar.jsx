@@ -33,14 +33,14 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
 
   return (
     <>
-      <div className={`fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300 ease-out lg:hidden ${isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+      <div className={`fixed inset-0 z-30 bg-surface/50 backdrop-blur-sm transition-opacity duration-300 ease-out lg:hidden ${isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
         onClick={onClose} aria-hidden="true" />
       <aside id="sidebar-navigation"
-        className={`fixed inset-y-0 left-0 z-40 flex w-[18rem] flex-col border-r border-white/10 bg-slate-950/76 px-4 py-4 text-slate-100 shadow-2xl shadow-black/30 backdrop-blur-2xl transition-transform duration-300 ease-out motion-reduce:transition-none sm:px-5 sm:py-5 lg:translate-x-0 lg:px-5 lg:py-6 ${isOpen ? 'translate-x-0' : '-translate-x-[105%]'}`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-[18rem] flex-col border-r border-border-subtle bg-surface/80 px-4 py-4 text-ink shadow-2xl backdrop-blur-2xl transition-transform duration-300 ease-out motion-reduce:transition-none sm:px-5 sm:py-5 lg:translate-x-0 lg:px-5 lg:py-6 ${isOpen ? 'translate-x-0' : '-translate-x-[105%]'}`}
         aria-label="Primary navigation"
       >
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-between border-b border-white/10 pb-5">
+          className="flex items-center justify-between border-b border-border-subtle pb-5">
           <NavLink to="/dashboard" className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-lg shadow-cyan-500/25">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="h-8 w-8">
@@ -60,12 +60,12 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
               </svg>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-300/90">Finance OS</p>
-              <h1 className="font-display mt-1 text-xl font-extrabold tracking-tight text-white">Smart Finance</h1>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-ink-tertiary">Finance OS</p>
+              <h1 className="font-display mt-1 text-xl font-extrabold tracking-tight text-ink">Smart Finance</h1>
             </div>
           </NavLink>
           <motion.button type="button" onClick={onClose} whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
-            className="rounded-full p-2 text-slate-400 transition hover:bg-white/10 hover:text-white lg:hidden" aria-label="Close sidebar">
+            className="rounded-full p-2 text-ink-tertiary transition hover:bg-surface-elevated hover:text-ink lg:hidden" aria-label="Close sidebar">
             <XMarkIcon className="h-6 w-6" />
           </motion.button>
         </motion.div>
@@ -78,12 +78,12 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
                 <NavLink to={item.to} onClick={onClose} aria-label={`Go to ${item.name}`}
                   aria-current={currentPageTitle === item.name ? 'page' : undefined}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${isActive ? 'bg-gradient-to-r from-emerald-400/18 to-cyan-400/14 text-white shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-300/25' : 'text-slate-300 hover:bg-white/8 hover:text-white hover:ring-1 hover:ring-white/10'}`
+                    `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isActive ? 'bg-gradient-to-r from-emerald-400/18 to-cyan-400/14 text-ink shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-300/25' : 'text-ink-secondary hover:bg-surface-elevated hover:text-ink hover:ring-1 hover:ring-border-subtle'}`
                   }
                 >
                   {({ isActive }) => (
-                    <><Icon className={`h-5 w-5 shrink-0 transition ${isActive ? 'text-cyan-300' : 'text-slate-400 group-hover:text-cyan-200'}`} /><span>{item.name}</span>
-                      {isActive && <motion.span layoutId="activeNav" className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />}
+                    <><Icon className={`h-5 w-5 shrink-0 transition ${isActive ? 'text-cyan-500' : 'text-ink-tertiary group-hover:text-cyan-500'}`} /><span>{item.name}</span>
+                      {isActive && <motion.span layoutId="activeNav" className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-500" />}
                     </>
                   )}
                 </NavLink>
@@ -93,8 +93,8 @@ function Sidebar({ isOpen, onClose, currentPageTitle }) {
         </nav>
 
         <div className="rounded-2xl border border-emerald-300/15 bg-gradient-to-br from-emerald-400/10 to-cyan-400/8 p-4 shadow-lg shadow-emerald-500/5">
-          <p className="font-display text-sm font-bold tracking-tight text-white">Monthly pulse</p>
-          <p className="mt-2 text-sm font-medium leading-6 text-slate-300">Review budgets, spending, and account activity from one focused workspace.</p>
+          <p className="font-display text-sm font-bold tracking-tight text-ink">Monthly pulse</p>
+          <p className="mt-2 text-sm font-medium leading-6 text-ink-secondary">Review budgets, spending, and account activity from one focused workspace.</p>
         </div>
       </aside>
     </>

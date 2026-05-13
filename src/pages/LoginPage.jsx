@@ -120,17 +120,17 @@ function LoginPage() {
   if (user) return <Navigate to="/dashboard" replace />
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-8">
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.06] p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl sm:p-8">
+    <main className="flex min-h-screen items-center justify-center bg-surface px-4 py-8">
+      <section className="w-full max-w-md rounded-3xl border border-border-subtle bg-white/[0.06] p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl sm:p-8">
         <p className="section-kicker">Smart Finance</p>
-        <h1 className="font-display mt-3 text-3xl font-extrabold tracking-[-0.025em] text-white">
+        <h1 className="font-display mt-3 text-3xl font-extrabold tracking-[-0.025em] text-ink">
           {mode === 'signin' ? 'Open your workspace' : 'Create your workspace'}
         </h1>
-        <p className="mt-3 text-sm font-medium leading-6 text-slate-400">
+        <p className="mt-3 text-sm font-medium leading-6 text-ink-secondary">
           Continue to your focused dashboard for income, spending, budgets, and reports.
         </p>
 
-        <div className="mt-6 grid grid-cols-2 rounded-xl bg-slate-950/60 p-1 ring-1 ring-white/10">
+        <div className="mt-6 grid grid-cols-2 rounded-xl bg-surface p-1 ring-1 ring-border-subtle">
           <button
             type="button"
             onClick={() => {
@@ -139,7 +139,7 @@ function LoginPage() {
               setShowPassword(false)
             }}
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              mode === 'signin' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-white'
+              mode === 'signin' ? 'bg-white text-slate-900 shadow-sm' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             Sign in
@@ -152,7 +152,7 @@ function LoginPage() {
               setShowPassword(false)
             }}
             className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              mode === 'signup' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-white'
+              mode === 'signup' ? 'bg-white text-slate-900 shadow-sm' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             Sign up
@@ -163,25 +163,25 @@ function LoginPage() {
           {mode === 'signup' ? (
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-bold text-slate-300">First name</span>
+                <span className="text-sm font-bold text-ink-secondary">First name</span>
                 <input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   autoComplete="given-name"
-                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   placeholder="Maya"
                 />
               </label>
 
               <label className="block">
-                <span className="text-sm font-bold text-slate-300">Last name</span>
+                <span className="text-sm font-bold text-ink-secondary">Last name</span>
                 <input
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   autoComplete="family-name"
-                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   placeholder="Patel"
                 />
               </label>
@@ -189,32 +189,32 @@ function LoginPage() {
           ) : null}
 
           <label className="block">
-            <span className="text-sm font-bold text-slate-300">Email</span>
+            <span className="text-sm font-bold text-ink-secondary">Email</span>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
-              className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="mt-2 w-full rounded-xl bg-slate-950/50 px-3 py-2 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="name@company.com"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-bold text-slate-300">Password</span>
-            <div className="mt-2 flex rounded-xl bg-slate-950/50 ring-1 ring-white/10 focus-within:ring-2 focus-within:ring-emerald-500">
+            <span className="text-sm font-bold text-ink-secondary">Password</span>
+            <div className="mt-2 flex rounded-xl bg-surface-secondary ring-1 ring-border-subtle focus-within:ring-2 focus-within:ring-emerald-500">
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                className="w-full rounded-l-xl bg-transparent px-3 py-2 text-sm font-medium text-white placeholder:text-slate-600 focus:outline-none"
+                className="w-full rounded-l-xl bg-transparent px-3 py-2 text-sm font-medium text-ink placeholder:text-slate-600 focus:outline-none"
                 placeholder="Minimum 6 characters"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="rounded-r-xl px-3 text-xs font-bold text-slate-400 transition hover:bg-white/5 hover:text-white"
+                className="rounded-r-xl px-3 text-xs font-bold text-ink-secondary transition hover:bg-surface-secondary hover:text-ink"
               >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
@@ -234,7 +234,7 @@ function LoginPage() {
               type="button"
               onClick={handleForgotPassword}
               disabled={isLoading}
-              className="w-full rounded-xl bg-white/5 px-4 py-2.5 text-sm font-bold text-slate-300 ring-1 ring-white/10 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-surface-secondary px-4 py-2.5 text-sm font-bold text-ink-secondary ring-1 ring-border-subtle transition hover:bg-surface-elevated disabled:cursor-not-allowed disabled:opacity-60"
             >
               Forgot password?
             </button>

@@ -33,26 +33,26 @@ export default function DebtPaymentModal({ open, onClose, onSubmit, debt }) {
 
   return (
     <motion.div {...modalOverlay} className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <button type="button" onClick={onClose} className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" aria-label="Close" />
+      <button type="button" onClick={onClose} className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-label="Close" />
       <motion.div {...modalContent} className="dashboard-card relative w-full max-w-sm p-6 shadow-xl">
         <div className="mb-4">
-          <h3 className="font-display text-lg font-bold text-white">Record Payment</h3>
-          <p className="mt-1 text-sm text-slate-400">{debt.name} &mdash; Remaining: {formatCurrency(debt.remainingBalance)}</p>
+          <h3 className="font-display text-lg font-bold text-ink">Record Payment</h3>
+          <p className="mt-1 text-sm text-ink-secondary">{debt.name} &mdash; Remaining: {formatCurrency(debt.remainingBalance)}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm font-semibold text-slate-300">Payment Amount ($)</label>
+            <label className="text-sm font-semibold text-ink-secondary">Payment Amount ($)</label>
             <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" min="0" placeholder="0.00" className="dashboard-input mt-2" autoFocus />
           </div>
           <div>
-            <label className="text-sm font-semibold text-slate-300">Date</label>
+            <label className="text-sm font-semibold text-ink-secondary">Date</label>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="dashboard-input mt-2" />
           </div>
           <div>
-            <label className="text-sm font-semibold text-slate-300">Note (optional)</label>
+            <label className="text-sm font-semibold text-ink-secondary">Note (optional)</label>
             <input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Extra payment" maxLength={100} className="dashboard-input mt-2" />
           </div>
-          {error ? <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-300 ring-1 ring-rose-400/20">{error}</div> : null}
+          {error ? <div className="rounded-xl bg-rose-400/10 p-3 text-sm font-medium text-rose-600 ring-1 ring-rose-400/20">{error}</div> : null}
           <button type="submit" disabled={saving} className="brand-button w-full px-4 py-2.5 text-sm font-bold">
             {saving ? 'Recording...' : 'Record Payment'}
           </button>

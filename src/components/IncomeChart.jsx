@@ -32,8 +32,8 @@ export default function IncomeChart({
       <article className="dashboard-card p-6 transition hover:shadow-lg">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="font-display text-xl font-bold tracking-tight text-white">Income trend</h2>
-            <p className="mt-1 text-sm font-medium leading-6 text-slate-400">Monthly inflow over the last six months.</p>
+            <h2 className="font-display text-xl font-bold tracking-tight text-ink">Income trend</h2>
+            <p className="mt-1 text-sm font-medium leading-6 text-ink-secondary">Monthly inflow over the last six months.</p>
           </div>
           <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300 ring-1 ring-emerald-300/20">
             {formatCurrency(bySource.total)}
@@ -71,8 +71,8 @@ export default function IncomeChart({
         <article className="dashboard-card p-6 transition hover:shadow-lg">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-white">Income sources</h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-400">How each source contributes to total inflow.</p>
+              <h2 className="font-display text-xl font-bold tracking-tight text-ink">Income sources</h2>
+              <p className="mt-1 text-sm font-medium leading-6 text-ink-secondary">How each source contributes to total inflow.</p>
             </div>
             <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300 ring-1 ring-emerald-300/20">
               {formatCurrency(bySource.total)}
@@ -80,7 +80,7 @@ export default function IncomeChart({
           </div>
 
           <div className="dashboard-panel mt-6 p-4">
-            <div className="h-72 rounded-lg bg-slate-950/35 p-2 ring-1 ring-white/10">
+            <div className="h-72 rounded-lg bg-surface/35 p-2 ring-1 ring-border-subtle">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Tooltip content={<ChartTooltip formatCurrency={formatCurrency} />} />
@@ -105,7 +105,7 @@ export default function IncomeChart({
             {bySource.data.slice(0, 6).map((c, idx) => (
               <span
                 key={c.name}
-                className="inline-flex items-center gap-2 rounded-full bg-white/8 px-3 py-1 text-xs font-bold text-slate-300 ring-1 ring-white/10"
+                className="inline-flex items-center gap-2 rounded-full bg-surface-secondary px-3 py-1 text-xs font-bold text-ink-secondary ring-1 ring-border-subtle"
               >
                 <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[idx % pieColors.length] }} />
                 {c.name}

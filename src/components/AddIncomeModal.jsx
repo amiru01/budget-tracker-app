@@ -114,19 +114,19 @@ export default function AddIncomeModal({
         type="button"
         aria-label="Close modal"
         onClick={onClose}
-        className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
       />
 
       <div className="dashboard-card relative w-full max-w-lg p-6 shadow-2xl shadow-black/30">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-slate-400">New entry</p>
-            <h3 className="font-display mt-1 text-lg font-bold text-white">Add income</h3>
+            <p className="text-sm font-medium text-ink-secondary">New entry</p>
+            <h3 className="font-display mt-1 text-lg font-bold text-ink">Add income</h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white"
+            className="rounded-lg p-1.5 text-ink-secondary transition hover:bg-surface-elevated hover:text-ink"
             aria-label="Close"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,7 +138,7 @@ export default function AddIncomeModal({
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Amount</span>
+              <span className="text-sm font-semibold text-ink-secondary">Amount</span>
               <input
                 type="number"
                 value={amount}
@@ -151,7 +151,7 @@ export default function AddIncomeModal({
             </label>
 
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Source</span>
+              <span className="text-sm font-semibold text-ink-secondary">Source</span>
               <select
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
@@ -168,7 +168,7 @@ export default function AddIncomeModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Date</span>
+              <span className="text-sm font-semibold text-ink-secondary">Date</span>
               <input
                 type="date"
                 value={date}
@@ -179,7 +179,7 @@ export default function AddIncomeModal({
             </label>
 
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Note</span>
+              <span className="text-sm font-semibold text-ink-secondary">Note</span>
               <input
                 type="text"
                 value={note}
@@ -192,13 +192,13 @@ export default function AddIncomeModal({
           </div>
 
           {error ? (
-            <div className="rounded-xl bg-rose-400/10 border border-rose-300/20 p-3 text-sm font-medium text-rose-200 backdrop-blur-xl">
+            <div className="rounded-xl bg-rose-400/10 border border-rose-300/20 p-3 text-sm font-medium text-rose-600 backdrop-blur-xl">
               ❌ {error}
             </div>
           ) : null}
 
           {success ? (
-            <div className="rounded-xl bg-emerald-400/10 border border-emerald-300/20 p-3 text-sm font-medium text-emerald-200 backdrop-blur-xl">
+            <div className="rounded-xl bg-emerald-400/10 border border-emerald-300/20 p-3 text-sm font-medium text-emerald-600 backdrop-blur-xl">
               ✅ Income saved successfully!
             </div>
           ) : null}

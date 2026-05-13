@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useCurrency } from '../context/CurrencyContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
 import { logout } from '../services/authService.js'
 import useFinanceData from '../hooks/useFinanceData.js'
 import { quickFade, modalOverlay, modalContent } from '../utils/animations.js'
@@ -17,9 +18,9 @@ export default function Profile() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { currency, setCurrency: setGlobalCurrency, formatCurrency } = useCurrency()
+  const { theme, toggleTheme } = useTheme()
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
-  const [theme, setTheme] = React.useState('light')
   const [notifications, setNotifications] = React.useState(true)
   const { incomes, expenses, totalIncome, totalExpenses, balance, loading } = useFinanceData()
 
@@ -136,8 +137,8 @@ export default function Profile() {
                   <p className="text-sm font-semibold text-white">Theme</p>
                   <p className="mt-0.5 text-xs text-slate-400">Switch between light and dark mode</p>
                 </div>
-                <motion.button type="button" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} whileTap={{ scale: 0.9 }}
-                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${theme === 'dark' ? 'bg-cyan-600' : 'bg-slate-600'}`}
+                <motion.button type="button" onClick={toggleTheme} whileTap={{ scale: 0.9 }}
+                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${theme === 'dark' ? 'bg-cyan-600' : 'bg-slate-400'}`}
                 >
                   <motion.span layout transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ${theme === 'dark' ? 'translate-x-7' : 'translate-x-1'}`}
@@ -206,7 +207,7 @@ export default function Profile() {
 
       {showDeleteModal && (
         <motion.div {...modalOverlay} className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <motion.button type="button" onClick={() => setShowDeleteModal(false)} className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" aria-label="Close modal" />
+          <motion.button type="button" onClick={() => setShowDeleteModal(false)} className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-label="Close modal" />
           <motion.div {...modalContent} className="dashboard-card relative w-full max-w-md p-6 shadow-xl">
             <div className="text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}

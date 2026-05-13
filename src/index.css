@@ -1,17 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
+  color-scheme: light;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #f8fafc;
-  background-color: #020617;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   /* ========================================
-     Brand Colors
+     Brand Colors (shared across themes)
      ======================================== */
   --color-brand-emerald-300: #6ee7b7;
   --color-brand-emerald-400: #34d399;
@@ -23,73 +24,74 @@
   --color-brand-cyan-600: #0891b2;
   --color-brand-teal-400: #2dd4bf;
   --color-brand-teal-500: #14b8a6;
-  
+
   /* ========================================
-     Background Colors
+     Background Colors - Light Theme
      ======================================== */
-  --color-bg-primary: #071024;
-  --color-bg-secondary: #0b1326;
-  --color-bg-slate-950: #020617;
-  --color-bg-slate-900: #0f172a;
-  --color-bg-slate-800: #1e293b;
-  
+  --color-bg-primary: #f8fafc;
+  --color-bg-secondary: #f1f5f9;
+  --color-bg-tertiary: #e2e8f0;
+  --color-bg-elevated: #ffffff;
+
   /* ========================================
-     Text Colors
+     Text Colors - Light Theme
      ======================================== */
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #94a3b8;
-  --color-text-quaternary: #64748b;
-  
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #64748b;
+  --color-text-quaternary: #94a3b8;
+  --color-text-inverse: #f8fafc;
+
   /* ========================================
-     Semantic Colors
+     Semantic Colors - Light Theme
      ======================================== */
-  --color-success-bg: rgba(16, 185, 129, 0.1);
-  --color-success-border: rgba(52, 211, 153, 0.2);
-  --color-success-text: #6ee7b7;
+  --color-success-bg: rgba(16, 185, 129, 0.08);
+  --color-success-border: rgba(5, 150, 105, 0.25);
+  --color-success-text: #059669;
   --color-warning-bg: rgba(251, 191, 36, 0.1);
-  --color-warning-border: rgba(252, 211, 77, 0.2);
-  --color-warning-text: #fcd34d;
-  --color-error-bg: rgba(244, 63, 94, 0.1);
-  --color-error-border: rgba(251, 113, 133, 0.2);
-  --color-error-text: #fda4af;
-  
+  --color-warning-border: rgba(217, 119, 6, 0.25);
+  --color-warning-text: #d97706;
+  --color-error-bg: rgba(244, 63, 94, 0.08);
+  --color-error-border: rgba(225, 29, 72, 0.2);
+  --color-error-text: #e11d48;
+
   /* ========================================
-     Glassmorphism
+     Glassmorphism - Light Theme
      ======================================== */
-  --glass-bg-light: rgba(255, 255, 255, 0.09);
-  --glass-bg-medium: rgba(255, 255, 255, 0.06);
-  --glass-bg-dark: rgba(255, 255, 255, 0.035);
-  --glass-border: rgba(148, 163, 184, 0.18);
-  --glass-border-light: rgba(255, 255, 255, 0.1);
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-medium: rgba(255, 255, 255, 0.5);
+  --glass-bg-dark: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(148, 163, 184, 0.3);
+  --glass-border-light: rgba(255, 255, 255, 0.8);
   --glass-blur: blur(20px);
   --glass-blur-heavy: blur(32px);
-  
+
   /* ========================================
-     Card Backgrounds
+     Card Backgrounds - Light Theme
      ======================================== */
-  --card-bg-primary: rgba(15, 23, 42, 0.72);
-  --card-bg-secondary: rgba(2, 6, 23, 0.44);
-  --card-bg-panel: rgba(2, 6, 23, 0.58);
-  
+  --card-bg-primary: rgba(255, 255, 255, 0.85);
+  --card-bg-secondary: rgba(255, 255, 255, 0.5);
+  --card-bg-panel: rgba(255, 255, 255, 0.7);
+
   /* ========================================
-     Glow Effects
+     Shadows - Light Theme
      ======================================== */
-  --glow-cyan-sm: 0 0 15px rgba(6, 182, 212, 0.3);
-  --glow-cyan-md: 0 18px 36px rgba(6, 182, 212, 0.25);
-  --glow-cyan-lg: 0 20px 44px rgba(16, 185, 129, 0.28);
-  --glow-emerald-sm: 0 0 18px rgba(45, 212, 191, 0.38);
-  --glow-emerald-md: 0 16px 36px rgba(16, 185, 129, 0.22);
-  --glow-card-hover: 0 24px 70px rgba(2, 6, 23, 0.34);
-  
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --glow-cyan-sm: 0 0 15px rgba(6, 182, 212, 0.15);
+  --glow-cyan-md: 0 18px 36px rgba(6, 182, 212, 0.15);
+  --glow-cyan-lg: 0 20px 44px rgba(16, 185, 129, 0.15);
+  --glow-emerald-sm: 0 0 18px rgba(45, 212, 191, 0.15);
+  --glow-emerald-md: 0 16px 36px rgba(16, 185, 129, 0.12);
+
   /* ========================================
      Gradients
      ======================================== */
   --gradient-brand-primary: linear-gradient(90deg, #10b981, #06b6d4);
   --gradient-brand-secondary: linear-gradient(90deg, #34d399, #22d3ee);
-  --gradient-card-overlay: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
-  --gradient-panel-glow: radial-gradient(circle at 50% 0%, rgba(20, 184, 166, 0.08), transparent 34%);
-  
+  --gradient-card-overlay: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+  --gradient-panel-glow: radial-gradient(circle at 50% 0%, rgba(20, 184, 166, 0.04), transparent 34%);
+
   /* ========================================
      Border Radius
      ======================================== */
@@ -99,7 +101,7 @@
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
-  
+
   /* ========================================
      Typography
      ======================================== */
@@ -111,7 +113,7 @@
   --font-weight-extrabold: 800;
   --letter-spacing-tight: -0.03em;
   --letter-spacing-wide: 0.16em;
-  
+
   /* ========================================
      Transitions
      ======================================== */
@@ -121,19 +123,73 @@
   --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Background Colors - Dark Theme */
+  --color-bg-primary: #071024;
+  --color-bg-secondary: #0b1326;
+  --color-bg-tertiary: #0f172a;
+  --color-bg-elevated: #0f172a;
+
+  /* Text Colors - Dark Theme */
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-quaternary: #64748b;
+  --color-text-inverse: #0f172a;
+
+  /* Semantic Colors - Dark Theme */
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+  --color-success-border: rgba(52, 211, 153, 0.2);
+  --color-success-text: #6ee7b7;
+  --color-warning-bg: rgba(251, 191, 36, 0.1);
+  --color-warning-border: rgba(252, 211, 77, 0.2);
+  --color-warning-text: #fcd34d;
+  --color-error-bg: rgba(244, 63, 94, 0.1);
+  --color-error-border: rgba(251, 113, 133, 0.2);
+  --color-error-text: #fda4af;
+
+  /* Glassmorphism - Dark Theme */
+  --glass-bg-light: rgba(255, 255, 255, 0.09);
+  --glass-bg-medium: rgba(255, 255, 255, 0.06);
+  --glass-bg-dark: rgba(255, 255, 255, 0.035);
+  --glass-border: rgba(148, 163, 184, 0.18);
+  --glass-border-light: rgba(255, 255, 255, 0.1);
+
+  /* Card Backgrounds - Dark Theme */
+  --card-bg-primary: rgba(15, 23, 42, 0.72);
+  --card-bg-secondary: rgba(2, 6, 23, 0.44);
+  --card-bg-panel: rgba(2, 6, 23, 0.58);
+
+  /* Shadows - Dark Theme */
+  --shadow-card: 0 24px 70px rgba(2, 6, 23, 0.34);
+  --shadow-card-hover: 0 28px 80px rgba(2, 6, 23, 0.4);
+  --glow-cyan-sm: 0 0 15px rgba(6, 182, 212, 0.3);
+  --glow-cyan-md: 0 18px 36px rgba(6, 182, 212, 0.25);
+  --glow-cyan-lg: 0 20px 44px rgba(16, 185, 129, 0.28);
+  --glow-emerald-sm: 0 0 18px rgba(45, 212, 191, 0.38);
+  --glow-emerald-md: 0 16px 36px rgba(16, 185, 129, 0.22);
+
+  /* Gradients - Dark Theme */
+  --gradient-card-overlay: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
+  --gradient-panel-glow: radial-gradient(circle at 50% 0%, rgba(20, 184, 166, 0.08), transparent 34%);
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
-  background-color: #020617;
+  background-color: var(--color-bg-primary);
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background-color: #020617;
-  color: #f8fafc;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: background-color var(--transition-slow), color var(--transition-slow);
 }
 
 .font-display {
@@ -151,7 +207,7 @@ body {
 .section-shell {
   position: relative;
   overflow: hidden;
-  background-color: #0f172a;
+  background-color: var(--color-bg-tertiary);
   padding-block: 6rem;
 }
 
@@ -188,7 +244,7 @@ body {
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #34d399;
+  color: var(--color-brand-emerald-500);
 }
 
 .section-title {
@@ -197,13 +253,13 @@ body {
   line-height: 1.04;
   font-weight: 800;
   letter-spacing: -0.035em;
-  color: #f8fafc;
+  color: var(--color-text-primary);
 }
 
 .section-copy {
   font-size: 1.0625rem;
   line-height: 1.8;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
 }
 
 .card-title {
@@ -212,36 +268,38 @@ body {
   line-height: 1.35;
   font-weight: 750;
   letter-spacing: -0.01em;
-  color: #f8fafc;
+  color: var(--color-text-primary);
 }
 
 .card-copy {
   font-size: 0.9375rem;
   line-height: 1.7;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
 }
 
 /* ========================================
    Dashboard Utility Classes
    ======================================== */
 
-/* Dashboard Card - Primary card component with glassmorphism */
 .dashboard-card {
   border-radius: var(--radius-xl);
   background: var(--gradient-card-overlay), var(--card-bg-primary);
-  box-shadow: var(--glow-card-hover), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   border: 1px solid var(--glass-border);
   backdrop-filter: var(--glass-blur);
+  transition: background var(--transition-slow), box-shadow var(--transition-slow), border-color var(--transition-slow);
 }
 
-/* Dashboard Panel - Inner panel with subtle glow */
+[data-theme="dark"] .dashboard-card {
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .dashboard-panel {
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  border: 1px solid var(--glass-border);
   background: var(--gradient-panel-glow), var(--card-bg-secondary);
 }
 
-/* Dashboard Input - Form input with focus states */
 .dashboard-input {
   width: 100%;
   border-radius: var(--radius-md);
@@ -264,10 +322,9 @@ body {
 .dashboard-input:focus {
   border-color: rgba(45, 212, 191, 0.65);
   box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.14);
-  background: rgba(15, 23, 42, 0.86);
+  background: var(--card-bg-primary);
 }
 
-/* Brand Button - Primary action button with gradient */
 .brand-button {
   border-radius: var(--radius-md);
   background: var(--gradient-brand-primary);
@@ -289,7 +346,6 @@ body {
   transform: translateY(0) scale(0.98);
 }
 
-/* Secondary Button - Glassmorphism button */
 .button-secondary {
   border-radius: var(--radius-xl);
   background: var(--glass-bg-medium);
@@ -302,12 +358,11 @@ body {
 }
 
 .button-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--glass-bg-light);
   color: var(--color-text-primary);
   border-color: rgba(45, 212, 191, 0.3);
 }
 
-/* Card Hover Effect */
 .card-hover {
   transition: transform var(--transition-base), 
               box-shadow var(--transition-base);
@@ -315,17 +370,22 @@ body {
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.4), 
+  box-shadow: var(--shadow-card-hover), 
               0 0 0 1px rgba(45, 212, 191, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Glow Text - Gradient text effect */
 .text-glow-brand {
   background: var(--gradient-brand-secondary);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .card-hover:hover {
+  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.4), 
+              0 0 0 1px rgba(45, 212, 191, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 @theme {
@@ -336,6 +396,16 @@ body {
       transform: translateX(100%);
     }
   }
+
+  --color-surface: var(--color-bg-primary);
+  --color-surface-secondary: var(--color-bg-secondary);
+  --color-surface-elevated: var(--color-bg-elevated);
+  --color-ink: var(--color-text-primary);
+  --color-ink-secondary: var(--color-text-secondary);
+  --color-ink-tertiary: var(--color-text-tertiary);
+  --color-ink-quaternary: var(--color-text-quaternary);
+  --color-ink-inverse: var(--color-text-inverse);
+  --color-border-subtle: var(--glass-border);
 }
 
 button,
@@ -351,7 +421,6 @@ a {
    Accessibility Support
    ======================================== */
 
-/* Reduced Motion Support - Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -363,39 +432,19 @@ a {
   }
 }
 
-/* CSS Custom Properties Fallbacks */
-.dashboard-card {
-  /* Fallback for browsers without custom property support */
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)), rgba(15, 23, 42, 0.72);
-  background: var(--gradient-card-overlay), var(--card-bg-primary);
-}
-
-.dashboard-input {
-  /* Fallback for browsers without custom property support */
-  background: rgba(2, 6, 23, 0.58);
-  background: var(--card-bg-panel);
-}
-
-.brand-button {
-  /* Fallback for browsers without custom property support */
-  background: linear-gradient(90deg, #10b981, #06b6d4);
-  background: var(--gradient-brand-primary);
-}
-
 /* Backdrop Filter Fallbacks */
 @supports not (backdrop-filter: blur(20px)) {
   .dashboard-card {
-    background: rgba(15, 23, 42, 0.95);
+    background: var(--card-bg-primary);
   }
   
   .dashboard-panel {
-    background: rgba(2, 6, 23, 0.95);
+    background: var(--card-bg-secondary);
   }
 }
 
 /* Gradient Text Fallbacks */
 .text-glow-brand {
-  /* Fallback for browsers without background-clip support */
   color: #22d3ee;
   background: linear-gradient(90deg, #34d399, #22d3ee);
   background: var(--gradient-brand-secondary);

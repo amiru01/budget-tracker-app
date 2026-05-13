@@ -23,10 +23,10 @@ export default function TransactionItem({
   const sign = isIncome ? "+" : "-";
 
   return (
-    <li className="flex items-center justify-between gap-4 rounded-xl bg-white/6 px-4 py-3 ring-1 ring-white/10 transition hover:bg-white/10">
+    <li className="flex items-center justify-between gap-4 rounded-xl bg-surface-secondary px-4 py-3 ring-1 ring-border-subtle transition hover:bg-surface-elevated">
       <div className="min-w-0">
-        <p className="truncate font-bold text-slate-100">{name}</p>
-        <p className="mt-0.5 text-sm font-medium text-slate-400">
+        <p className="truncate font-bold text-ink">{name}</p>
+        <p className="mt-0.5 text-sm font-medium text-ink-secondary">
           {category}
           {date ? ` · ${formatDate(date)}` : ""}
           {note ? ` · ${note}` : ""}

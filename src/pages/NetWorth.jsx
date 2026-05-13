@@ -41,7 +41,7 @@ export default function NetWorth() {
 
   if (loading) {
     return <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-      <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-300">Loading accounts…</div>
+      <div className="dashboard-card px-4 py-3 text-sm font-bold text-ink-secondary">Loading accounts…</div>
     </div>
   }
 
@@ -59,9 +59,9 @@ export default function NetWorth() {
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0 }}>
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Finance OS</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Net Worth</h1>
-            <p className="mt-1 text-sm text-slate-400">Track your accounts, income, and total net worth.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Finance OS</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Net Worth</h1>
+            <p className="mt-1 text-sm text-ink-secondary">Track your accounts, income, and total net worth.</p>
           </div>
           <button type="button" onClick={() => setIsIncomeModalOpen(true)} className="brand-button px-4 py-2 text-sm">+ Add Income</button>
         </header>
@@ -71,28 +71,28 @@ export default function NetWorth() {
 
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.1 }}>
         <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Total Balance</p>
-            <p className="font-display mt-2 text-2xl font-extrabold text-white">{formatCurrency(totalBalance)}</p></article>
-          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Total Income</p>
+          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Total Balance</p>
+            <p className="font-display mt-2 text-2xl font-extrabold text-ink">{formatCurrency(totalBalance)}</p></article>
+          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Total Income</p>
             <p className="font-display mt-2 text-2xl font-extrabold text-emerald-400">{formatCurrency(totalIncome)}</p></article>
-          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Total Expenses</p>
+          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Total Expenses</p>
             <p className="font-display mt-2 text-2xl font-extrabold text-rose-400">{formatCurrency(totalExpenses)}</p></article>
-          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Net Worth</p>
+          <article className="dashboard-card p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-secondary">Net Worth</p>
             <p className={`font-display mt-2 text-2xl font-extrabold ${netWorth >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>{formatCurrency(netWorth)}</p></article>
         </section>
       </motion.div>
 
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.15 }}>
         <section className="dashboard-card p-6">
-          <h2 className="font-display text-xl font-bold tracking-tight text-white">Your Accounts</h2>
-          <p className="mt-1 text-sm text-slate-400">Manage your bank accounts, cash, wallets, and savings.</p>
+          <h2 className="font-display text-xl font-bold tracking-tight text-ink">Your Accounts</h2>
+          <p className="mt-1 text-sm text-ink-secondary">Manage your bank accounts, cash, wallets, and savings.</p>
           <div className="mt-6 space-y-6">
             {['bank', 'cash', 'wallet', 'savings', 'investment', 'other'].map((type) => {
               const items = grouped[type]
               if (items.length === 0 && type !== 'other') return null
               return (
                 <div key={type}>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-slate-500">{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.12em] text-ink-tertiary">{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((account, idx) => (
                       <motion.div key={account.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + idx * 0.04, duration: 0.2 }}
@@ -100,10 +100,10 @@ export default function NetWorth() {
                       >
                         <div className="flex items-start justify-between">
                           <div>
-                            <p className="font-semibold text-white">{account.name}</p>
-                            <p className="mt-1 text-sm text-slate-400">{account.note || `${type.charAt(0).toUpperCase() + type.slice(1)} account`}</p>
+                            <p className="font-semibold text-ink">{account.name}</p>
+                            <p className="mt-1 text-sm text-ink-secondary">{account.note || `${type.charAt(0).toUpperCase() + type.slice(1)} account`}</p>
                           </div>
-                          <p className="text-lg font-bold text-white">{formatCurrency(account.balance)}</p>
+                          <p className="text-lg font-bold text-ink">{formatCurrency(account.balance)}</p>
                         </div>
                         <div className="mt-3 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                           <button type="button" onClick={() => handleDeleteAccount(account.id)}
@@ -112,7 +112,7 @@ export default function NetWorth() {
                       </motion.div>
                     ))}
                     {items.length === 0 && (
-                      <p className="col-span-full text-sm text-slate-500 py-2">No {type} accounts yet.</p>
+                      <p className="col-span-full text-sm text-ink-tertiary py-2">No {type} accounts yet.</p>
                     )}
                   </div>
                 </div>
@@ -124,8 +124,8 @@ export default function NetWorth() {
 
       {incomes.length > 0 && (
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.2 }} className="dashboard-card p-6">
-          <h2 className="font-display text-xl font-bold tracking-tight text-white">Income History</h2>
-          <p className="mt-1 text-sm text-slate-400">All income entries recorded across the app.</p>
+          <h2 className="font-display text-xl font-bold tracking-tight text-ink">Income History</h2>
+          <p className="mt-1 text-sm text-ink-secondary">All income entries recorded across the app.</p>
           <div className="mt-4 space-y-2">
             {incomes.slice(0, 10).map((inc) => <IncomeItem key={inc.id} income={inc} />)}
           </div>

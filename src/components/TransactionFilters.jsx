@@ -13,7 +13,7 @@ export default function TransactionFilters({
     <div className="space-y-4">
       {/* Type Filter */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-semibold text-slate-300">Type:</span>
+        <span className="text-sm font-semibold text-ink-secondary">Type:</span>
         <div className="flex gap-2">
           <button
             type="button"
@@ -21,8 +21,8 @@ export default function TransactionFilters({
             className={[
               'rounded-xl px-4 py-2 text-sm font-semibold transition',
               activeFilter === 'all'
-                ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15'
-                : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
+                ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-ink shadow-lg shadow-cyan-500/15'
+                : 'bg-surface-secondary text-ink-secondary ring-1 ring-border-subtle hover:bg-surface-elevated hover:text-ink',
             ].join(' ')}
           >
             All
@@ -33,8 +33,8 @@ export default function TransactionFilters({
             className={[
               'rounded-xl px-4 py-2 text-sm font-semibold transition',
               activeFilter === 'income'
-                ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/15 ring-1 ring-emerald-400/30'
-                : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
+                ? 'bg-emerald-600 text-ink shadow-sm shadow-emerald-500/15 ring-1 ring-emerald-400/30'
+                : 'bg-surface-secondary text-ink-secondary ring-1 ring-border-subtle hover:bg-surface-elevated hover:text-ink',
             ].join(' ')}
           >
             Income
@@ -45,8 +45,8 @@ export default function TransactionFilters({
             className={[
               'rounded-xl px-4 py-2 text-sm font-semibold transition',
               activeFilter === 'expense'
-                ? 'bg-rose-600 text-white shadow-sm shadow-rose-500/15 ring-1 ring-rose-400/30'
-                : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white',
+                ? 'bg-rose-600 text-ink shadow-sm shadow-rose-500/15 ring-1 ring-rose-400/30'
+                : 'bg-surface-secondary text-ink-secondary ring-1 ring-border-subtle hover:bg-surface-elevated hover:text-ink',
             ].join(' ')}
           >
             Expenses
@@ -58,7 +58,7 @@ export default function TransactionFilters({
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Category Filter */}
         <label className="block">
-          <span className="text-sm font-semibold text-slate-300">Category</span>
+          <span className="text-sm font-semibold text-ink-secondary">Category</span>
           <select
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
@@ -75,7 +75,7 @@ export default function TransactionFilters({
 
         {/* Date Range Filter */}
         <label className="block">
-          <span className="text-sm font-semibold text-slate-300">Time Period</span>
+          <span className="text-sm font-semibold text-ink-secondary">Time Period</span>
           <select
             value={dateRange}
             onChange={(e) => onDateRangeChange(e.target.value)}

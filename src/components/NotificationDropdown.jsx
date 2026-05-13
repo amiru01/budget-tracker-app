@@ -18,14 +18,14 @@ function getNotificationIcon(type) {
 function getNotificationColor(type) {
   switch (type) {
     case 'warning':
-      return 'bg-amber-400/10 border border-amber-300/20 text-amber-200'
+      return 'bg-amber-400/10 border border-amber-300/20 text-amber-600'
     case 'success':
-      return 'bg-emerald-400/10 border border-emerald-300/20 text-emerald-200'
+      return 'bg-emerald-400/10 border border-emerald-300/20 text-emerald-600'
     case 'error':
-      return 'bg-rose-400/10 border border-rose-300/20 text-rose-200'
+      return 'bg-rose-400/10 border border-rose-300/20 text-rose-600'
     case 'info':
     default:
-      return 'bg-slate-900/90 border border-white/10 text-slate-100'
+      return 'bg-surface/90 border border-border-subtle text-ink'
   }
 }
 
@@ -55,7 +55,7 @@ function NotificationItem({ notification, onMarkAsRead, onDelete }) {
       onClick={handleClick}
       className={[
         'group relative cursor-pointer rounded-3xl p-4 transition shadow-lg shadow-cyan-500/10 backdrop-blur-xl',
-        notification.read ? 'bg-slate-950/90 border border-white/10 text-slate-300 opacity-80' : getNotificationColor(notification.type),
+        notification.read ? 'bg-surface/90 border border-border-subtle text-ink-secondary opacity-80' : getNotificationColor(notification.type),
       ].join(' ')}
     >
       <div className="flex items-start gap-3">
@@ -63,14 +63,14 @@ function NotificationItem({ notification, onMarkAsRead, onDelete }) {
         
         <div className="flex-1 min-w-0">
           {notification.title && (
-            <p className="text-sm font-semibold text-slate-900 truncate">
+            <p className="text-sm font-semibold text-ink truncate">
               {notification.title}
             </p>
           )}
-          <p className="text-sm text-slate-700 mt-0.5">
+          <p className="text-sm text-ink-tertiary mt-0.5">
             {notification.message}
           </p>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-ink-tertiary mt-1">
             {formatTimeAgo(notification.createdAt)}
           </p>
         </div>
@@ -87,7 +87,7 @@ function NotificationItem({ notification, onMarkAsRead, onDelete }) {
           e.stopPropagation()
           onDelete(notification.id)
         }}
-        className="absolute top-2 right-2 rounded-lg p-1 text-slate-400 opacity-0 transition group-hover:opacity-100 hover:bg-slate-100 hover:text-slate-600"
+        className="absolute top-2 right-2 rounded-lg p-1 text-ink-secondary opacity-0 transition group-hover:opacity-100 hover:bg-surface-secondary hover:text-ink-tertiary"
         aria-label="Delete notification"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,13 +136,13 @@ export default function NotificationDropdown({ notifications, userId, onClose })
       />
 
       {/* Dropdown */}
-      <div className="rounded-[28px] border border-white/10 bg-slate-950/95 shadow-2xl shadow-cyan-500/15 backdrop-blur-xl">
+      <div className="rounded-[28px] border border-border-subtle bg-surface/95 shadow-2xl shadow-cyan-500/15 backdrop-blur-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+        <div className="flex items-center justify-between border-b border-border-subtle px-4 py-4">
           <div>
-            <h3 className="text-base font-semibold text-slate-900">Notifications</h3>
+            <h3 className="text-base font-semibold text-ink">Notifications</h3>
             {unreadCount > 0 && (
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-ink-tertiary mt-0.5">
                 {unreadCount} unread
               </p>
             )}
@@ -161,12 +161,12 @@ export default function NotificationDropdown({ notifications, userId, onClose })
         {/* Notifications List */}
         <div className="max-h-96 overflow-y-auto p-3">
           {notifications.length === 0 ? (
-            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-8 text-center text-slate-300">
+            <div className="rounded-3xl border border-border-subtle bg-surface/80 p-8 text-center text-ink-secondary">
               <p className="text-4xl">🔔</p>
-              <p className="mt-3 text-sm font-bold text-white">
+              <p className="mt-3 text-sm font-bold text-ink">
                 No notifications yet
               </p>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-ink-secondary">
                 We'll notify you about important updates
               </p>
             </div>
@@ -186,11 +186,11 @@ export default function NotificationDropdown({ notifications, userId, onClose })
 
         {/* Footer */}
         {notifications.length > 0 && (
-          <div className="border-t border-slate-200 px-4 py-2 text-center">
+          <div className="border-t border-border-subtle px-4 py-2 text-center">
             <button
               type="button"
               onClick={onClose}
-              className="text-xs font-semibold text-slate-600 transition hover:text-slate-900"
+              className="text-xs font-semibold text-ink-tertiary transition hover:text-ink"
             >
               Close
             </button>

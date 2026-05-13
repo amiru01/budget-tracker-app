@@ -80,14 +80,14 @@ export default function AddExpenseModal({
 
   return (
     <motion.div {...modalOverlay} className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <button type="button" aria-label="Close modal" onClick={onClose} className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" />
+      <button type="button" aria-label="Close modal" onClick={onClose} className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <motion.div {...modalContent} className="dashboard-card relative w-full max-w-lg p-6 shadow-2xl shadow-black/30">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-slate-400">New entry</p>
-            <h3 className="font-display mt-1 text-lg font-bold text-white">Add expense</h3>
+            <p className="text-sm font-medium text-ink-secondary">New entry</p>
+            <h3 className="font-display mt-1 text-lg font-bold text-ink">Add expense</h3>
           </div>
-          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white" aria-label="Close">
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-ink-secondary transition hover:bg-surface-elevated hover:text-ink" aria-label="Close">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -95,11 +95,11 @@ export default function AddExpenseModal({
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Amount</span>
+              <span className="text-sm font-semibold text-ink-secondary">Amount</span>
               <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="1" min="0" placeholder="0.00" className="dashboard-input mt-2" />
             </label>
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Category</span>
+              <span className="text-sm font-semibold text-ink-secondary">Category</span>
               <select value={category} onChange={(e) => setCategory(e.target.value)} className="dashboard-input mt-2">
                 {categories.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -107,7 +107,7 @@ export default function AddExpenseModal({
           </div>
 
           <label className="block">
-            <span className="text-sm font-semibold text-slate-300">Payment Account <span className="text-xs font-normal text-slate-500">(optional)</span></span>
+            <span className="text-sm font-semibold text-ink-secondary">Payment Account <span className="text-xs font-normal text-ink-tertiary">(optional)</span></span>
             <select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="dashboard-input mt-2">
               <option value="">No account linked</option>
               {accounts.map((a) => <option key={a.id} value={a.id}>{a.name} — {a.type}</option>)}
@@ -116,17 +116,17 @@ export default function AddExpenseModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Date</span>
+              <span className="text-sm font-semibold text-ink-secondary">Date</span>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} max={new Date().toISOString().split('T')[0]} className="dashboard-input mt-2" />
             </label>
             <label className="block">
-              <span className="text-sm font-semibold text-slate-300">Note</span>
+              <span className="text-sm font-semibold text-ink-secondary">Note</span>
               <input type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional note" maxLength="100" className="dashboard-input mt-2" />
             </label>
           </div>
 
-          {error ? <div className="rounded-xl bg-rose-400/10 border border-rose-300/20 p-3 text-sm font-medium text-rose-200 backdrop-blur-xl">❌ {error}</div> : null}
-          {success ? <div className="rounded-xl bg-emerald-400/10 border border-emerald-300/20 p-3 text-sm font-medium text-emerald-200 backdrop-blur-xl">✅ Expense saved successfully!</div> : null}
+          {error ? <div className="rounded-xl bg-rose-400/10 border border-rose-300/20 p-3 text-sm font-medium text-rose-600 backdrop-blur-xl">❌ {error}</div> : null}
+          {success ? <div className="rounded-xl bg-emerald-400/10 border border-emerald-300/20 p-3 text-sm font-medium text-emerald-600 backdrop-blur-xl">✅ Expense saved successfully!</div> : null}
 
           <button type="submit" disabled={loading || success}
             className="brand-button w-full px-4 py-2.5 text-sm font-bold transition-all duration-300 ease-out disabled:cursor-not-allowed disabled:opacity-60">

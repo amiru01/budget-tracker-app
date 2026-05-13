@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
+import { useTheme } from '../../context/ThemeContext.jsx'
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -50,6 +52,14 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-full p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <Link
               to="/auth"
               className="text-sm font-bold text-white transition hover:text-emerald-400"
@@ -95,6 +105,14 @@ export default function Navbar() {
               </a>
             ))}
             <hr className="border-white/10 my-2" />
+            <button
+              type="button"
+              onClick={() => { toggleTheme(); setMobileMenuOpen(false) }}
+              className="flex items-center gap-2 text-base font-medium text-slate-300 hover:text-white p-2"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            </button>
             <Link
               to="/auth"
               onClick={() => setMobileMenuOpen(false)}

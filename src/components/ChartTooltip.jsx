@@ -8,11 +8,11 @@ export default function ChartTooltip({ active, payload, label, formatCurrency, s
   const name = seriesLabel || entry?.name || 'Value'
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl shadow-cyan-500/15 backdrop-blur-xl">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</p>
+    <div className="rounded-3xl border border-border-subtle bg-surface/95 p-4 shadow-2xl shadow-cyan-500/15 backdrop-blur-xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-secondary">{label}</p>
       <div className="mt-3 flex items-center justify-between gap-4">
-        <span className="text-sm font-medium text-slate-300">{name}</span>
-        <span className="text-sm font-bold text-white">{formatCurrency(value)}</span>
+        <span className="text-sm font-medium text-ink-secondary">{name}</span>
+        <span className="text-sm font-bold text-ink">{formatCurrency(value)}</span>
       </div>
     </div>
   )

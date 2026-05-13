@@ -2,14 +2,17 @@ import {
   Bars3Icon,
   BellIcon,
 } from '@heroicons/react/24/outline'
+import { Sun, Moon } from 'lucide-react'
 import React from 'react'
 import { logout } from '../../services/authService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
+import { useTheme } from '../../context/ThemeContext.jsx'
 import useNotifications from '../../hooks/useNotifications.js'
 import NotificationDropdown from '../NotificationDropdown.jsx'
 
 function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
   const { user, loading } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const { notifications, unreadCount } = useNotifications()
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = React.useState(false)
@@ -32,13 +35,13 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/45 backdrop-blur-2xl">
+    <header className="sticky top-0 z-20 border-b border-border-subtle bg-surface/45 backdrop-blur-2xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
         <div className="min-w-0 flex items-center gap-3">
           <button
             type="button"
             onClick={onMenuClick}
-              className="inline-flex rounded-xl border border-white/10 bg-white/8 p-2 text-slate-300 shadow-sm transition-colors duration-200 hover:border-cyan-300/30 hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 lg:hidden"
+              className="inline-flex rounded-xl border border-border-subtle bg-surface-secondary p-2 text-ink-secondary shadow-sm transition-colors duration-200 hover:border-cyan-300/30 hover:bg-surface-elevated hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-surface lg:hidden"
             aria-label="Open sidebar"
             aria-controls="sidebar-navigation"
             aria-expanded={isSidebarOpen}
@@ -47,10 +50,10 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
           </button>
 
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300/80">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">
               Smart Finance
             </p>
-            <h2 className="font-display truncate text-xl font-extrabold tracking-[-0.02em] text-white sm:text-2xl">
+            <h2 className="font-display truncate text-xl font-extrabold tracking-[-0.02em] text-ink sm:text-2xl">
               {pageTitle}
             </h2>
           </div>
@@ -62,8 +65,8 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
               type="button"
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
               className={[
-                'relative rounded-full bg-white/8 p-2.5 text-slate-300 shadow-sm ring-1 ring-white/10 transition-colors duration-200 hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
-                isNotificationOpen ? 'text-white ring-2 ring-cyan-400' : '',
+                'relative rounded-full bg-surface-secondary p-2.5 text-ink-secondary shadow-sm ring-1 ring-border-subtle transition-colors duration-200 hover:bg-surface-elevated hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+                isNotificationOpen ? 'text-ink ring-2 ring-cyan-400' : '',
               ].join(' ')}
               aria-label="View notifications"
               aria-expanded={isNotificationOpen}
@@ -87,21 +90,29 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
 
           <button
             type="button"
-            className="flex items-center gap-3 rounded-full bg-white/8 py-1.5 pl-1.5 pr-2 shadow-sm ring-1 ring-white/10 transition duration-200 hover:bg-white/12 hover:shadow-cyan-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:pr-4"
+            className="flex items-center gap-3 rounded-full bg-surface-secondary py-1.5 pl-1.5 pr-2 shadow-sm ring-1 ring-border-subtle transition duration-200 hover:bg-surface-elevated hover:shadow-cyan-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-surface sm:pr-4"
             aria-label="Open user profile"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 text-sm font-extrabold text-white shadow-lg shadow-cyan-500/20">
               {initials}
             </div>
             <div className="hidden text-left sm:block">
-              <p className="max-w-52 truncate text-sm font-bold text-white">{displayName}</p>
-              <p className="text-xs font-medium text-slate-400">Workspace access</p>
+              <p className="max-w-52 truncate text-sm font-bold text-ink">{displayName}</p>
+              <p className="text-xs font-medium text-ink-tertiary">Workspace access</p>
             </div>
           </button>
           <button
             type="button"
+            onClick={toggleTheme}
+            className="rounded-xl bg-surface-secondary p-2.5 text-ink-secondary shadow-sm ring-1 ring-border-subtle transition hover:bg-surface-elevated hover:text-ink"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+          <button
+            type="button"
             onClick={handleLogout}
-            className="rounded-xl bg-white/8 px-3 py-2 text-xs font-bold text-slate-300 shadow-sm ring-1 ring-white/10 transition hover:bg-white/12 hover:text-white"
+            className="rounded-xl bg-surface-secondary px-3 py-2 text-xs font-bold text-ink-secondary shadow-sm ring-1 ring-border-subtle transition hover:bg-surface-elevated hover:text-ink"
             disabled={loading || isLoggingOut}
           >
             {isLoggingOut ? 'Logging out...' : 'Logout'}

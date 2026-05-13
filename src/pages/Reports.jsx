@@ -29,11 +29,11 @@ function CustomTooltip({ active, payload, label, formatCurrency }) {
   if (!active || !payload?.length) return null
   return (
     <div className="dashboard-card p-3 shadow-lg">
-      <p className="text-xs font-semibold text-slate-400">{label}</p>
+      <p className="text-xs font-semibold text-ink-secondary">{label}</p>
       {payload.map((entry, index) => (
         <div key={index} className="mt-2 flex items-center justify-between gap-6">
           <span className="text-xs font-medium" style={{ color: entry.color }}>{entry.name}</span>
-          <span className="text-xs font-semibold text-slate-100">{formatCurrency(entry.value)}</span>
+          <span className="text-xs font-semibold text-ink">{formatCurrency(entry.value)}</span>
         </div>
       ))}
     </div>
@@ -83,7 +83,7 @@ export default function Reports() {
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
-        <div className="dashboard-card px-4 py-3 text-sm font-bold text-slate-300">Loading reports…</div>
+        <div className="dashboard-card px-4 py-3 text-sm font-bold text-ink-secondary">Loading reports…</div>
       </div>
     )
   }
@@ -95,14 +95,14 @@ export default function Reports() {
       <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0 }}>
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Smart Finance</p>
-            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-white sm:text-4xl">Financial Reports</h1>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Smart Finance</p>
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Financial Reports</h1>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-slate-400">Period:</span>
+            <span className="text-sm font-bold text-ink-secondary">Period:</span>
             {['7D', '30D', '90D'].map((r) => (
               <button key={r} type="button" onClick={() => setTimeRange(r)}
-                className={`rounded-xl px-4 py-2 text-sm font-bold transition ${timeRange === r ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15' : 'bg-white/8 text-slate-300 ring-1 ring-white/10 hover:bg-white/12 hover:text-white'}`}
+                className={`rounded-xl px-4 py-2 text-sm font-bold transition ${timeRange === r ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-cyan-500/15' : 'bg-surface-secondary text-ink-secondary ring-1 ring-border-subtle hover:bg-surface-elevated hover:text-ink'}`}
               >{r === '7D' ? '7 Days' : r === '30D' ? '30 Days' : '90 Days'}</button>
             ))}
           </div>
@@ -110,7 +110,7 @@ export default function Reports() {
       </motion.div>
 
       {error ? (
-        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-100 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
+        <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.08 }} className="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-bold text-rose-600 shadow-lg shadow-rose-500/10 backdrop-blur-xl">
           {error}
         </motion.div>
       ) : null}
@@ -119,8 +119,8 @@ export default function Reports() {
         <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.12 }} className="dashboard-card p-12 text-center shadow-md">
           <div className="mx-auto max-w-md">
             <p className="text-6xl">📊</p>
-            <h2 className="mt-6 text-xl font-semibold text-white">No financial data available</h2>
-            <p className="mt-2 text-sm text-slate-400">Start tracking your finances to see detailed reports and insights.</p>
+            <h2 className="mt-6 text-xl font-semibold text-ink">No financial data available</h2>
+            <p className="mt-2 text-sm text-ink-secondary">Start tracking your finances to see detailed reports and insights.</p>
             <button type="button" onClick={() => (window.location.href = '/transactions')} className="brand-button mt-6 px-6 py-3 text-sm">Add your first transaction</button>
           </div>
         </motion.div>
@@ -158,8 +158,8 @@ export default function Reports() {
             <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.3 }} className="dashboard-card p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">Spending Trend</h2>
-                  <p className="mt-1 text-sm text-slate-400">Daily spending over the selected period</p>
+                  <h2 className="text-lg font-semibold text-ink">Spending Trend</h2>
+                  <p className="mt-1 text-sm text-ink-secondary">Daily spending over the selected period</p>
                 </div>
                 <span className="rounded-full bg-rose-400/10 px-3 py-1 text-xs font-semibold text-rose-300 ring-1 ring-rose-400/20">{formatCurrency(totalExpenses)}</span>
               </div>
@@ -179,8 +179,8 @@ export default function Reports() {
             <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.35 }} className="dashboard-card p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">Income vs Expenses</h2>
-                  <p className="mt-1 text-sm text-slate-400">Comparison of total amounts</p>
+                  <h2 className="text-lg font-semibold text-ink">Income vs Expenses</h2>
+                  <p className="mt-1 text-sm text-ink-secondary">Comparison of total amounts</p>
                 </div>
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${balance >= 0 ? 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20' : 'bg-rose-400/10 text-rose-300 ring-rose-400/20'}`}>
                   {balance >= 0 ? 'Surplus' : 'Deficit'}
@@ -206,10 +206,10 @@ export default function Reports() {
             <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.4 }} className="dashboard-card p-6 lg:col-span-2">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">Category Breakdown</h2>
-                  <p className="mt-1 text-sm text-slate-400">Spending by category</p>
+                  <h2 className="text-lg font-semibold text-ink">Category Breakdown</h2>
+                  <p className="mt-1 text-sm text-ink-secondary">Spending by category</p>
                 </div>
-                <motion.span {...badgePop} className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-slate-200 ring-1 ring-white/10">
+                <motion.span {...badgePop} className="rounded-full bg-surface-secondary px-3 py-1 text-xs font-semibold text-ink-secondary ring-1 ring-border-subtle">
                   {categoryData.data.length} categories
                 </motion.span>
               </div>
@@ -230,7 +230,7 @@ export default function Reports() {
               <div className="mt-4 flex flex-wrap gap-2">
                 {categoryData.data.slice(0, 6).map((cat, idx) => (
                   <motion.span key={cat.name} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.5 + idx * 0.05 }}
-                    className="inline-flex items-center gap-2 rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-slate-300 ring-1 ring-white/10"
+                    className="inline-flex items-center gap-2 rounded-full bg-surface-secondary px-3 py-1 text-xs font-semibold text-ink-secondary ring-1 ring-border-subtle"
                   >
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
                     {cat.name}
@@ -242,14 +242,14 @@ export default function Reports() {
             <motion.div {...quickFade} transition={{ ...quickFade.animate.transition, delay: 0.45 }} className="dashboard-card p-6 lg:col-span-3">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">AI Insights</h2>
-                  <p className="mt-1 text-sm text-slate-400">Smart analysis of your financial patterns</p>
+                  <h2 className="text-lg font-semibold text-ink">AI Insights</h2>
+                  <p className="mt-1 text-sm text-ink-secondary">Smart analysis of your financial patterns</p>
                 </div>
                 <motion.span {...badgePop} className="rounded-full bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-300 ring-1 ring-cyan-400/20">Live</motion.span>
               </div>
               <div className="mt-6 space-y-3">
                 {insights.length === 0 ? (
-                  <div className="dashboard-card p-4 text-center"><p className="text-sm text-slate-400">Add more transactions to unlock personalized insights</p></div>
+                  <div className="dashboard-card p-4 text-center"><p className="text-sm text-ink-secondary">Add more transactions to unlock personalized insights</p></div>
                 ) : (
                   insights.map((insight, idx) => (
                     <motion.div key={insight.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + idx * 0.08, duration: 0.25 }}>
@@ -261,22 +261,22 @@ export default function Reports() {
               <div className="mt-6 space-y-3">
                 {savingsRate < 10 && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.25 }} className="rounded-xl bg-amber-400/10 p-4 ring-1 ring-amber-400/20">
-                    <div className="flex items-start gap-3"><span className="text-xl">⚠️</span><div><p className="text-sm font-semibold text-amber-200">Low Savings Rate</p><p className="mt-1 text-sm text-amber-300">Your savings rate is {savingsRate.toFixed(1)}%. Consider reducing expenses or increasing income to reach the recommended 20%.</p></div></div>
+                    <div className="flex items-start gap-3"><span className="text-xl">⚠️</span><div><p className="text-sm font-semibold text-amber-600">Low Savings Rate</p><p className="mt-1 text-sm text-amber-300">Your savings rate is {savingsRate.toFixed(1)}%. Consider reducing expenses or increasing income to reach the recommended 20%.</p></div></div>
                   </motion.div>
                 )}
                 {trendData.direction === 'up' && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.25 }} className="rounded-xl bg-rose-400/10 p-4 ring-1 ring-rose-400/20">
-                    <div className="flex items-start gap-3"><span className="text-xl">📈</span><div><p className="text-sm font-semibold text-rose-200">Spending Increased</p><p className="mt-1 text-sm text-rose-300">Your spending increased by {trendData.percentage}% compared to the previous period. Review your expenses to stay on budget.</p></div></div>
+                    <div className="flex items-start gap-3"><span className="text-xl">📈</span><div><p className="text-sm font-semibold text-rose-600">Spending Increased</p><p className="mt-1 text-sm text-rose-300">Your spending increased by {trendData.percentage}% compared to the previous period. Review your expenses to stay on budget.</p></div></div>
                   </motion.div>
                 )}
                 {trendData.direction === 'down' && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.25 }} className="rounded-xl bg-emerald-400/10 p-4 ring-1 ring-emerald-400/20">
-                    <div className="flex items-start gap-3"><span className="text-xl">📉</span><div><p className="text-sm font-semibold text-emerald-200">Spending Decreased</p><p className="mt-1 text-sm text-emerald-300">Great job! Your spending decreased by {trendData.percentage}% compared to the previous period.</p></div></div>
+                    <div className="flex items-start gap-3"><span className="text-xl">📉</span><div><p className="text-sm font-semibold text-emerald-600">Spending Decreased</p><p className="mt-1 text-sm text-emerald-300">Great job! Your spending decreased by {trendData.percentage}% compared to the previous period.</p></div></div>
                   </motion.div>
                 )}
                 {categoryData.data.length > 0 && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.25 }} className="rounded-xl bg-sky-400/10 p-4 ring-1 ring-sky-400/20">
-                    <div className="flex items-start gap-3"><span className="text-xl">🎯</span><div><p className="text-sm font-semibold text-sky-200">Top Category</p><p className="mt-1 text-sm text-sky-300"><strong>{categoryData.data[0]?.name}</strong> is your highest expense category at {formatCurrency(categoryData.data[0]?.value || 0)}.</p></div></div>
+                    <div className="flex items-start gap-3"><span className="text-xl">🎯</span><div><p className="text-sm font-semibold text-sky-600">Top Category</p><p className="mt-1 text-sm text-sky-300"><strong>{categoryData.data[0]?.name}</strong> is your highest expense category at {formatCurrency(categoryData.data[0]?.value || 0)}.</p></div></div>
                   </motion.div>
                 )}
               </div>
