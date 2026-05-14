@@ -7,7 +7,6 @@ import useFinanceData from '../hooks/useFinanceData.js'
 import StatCard from '../components/StatCard.jsx'
 import TransactionItem from '../components/TransactionItem.jsx'
 import IncomeChart from '../components/IncomeChart.jsx'
-import InsightCard from '../components/InsightCard.jsx'
 import Spinner from '../components/Spinner.jsx'
 import { quickFade } from '../utils/animations.js'
 import { subscribeToDebts } from '../services/debtService.js'
@@ -23,14 +22,9 @@ export default function Dashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { formatCurrency } = useCurrency()
-  const [mode, setMode] = React.useState(() => localStorage.getItem('financeMode') || null)
   const [debts, setDebts] = React.useState([])
   const [subs, setSubs] = React.useState([])
   const { expenses, incomes, totalIncome, totalExpenses, balance, loading, error } = useFinanceData()
-
-  React.useEffect(() => {
-    if (mode) localStorage.setItem('financeMode', mode)
-  }, [mode])
 
   React.useEffect(() => {
     if (user?.uid) {
@@ -52,86 +46,12 @@ export default function Dashboard() {
     return subs.filter((s) => s.isActive && s.renewalDate && new Date(s.renewalDate) >= now && new Date(s.renewalDate) <= weekFromNow)
   }, [subs])
 
-  if (!mode) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4">
-        <div className="w-full max-w-2xl">
-          <motion.div {...quickFade} className="text-center mb-10">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Welcome to</p>
-            <h1 className="font-display mt-2 text-4xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Smart Finance</h1>
-            <p className="mt-3 text-ink-secondary max-w-md mx-auto">Choose how you want to use your finance workspace.</p>
-          </motion.div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <motion.button onClick={() => setMode('personal')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-emerald-500/10"
-            >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 text-3xl shadow-lg shadow-cyan-500/20">👤</div>
-              <h2 className="font-display text-xl font-bold text-ink group-hover:text-emerald-500 transition-colors">Personal Use</h2>
-              <p className="mt-2 text-sm text-ink-secondary leading-relaxed">Track spending, manage subscriptions, monitor net worth, and pay off debt — all in one place.</p>
-              <div className="mt-4 flex gap-2 text-xs text-ink-tertiary">
-                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">3 Modules</span>
-                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Personal Finance</span>
-              </div>
-            </motion.button>
-            <motion.button onClick={() => setMode('org')} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.03, y: -4 }} className="dashboard-card group p-8 text-left transition-all hover:shadow-xl hover:shadow-cyan-500/10"
-            >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-400 to-pink-500 text-3xl shadow-lg shadow-purple-500/20">🏢</div>
-              <h2 className="font-display text-xl font-bold text-ink group-hover:text-purple-500 transition-colors">Organizational Use</h2>
-              <p className="mt-2 text-sm text-ink-secondary leading-relaxed">Team finance tracking, shared accounts, expense management, budgets, and multi-user reports.</p>
-              <div className="mt-4 flex gap-2 text-xs text-ink-tertiary">
-                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Team Mode</span>
-                <span className="rounded-full bg-surface-secondary px-2.5 py-1 ring-1 ring-border-subtle">Shared Access</span>
-              </div>
-            </motion.button>
-          </div>
-          <p className="mt-6 text-center text-xs text-ink-quaternary">You can change this later in Settings.</p>
-        </div>
-      </div>
-    )
-  }
-
   if (loading) {
     return <div className="flex min-h-[50vh] items-center justify-center px-4 py-10">
       <div className="dashboard-card px-4 py-3 text-sm font-bold text-ink-secondary flex items-center gap-3">
         <Spinner size="md" /><span>Loading dashboard...</span>
       </div>
     </div>
-  }
-
-  if (mode === 'org') {
-    return (
-      <div className="space-y-7">
-        <motion.div {...quickFade}>
-          <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-ink-tertiary">Finance OS</p>
-              <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] text-ink sm:text-4xl">Organization Dashboard</h1>
-              <p className="mt-1 text-sm text-ink-secondary">Team finance tracking and shared expense management.</p>
-            </div>
-            <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
-              className="button-secondary rounded-xl px-4 py-2 text-xs">Switch Mode</button>
-          </header>
-        </motion.div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <article className="dashboard-card p-8 text-center lg:col-span-3">
-            <p className="text-5xl mb-4">🏢</p>
-            <h2 className="font-display text-xl font-bold text-ink">Organizational Mode</h2>
-            <p className="mt-2 text-ink-secondary max-w-md mx-auto">Team finance features are being rolled out. Start by adding expenses and building your team workspace.</p>
-          </article>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {MODULES.map((mod, idx) => (
-            <motion.button key={mod.title} onClick={() => navigate(mod.path)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + idx * 0.06, duration: 0.3 }}
-              whileHover={{ scale: 1.03, y: -2 }} className="dashboard-card group p-5 text-left transition-all">
-              <span className="text-3xl">{mod.icon}</span>
-              <h3 className="mt-3 font-semibold text-ink group-hover:text-emerald-500 transition-colors">{mod.title}</h3>
-              <p className="mt-1 text-xs text-ink-secondary">{mod.desc}</p>
-            </motion.button>
-          ))}
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -144,8 +64,6 @@ export default function Dashboard() {
             <p className="mt-1 text-sm text-ink-secondary">Track cash flow, spending, and budget signals from one workspace.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="button" onClick={() => { localStorage.removeItem('financeMode'); setMode(null) }}
-              className="button-secondary rounded-xl px-3 py-2 text-xs">Switch Mode</button>
             <button type="button" onClick={() => navigate('/transactions')} className="brand-button px-4 py-2.5 text-sm">Add transaction</button>
           </div>
         </header>

@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Menu, X, Sun, Moon } from 'lucide-react'
-import { useTheme } from '../../context/ThemeContext.jsx'
+import { Menu, X } from 'lucide-react'
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -24,7 +22,7 @@ export default function Navbar() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-slate-900/70 backdrop-blur-md border-b border-white/10 shadow-lg'
+          ? 'bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm'
           : 'bg-transparent'
       }`}
     >
@@ -35,7 +33,7 @@ export default function Navbar() {
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30 transition-transform group-hover:scale-105">
                 <span className="text-xl font-bold text-white">$</span>
               </div>
-              <span className="font-display text-xl font-bold tracking-tight text-white">Smart Finance</span>
+              <span className="font-display text-xl font-bold tracking-tight text-slate-900">Smart Finance</span>
             </Link>
           </div>
 
@@ -44,7 +42,7 @@ export default function Navbar() {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-sm font-semibold text-slate-300 transition-colors hover:text-white"
+                className="text-sm font-semibold text-slate-600 transition-colors hover:text-emerald-600"
               >
                 {item}
               </a>
@@ -52,23 +50,15 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="rounded-full p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
-              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
             <Link
               to="/auth"
-              className="text-sm font-bold text-white transition hover:text-emerald-400"
+              className="text-sm font-bold text-slate-700 transition hover:text-emerald-600"
             >
               Log in
             </Link>
             <Link
               to="/auth"
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-bold text-slate-900 shadow-sm transition hover:bg-slate-100 hover:scale-105"
+              className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-800 hover:scale-105"
             >
               Get Started
             </Link>
@@ -77,7 +67,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               type="button"
-              className="text-slate-300 hover:text-white"
+              className="text-slate-500 hover:text-slate-900"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -86,12 +76,11 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-20 left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10 p-4 shadow-2xl"
+          className="md:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-200 p-4 shadow-2xl"
         >
           <div className="flex flex-col gap-4">
             {['Features', 'Product', 'Testimonials', 'FAQ'].map((item) => (
@@ -99,24 +88,16 @@ export default function Navbar() {
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-slate-300 hover:text-white p-2"
+                className="text-base font-medium text-slate-600 hover:text-slate-900 p-2"
               >
                 {item}
               </a>
             ))}
-            <hr className="border-white/10 my-2" />
-            <button
-              type="button"
-              onClick={() => { toggleTheme(); setMobileMenuOpen(false) }}
-              className="flex items-center gap-2 text-base font-medium text-slate-300 hover:text-white p-2"
-            >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            </button>
+            <hr className="border-slate-200 my-2" />
             <Link
               to="/auth"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-medium text-slate-300 hover:text-white p-2"
+              className="text-base font-medium text-slate-600 hover:text-slate-900 p-2"
             >
               Log in
             </Link>

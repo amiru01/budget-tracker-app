@@ -53,12 +53,12 @@ function TestimonialCard({ testimonial, index }) {
       <motion.div
         animate={{ scale: isHovered ? 1.02 : 1 }}
         transition={{ duration: 0.3 }}
-        className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/8 to-white/3 p-7 shadow-xl backdrop-blur-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10 sm:p-8"
+        className="relative h-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 sm:p-8"
       >
         <motion.div
           animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-500/10"
+          className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-transparent to-cyan-50"
         />
 
         <div className="relative z-10 flex h-full flex-col">
@@ -79,24 +79,24 @@ function TestimonialCard({ testimonial, index }) {
           <motion.p
             animate={{ y: isHovered ? -2 : 0 }}
             transition={{ duration: 0.3 }}
-            className="flex-1 text-[1.02rem] font-medium leading-8 text-slate-200"
+            className="flex-1 text-[1.02rem] font-medium leading-8 text-slate-700"
           >
-            “{testimonial.content}”
+            {"\u201C"}{testimonial.content}{"\u201D"}
           </motion.p>
 
-          <div className="mt-8 flex items-center gap-4 border-t border-white/10 pt-6">
+          <div className="mt-8 flex items-center gap-4 border-t border-slate-100 pt-6">
             <motion.img
               animate={{ scale: isHovered ? 1.08 : 1 }}
               transition={{ duration: 0.3 }}
-              className="h-12 w-12 rounded-full border-2 border-white/20 object-cover shadow-lg"
+              className="h-12 w-12 rounded-full border-2 border-slate-200 object-cover shadow-sm"
               src={testimonial.avatar}
               alt={testimonial.author}
             />
             <div>
-              <h4 className="font-display font-semibold tracking-tight text-white">
+              <h4 className="font-display font-semibold tracking-tight text-slate-900">
                 {testimonial.author}
               </h4>
-              <p className="text-sm font-medium text-slate-400">
+              <p className="text-sm font-medium text-slate-500">
                 {testimonial.role}
               </p>
             </div>
@@ -117,7 +117,7 @@ export default function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="relative overflow-hidden bg-slate-950 pt-14 pb-24 sm:pt-16 sm:pb-32"
+      className="relative overflow-hidden bg-white pt-14 pb-24 sm:pt-16 sm:pb-32"
     >
       <div className="absolute top-1/4 right-1/4 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="absolute bottom-1/4 left-1/4 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
@@ -132,7 +132,7 @@ export default function TestimonialsSection() {
             className="section-title text-balance mb-6"
           >
             Built for people who want a clearer
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-500 to-cyan-500 bg-clip-text text-transparent">
               {" "}money routine.
             </span>
           </motion.h2>

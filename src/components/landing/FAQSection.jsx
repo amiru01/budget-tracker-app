@@ -48,8 +48,8 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
         <div
           className={`absolute inset-0 rounded-2xl border transition-all duration-300 ${
             isOpen
-              ? "border-emerald-500/25 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10"
-              : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.07]"
+              ? "border-emerald-300 bg-gradient-to-r from-emerald-50 to-cyan-50"
+              : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
           }`}
         />
 
@@ -57,8 +57,8 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
           <span
             className={`font-display text-base font-bold leading-6 tracking-tight transition-colors duration-300 sm:text-lg ${
               isOpen
-                ? "bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
-                : "text-white group-hover:text-slate-50"
+                ? "bg-gradient-to-r from-emerald-500 to-cyan-500 bg-clip-text text-transparent"
+                : "text-slate-900 group-hover:text-slate-700"
             }`}
           >
             {faq.question}
@@ -67,7 +67,7 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
           <motion.span
             animate={{ rotate: isOpen ? 45 : 0 }}
             transition={{ duration: 0.25 }}
-            className={isOpen ? "text-emerald-400" : "text-slate-400"}
+            className={isOpen ? "text-emerald-500" : "text-slate-400"}
           >
             <Plus className="h-5 w-5" />
           </motion.span>
@@ -83,7 +83,7 @@ function FAQItem({ faq, index, isOpen, onToggle }) {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="ml-5 border-l-2 border-emerald-500/30 px-5 pb-5 text-[0.96rem] leading-7 text-slate-300 sm:ml-6">
+            <div className="ml-5 border-l-2 border-emerald-300 px-5 pb-5 text-[0.96rem] leading-7 text-slate-600 sm:ml-6">
               {faq.answer}
             </div>
           </motion.div>
@@ -111,7 +111,7 @@ export default function FAQSection() {
             className="section-title text-balance mb-6"
           >
             Practical answers before you
-            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-500 to-cyan-500 bg-clip-text text-transparent">
               {" "}get started.
             </span>
           </motion.h2>
@@ -147,12 +147,12 @@ export default function FAQSection() {
           transition={{ delay: 0.3 }}
           className="mt-14 text-center"
         >
-          <p className="mb-4 text-sm font-medium text-slate-400">
+          <p className="mb-4 text-sm font-medium text-slate-500">
             Need help thinking through your setup?
           </p>
           <a
             href="mailto:support@smartfinance.app"
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50"
           >
             Contact support
           </a>

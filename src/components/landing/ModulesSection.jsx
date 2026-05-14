@@ -6,33 +6,33 @@ const modules = [
     icon: "💳",
     title: "Track My Spending",
     desc: "Log and categorize every expense. Visualize where your money goes with pie charts, line charts, and monthly analytics. Know your daily, weekly, and monthly totals at a glance.",
-    color: "from-cyan-500/20 to-blue-600/20",
-    glow: "shadow-cyan-500/20",
-    border: "hover:border-cyan-400/30",
+    color: "from-cyan-100 to-blue-50",
+    glow: "shadow-cyan-200/50",
+    border: "hover:border-cyan-300",
   },
   {
     icon: "📊",
     title: "Track My Net Worth",
     desc: "Connect all your accounts — bank, cash, wallet, savings, investments. Add income anytime, see expenses deducted automatically, and watch your real-time net worth grow.",
-    color: "from-emerald-500/20 to-teal-600/20",
-    glow: "shadow-emerald-500/20",
-    border: "hover:border-emerald-400/30",
+    color: "from-emerald-100 to-teal-50",
+    glow: "shadow-emerald-200/50",
+    border: "hover:border-emerald-300",
   },
   {
     icon: "📱",
     title: "Control My Subscriptions",
     desc: "Monitor every recurring payment in one place. Track monthly costs, get renewal reminders, pause unused services, and know exactly what you're spending each month.",
-    color: "from-purple-500/20 to-pink-600/20",
-    glow: "shadow-purple-500/20",
-    border: "hover:border-purple-400/30",
+    color: "from-purple-100 to-pink-50",
+    glow: "shadow-purple-200/50",
+    border: "hover:border-purple-300",
   },
   {
     icon: "🎯",
     title: "Pay Off My Debt",
     desc: "Add debts, set payment priorities, and choose daily, weekly, or monthly payment plans. Watch progress bars fill as you pay down balances and work toward financial freedom.",
-    color: "from-amber-500/20 to-rose-600/20",
-    glow: "shadow-amber-500/20",
-    border: "hover:border-amber-400/30",
+    color: "from-amber-100 to-rose-50",
+    glow: "shadow-amber-200/50",
+    border: "hover:border-amber-300",
   },
 ];
 
@@ -52,7 +52,7 @@ export default function ModulesSection() {
             className="section-title text-balance"
           >
             Everything you need to master
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400"> your finances.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-cyan-500"> your finances.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -74,28 +74,28 @@ export default function ModulesSection() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.12, duration: 0.6 }}
               whileHover={{ scale: 1.02, y: -4 }}
-              className={`group relative rounded-2xl border border-white/10 bg-gradient-to-br ${mod.color} backdrop-blur-xl p-8 shadow-xl ${mod.glow} ${mod.border} transition-all duration-300 hover:shadow-2xl`}
+              className={`group relative rounded-2xl border border-slate-200 bg-gradient-to-br ${mod.color} bg-white p-8 shadow-sm ${mod.glow} ${mod.border} transition-all duration-300 hover:shadow-xl`}
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-emerald-50 to-transparent" />
 
               <div className="relative z-10">
                 <motion.div
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 3, delay: index * 0.15, repeat: Infinity }}
-                  className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white/10 to-white/5 text-3xl ring-1 ring-white/20 group-hover:ring-white/40"
+                  className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-white text-3xl ring-1 ring-slate-200 group-hover:ring-emerald-200"
                 >
                   {mod.icon}
                 </motion.div>
 
-                <h3 className="card-title mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300">
+                <h3 className="card-title mb-3 group-hover:text-emerald-600 transition-all duration-300">
                   {mod.title}
                 </h3>
 
-                <p className="card-copy group-hover:text-slate-300 transition-colors duration-300 mb-5">
+                <p className="card-copy group-hover:text-slate-600 transition-colors duration-300 mb-5">
                   {mod.desc}
                 </p>
 
-                <div className="flex items-center gap-2 text-sm font-bold text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="flex items-center gap-2 text-sm font-bold text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span>Explore module</span>
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </div>

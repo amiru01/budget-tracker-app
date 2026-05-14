@@ -76,7 +76,7 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Monthly Price ($)</label>
-              <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} step="0.01" min="0" placeholder="9.99"
+              <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} step="1" min="0" placeholder="9.99"
                 className="dashboard-input mt-2" />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function SubscriptionModal({ open, onClose, onSubmit, accounts = 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Save Amount ($)</label>
-              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="0.01" min="0" placeholder="50" className="dashboard-input mt-2" />
+              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="1" min="0" placeholder="50" className="dashboard-input mt-2" />
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Frequency</label>

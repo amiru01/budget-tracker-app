@@ -2,17 +2,14 @@ import {
   Bars3Icon,
   BellIcon,
 } from '@heroicons/react/24/outline'
-import { Sun, Moon } from 'lucide-react'
 import React from 'react'
 import { logout } from '../../services/authService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
-import { useTheme } from '../../context/ThemeContext.jsx'
 import useNotifications from '../../hooks/useNotifications.js'
 import NotificationDropdown from '../NotificationDropdown.jsx'
 
 function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
   const { user, loading } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const { notifications, unreadCount } = useNotifications()
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = React.useState(false)
@@ -101,22 +98,8 @@ function Navbar({ pageTitle, isSidebarOpen, onMenuClick }) {
               <p className="text-xs font-medium text-ink-tertiary">Workspace access</p>
             </div>
           </button>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="rounded-xl bg-surface-secondary p-2.5 text-ink-secondary shadow-sm ring-1 ring-border-subtle transition hover:bg-surface-elevated hover:text-ink"
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-xl bg-surface-secondary px-3 py-2 text-xs font-bold text-ink-secondary shadow-sm ring-1 ring-border-subtle transition hover:bg-surface-elevated hover:text-ink"
-            disabled={loading || isLoggingOut}
-          >
-            {isLoggingOut ? 'Logging out...' : 'Logout'}
-          </button>
+
+
         </div>
       </div>
     </header>

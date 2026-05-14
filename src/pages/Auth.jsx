@@ -97,7 +97,7 @@ export default function Auth() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50 px-4">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -116,7 +116,7 @@ export default function Auth() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-8 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50 px-4 py-8 overflow-hidden"
     >
       {/* Animated background elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -159,7 +159,7 @@ export default function Auth() {
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-3xl border border-border-subtle bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-3xl p-8 shadow-2xl sm:p-10 overflow-hidden"
+          className="relative rounded-3xl border border-slate-200 bg-white p-8 shadow-xl sm:p-10 overflow-hidden"
         >
           {/* Top glow accent */}
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
@@ -174,7 +174,7 @@ export default function Auth() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="font-display text-3xl font-extrabold tracking-[-0.025em] text-white"
+                className="font-display text-3xl font-extrabold tracking-[-0.025em] text-slate-900"
               >
                 {isLogin ? "Welcome back" : "Create your finance workspace"}
               </motion.h1>
@@ -182,7 +182,7 @@ export default function Auth() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.5 }}
-                className="mx-auto mt-3 max-w-sm text-sm font-medium leading-6 text-ink-secondary"
+                className="mx-auto mt-3 max-w-sm text-sm font-medium leading-6 text-slate-500"
               >
                 {isLogin
                   ? "Sign in to review cash flow, budgets, and recent activity."
@@ -200,9 +200,9 @@ export default function Auth() {
               disabled={isGoogleLoading || isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-white/10 to-white/5 px-4 py-3.5 text-sm font-bold text-white shadow-sm ring-1 ring-white/20 transition-all hover:from-white/15 hover:to-white/10 hover:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+              className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-white px-4 py-3.5 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-100 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
 
               {isGoogleLoading ? (
                 <motion.div
@@ -307,7 +307,7 @@ export default function Auth() {
               >
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-bold text-ink-secondary"
+                  className="mb-2 block text-sm font-bold text-slate-700"
                 >
                   Email address
                 </label>
@@ -318,7 +318,7 @@ export default function Auth() {
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
-                  className="w-full rounded-xl bg-surface-secondary px-4 py-3 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-ink-quaternary focus:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                  className="w-full rounded-xl bg-white px-4 py-3 text-sm font-medium text-slate-900 ring-1 ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                   placeholder="name@company.com"
                 />
               </motion.div>
@@ -332,7 +332,7 @@ export default function Auth() {
                 <div className="flex items-center justify-between mb-2">
                   <label
                     htmlFor="password"
-                    className="text-sm font-bold text-ink-secondary"
+                    className="text-sm font-bold text-slate-700"
                   >
                     Password
                   </label>
@@ -354,7 +354,7 @@ export default function Auth() {
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete={isLogin ? "current-password" : "new-password"}
                     required
-                    className="w-full rounded-xl bg-surface-secondary px-4 py-3 pr-12 text-sm font-medium text-ink ring-1 ring-border-subtle placeholder:text-ink-quaternary focus:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 backdrop-blur-sm"
+                    className="w-full rounded-xl bg-white px-4 py-3 pr-12 text-sm font-medium text-slate-900 ring-1 ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                     placeholder="Minimum 6 characters"
                   />
                   <button
@@ -403,7 +403,7 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.65, duration: 0.5 }}
-              className="mt-8 text-center text-sm font-medium text-ink-secondary"
+              className="mt-8 text-center text-sm font-medium text-slate-500"
             >
               {isLogin
                 ? "New to Smart Finance? "
@@ -426,7 +426,7 @@ export default function Auth() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-6 text-center text-xs font-medium leading-5 text-ink-tertiary"
+              className="mt-6 text-center text-xs font-medium leading-5 text-slate-400"
             >
               By continuing, you agree to our{" "}
               <a

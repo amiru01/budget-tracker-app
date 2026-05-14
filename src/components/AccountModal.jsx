@@ -75,7 +75,7 @@ export default function AccountModal({ open, onClose, onSubmit, initial = null }
           </div>
           <div>
             <label className="text-sm font-semibold text-ink-secondary">Current Balance</label>
-            <input type="number" value={balance} onChange={(e) => setBalance(e.target.value)} step="0.01" min="0" placeholder="0.00"
+            <input type="number" value={balance} onChange={(e) => setBalance(e.target.value)} step="1" min="0" placeholder="0.00"
               className="dashboard-input mt-2" />
           </div>
           <div>

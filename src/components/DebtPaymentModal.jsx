@@ -42,7 +42,7 @@ export default function DebtPaymentModal({ open, onClose, onSubmit, debt }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-sm font-semibold text-ink-secondary">Payment Amount ($)</label>
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" min="0" placeholder="0.00" className="dashboard-input mt-2" autoFocus />
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="1" min="0" placeholder="0.00" className="dashboard-input mt-2" autoFocus />
           </div>
           <div>
             <label className="text-sm font-semibold text-ink-secondary">Date</label>

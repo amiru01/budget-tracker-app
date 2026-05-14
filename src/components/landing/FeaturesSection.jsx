@@ -11,56 +11,55 @@ import {
 
 const features = [
   {
-    icon: <Wallet className="text-emerald-400" size={32} />,
+    icon: <Wallet className="text-emerald-500" size={32} />,
     title: "Budgets that adjust with you",
     description:
       "Set practical limits, track progress by category, and spot overspending before it becomes a pattern.",
-    color: "from-emerald-400/20 to-emerald-600/20",
-    glow: "shadow-emerald-500/20",
+    color: "from-emerald-100 to-emerald-50",
+    glow: "shadow-emerald-200/50",
   },
   {
-    icon: <LineChart className="text-cyan-400" size={32} />,
+    icon: <LineChart className="text-cyan-500" size={32} />,
     title: "Analytics you can read quickly",
     description:
       "Turn daily transactions into clear trends, comparisons, and summaries that make decisions easier.",
-    color: "from-cyan-400/20 to-blue-600/20",
-    glow: "shadow-cyan-500/20",
+    color: "from-cyan-100 to-cyan-50",
+    glow: "shadow-cyan-200/50",
   },
   {
-    icon: <Shield className="text-indigo-400" size={32} />,
+    icon: <Shield className="text-indigo-500" size={32} />,
     title: "Privacy-minded by default",
     description:
       "Your financial workspace is protected with modern authentication, encrypted data, and careful access controls.",
-    color: "from-indigo-400/20 to-purple-600/20",
-    glow: "shadow-indigo-500/20",
+    color: "from-indigo-100 to-indigo-50",
+    glow: "shadow-indigo-200/50",
   },
   {
-    icon: <Zap className="text-amber-400" size={32} />,
+    icon: <Zap className="text-amber-500" size={32} />,
     title: "Fast everyday workflow",
     description:
       "Add expenses, review charts, and move between reports without the friction of heavyweight finance tools.",
-    color: "from-amber-400/20 to-orange-600/20",
-    glow: "shadow-amber-500/20",
+    color: "from-amber-100 to-amber-50",
+    glow: "shadow-amber-200/50",
   },
   {
-    icon: <ArrowUpRight className="text-rose-400" size={32} />,
+    icon: <ArrowUpRight className="text-rose-500" size={32} />,
     title: "Goals with visible momentum",
     description:
       "Connect saving targets to real activity so every paycheck and purchase has context.",
-    color: "from-rose-400/20 to-pink-600/20",
-    glow: "shadow-rose-500/20",
+    color: "from-rose-100 to-rose-50",
+    glow: "shadow-rose-200/50",
   },
   {
-    icon: <BarChart3 className="text-purple-400" size={32} />,
+    icon: <BarChart3 className="text-purple-500" size={32} />,
     title: "Reports ready to share",
     description:
       "Export clean summaries for planning, taxes, budgeting reviews, or conversations with a partner.",
-    color: "from-purple-400/20 to-violet-600/20",
-    glow: "shadow-purple-500/20",
+    color: "from-purple-100 to-purple-50",
+    glow: "shadow-purple-200/50",
   },
 ];
 
-// Feature Card Component with 3D hover
 function FeatureCard({ feature, index }) {
   const cardRef = useRef(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -98,42 +97,35 @@ function FeatureCard({ feature, index }) {
       }}
       className="group relative rounded-2xl transition-all duration-300"
     >
-      {/* Glass background with gradient */}
       <div
-        className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.color} opacity-40 group-hover:opacity-60 transition-opacity duration-300`}
+        className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}
       />
 
-      {/* Premium glass card */}
       <div
-        className={`relative rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-2xl p-8 shadow-xl ${feature.glow} group-hover:shadow-2xl group-hover:border-white/20 transition-all duration-300 overflow-hidden`}
+        className={`relative rounded-2xl border border-slate-200 bg-white shadow-sm ${feature.glow} group-hover:shadow-xl group-hover:border-emerald-200 transition-all duration-300 overflow-hidden`}
       >
-        {/* Animated background gradient on hover */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+        <div className="absolute inset-0 -z-10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-emerald-50 to-transparent" />
 
-        {/* Icon container with glow */}
         <motion.div
           animate={{ y: [0, -6, 0] }}
           transition={{ duration: 3, delay: index * 0.1, repeat: Infinity }}
-          className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white/10 to-white/5 ring-1 ring-white/20 group-hover:ring-white/40 group-hover:from-white/15 transition-all"
+          className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-white ring-1 ring-slate-200 group-hover:ring-emerald-200 group-hover:from-emerald-50 transition-all"
         >
           {feature.icon}
         </motion.div>
 
-        {/* Title */}
         <motion.h3
           animate={{ y: 0 }}
           transition={{ duration: 0.3 }}
-          className="card-title mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all duration-300"
+          className="card-title mb-3 group-hover:text-emerald-600 transition-all duration-300"
         >
           {feature.title}
         </motion.h3>
 
-        {/* Description */}
-        <p className="card-copy group-hover:text-slate-300 transition-colors duration-300">
+        <p className="card-copy group-hover:text-slate-600 transition-colors duration-300">
           {feature.description}
         </p>
 
-        {/* Bottom accent line */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </motion.div>
@@ -146,12 +138,10 @@ export default function FeaturesSection() {
       id="features"
       className="section-shell"
     >
-      {/* Background elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="section-container">
-        {/* Section Header */}
         <div className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
           <p className="section-kicker mb-4">Core workflow</p>
           <motion.h2
@@ -161,7 +151,7 @@ export default function FeaturesSection() {
             className="section-title text-balance"
           >
             Everything you need to run your money with
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-cyan-500">
               {" "}less effort.
             </span>
           </motion.h2>
@@ -178,7 +168,6 @@ export default function FeaturesSection() {
           </motion.p>
         </div>
 
-        {/* Feature Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />

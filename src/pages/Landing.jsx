@@ -24,7 +24,7 @@ export default function Landing() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900">
+      <div className="flex min-h-screen items-center justify-center bg-white">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity }}
@@ -40,7 +40,7 @@ export default function Landing() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-slate-900 text-slate-50 selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden"
+      className="bg-white text-slate-900 selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden"
     >
       <Navbar />
       <main>

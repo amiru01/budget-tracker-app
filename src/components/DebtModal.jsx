@@ -101,17 +101,17 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Total Amount ($)</label>
-              <input type="number" value={totalAmount} onChange={(e) => setTotalAmount(e.target.value)} step="0.01" min="0" placeholder="5000" className="dashboard-input mt-2" />
+              <input type="number" value={totalAmount} onChange={(e) => setTotalAmount(e.target.value)} step="1" min="0" placeholder="5000" className="dashboard-input mt-2" />
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Remaining Balance ($)</label>
-              <input type="number" value={remainingBalance} onChange={(e) => setRemainingBalance(e.target.value)} step="0.01" min="0" placeholder={totalAmount || '5000'} className="dashboard-input mt-2" />
+              <input type="number" value={remainingBalance} onChange={(e) => setRemainingBalance(e.target.value)} step="1" min="0" placeholder={totalAmount || '5000'} className="dashboard-input mt-2" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Interest Rate (%)</label>
-              <input type="number" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} step="0.1" min="0" placeholder="5.0" className="dashboard-input mt-2" />
+              <input type="number" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} step="1" min="0" placeholder="5.0" className="dashboard-input mt-2" />
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Due Date</label>
@@ -145,7 +145,7 @@ export default function DebtModal({ open, onClose, onSubmit, initial = null }) {
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Save Amount ($)</label>
-              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="0.01" min="0" placeholder="100" className="dashboard-input mt-2" />
+              <input type="number" value={savingAmount} onChange={(e) => setSavingAmount(e.target.value)} step="1" min="0" placeholder="100" className="dashboard-input mt-2" />
             </div>
             <div>
               <label className="text-sm font-semibold text-ink-secondary">Frequency</label>
