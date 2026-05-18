@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner.jsx";
 import {
   getAuthErrorMessage,
   login,
+  logout,
   signup,
   signInWithGoogle,
   resetPassword,
@@ -27,13 +28,6 @@ export default function Auth() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const from = location.state?.from || "/dashboard";
-
-  useEffect(() => {
-    if (loading) return;
-    if (user) {
-      navigate(from, { replace: true });
-    }
-  }, [loading, user, navigate, from]);
 
   async function handleGoogle() {
     setError("");
@@ -107,6 +101,45 @@ export default function Auth() {
           <p className="text-sm font-medium text-ink-secondary">Preparing your workspace...</p>
         </motion.div>
       </main>
+    );
+  }
+
+  if (user) {
+    return (
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50 px-4 py-8 overflow-hidden"
+      >
+        <div className="w-full max-w-md relative z-10 text-center">
+          <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-xl">
+            <div className="flex justify-center mb-6">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100">
+                <svg className="h-8 w-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+            <h1 className="text-2xl font-extrabold text-slate-900 mb-2">You&apos;re signed in</h1>
+            <p className="text-sm text-slate-500 mb-8">{user.email}</p>
+            <div className="flex flex-col gap-3">
+              <Link
+                to="/dashboard"
+                className="rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-400 hover:to-cyan-400"
+              >
+                Go to Dashboard
+              </Link>
+              <button
+                type="button"
+                onClick={async () => { await logout(); navigate("/"); }}
+                className="rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.main>
     );
   }
 

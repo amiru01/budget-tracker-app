@@ -177,7 +177,7 @@ export default function HeroSection() {
               <ArrowRight size={22} className="transition group-hover:translate-x-1" />
             </Link>
             <Link
-              to="/auth"
+              to="/dashboard"
               className="inline-flex min-h-16 items-center justify-center rounded-full border border-slate-200 bg-white px-10 text-lg font-extrabold text-slate-700 backdrop-blur-md shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
             >
               View dashboard
