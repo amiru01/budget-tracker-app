@@ -1,7 +1,7 @@
 # 💰 Smart Finance
 
 A modern personal finance management web app built with React and Firebase.
-LIVE SITE : https://budget-tracker-app-i6ks-qizdhdqe1-amiru01s-projects.vercel.app
+LIVE SITE : https://budget-tracker-app-58l5.vercel.app/
 ## ✨ Features
 
 ### 📊 Financial Tracking
